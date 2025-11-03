@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  background: linear-gradient(135deg, #e6e0f8, #f0e6ff); /* لافندر فاتح */
   margin: 0;
   padding: 0;
 }
@@ -17,7 +17,7 @@ body {
 h1 {
   margin-bottom: 30px;
   font-size: 2em;
-  color: #a33; /* أحمر فاتح */
+  color: #6b4f8a; /* موف متوسط */
 }
 
 button {
@@ -30,26 +30,30 @@ button {
   transition: 0.2s;
 }
 
+/* زر الطوارئ */
 #emergencyBtn {
-  background: #b0b0b0;
+  background: #9b59b6; /* موف */
   color: white;
   padding: 20px 50px;
   font-size: 1.6em;
 }
-#emergencyBtn:hover { background: #999; transform: scale(1.05); }
+#emergencyBtn:hover { background: #8e44ad; transform: scale(1.05); }
 
+/* زر عرض الحالات */
 #showCasesBtn {
-  background: #c0c0c0;
+  background: #b39ddb; /* موف فاتح */
   color: white;
 }
-#showCasesBtn:hover { background: #999; }
+#showCasesBtn:hover { background: #9575cd; }
 
+/* التلميح */
 #hint {
   margin: 20px 0;
-  color: #333;
+  color: #4b0082; /* موف داكن للنص */
   font-size: 1.1em;
 }
 
+/* عرض الحالات نصيًا */
 #casesList {
   display: flex;
   gap: 15px;
@@ -59,7 +63,7 @@ button {
 }
 
 .card {
-  background: white;
+  background: #ffffffcc;
   padding: 15px 20px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -68,10 +72,11 @@ button {
   cursor: pointer;
 }
 
+/* خطوات الحالة */
 #stepsSection {
   display: none;
   margin-top: 20px;
-  background: #ffffffdd;
+  background: #f3e5f5dd; /* موف فاتح */
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
