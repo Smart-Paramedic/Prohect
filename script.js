@@ -20,6 +20,11 @@ const cases = [
   {name:"انخفاض السكر", steps:["1. قدم للمصاب عصير أو حلوى","2. اجلس المصاب","3. اطلب مساعدة طبية 📞997"], info:"قدم سكريات سريعة للمصاب وأجلسه"}
 ];
 
+function showTab(tabId) {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.add("hidden"));
+  document.getElementById(tabId + "Tab").classList.remove("hidden");
+}
+
 function showSteps(c){
   stepsSection.classList.remove("hidden");
   caseTitle.textContent = c.name;
@@ -29,18 +34,3 @@ function showSteps(c){
     li.textContent = s;
     stepsList.appendChild(li);
   });
-  speakSteps(c.steps);
-
-  emergencyBtn.style.display = "none";
-  showCasesBtn.style.display = "none";
-  hint.style.display = "none";
-}
-
-function speakSteps(steps){
-  if(synth.speaking) synth.cancel();
-  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
-  currentUtterance.lang = "ar-SA";
-  synth.speak(currentUtterance);
-}
-
-function playLast(){
