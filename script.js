@@ -1,12 +1,11 @@
-// ======= ضبط رابط API =======
-// استبدلي النص داخل علامات الاقتباس برابط API الخاص بك من SheetDB
-const API_URL = "https://sheetdb.io/api/v1/abcd1234"; // ← ضع هنا رابطك
 
-// عناصر الواجهة
+const API_URL = "https://sheetdb.io/api/v1/abcd1234"; 
+
+
 const licensedList = document.getElementById("licensedList");
 const form = document.getElementById("userForm");
 
-// إضافة مستخدم جديد
+
 async function addUser() {
   const name = document.getElementById("name").value.trim();
   const history = document.getElementById("history").value.trim();
@@ -143,3 +142,4 @@ function escapeHtml(text) {
 
 // تحميل مرخّصين افتراضياً عند فتح الصفحة (اختياري)
 // showLicensed();
+
