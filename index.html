@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>المسعف الذكي</title>
-  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <nav>
@@ -14,14 +14,12 @@
     <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
   </nav>
 
-  <!-- الرئيسية -->
   <section id="home" class="tab">
     <h1 id="instruction">اضغط زر الطوارئ أو قل اسم الحالة</h1>
     <button id="emergencyBtn">🚨 الطوارئ</button>
     <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
   </section>
 
-  <!-- عرض الحالات -->
   <section id="cases" class="tab hidden">
     <h2>الحالات الإسعافية</h2>
     <div id="casesList"></div>
@@ -34,7 +32,6 @@
     </div>
   </section>
 
-  <!-- تسجيل حالة -->
   <section id="register" class="tab hidden">
     <h2>تسجيل حالة جديدة</h2>
     <form id="registerForm">
@@ -60,7 +57,6 @@
     </form>
   </section>
 
-  <!-- المسعفون -->
   <section id="paramedics" class="tab hidden">
     <h2>المسعفون المؤهلون</h2>
     <p>📋 قاعدة البيانات تحتوي على:</p>
@@ -74,4 +70,3 @@
   <script src="script.js" defer></script>
 </body>
 </html>
-
