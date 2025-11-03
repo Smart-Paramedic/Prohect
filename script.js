@@ -7,13 +7,11 @@ let recognition = null;
 let currentUtterance = null;
 let cases = [];
 
-// عرض التبويبات
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(tab => tab.classList.add("hidden"));
   document.getElementById(tabId + "Tab").classList.remove("hidden");
 }
 
-// جلب الحالات من ورقة "الحالات" في SheetDB
 fetch("https://sheetdb.io/api/v1/pp3tkazlfqhvu?sheet=الحالات")
   .then(res => res.json())
   .then(data => {
@@ -25,7 +23,6 @@ fetch("https://sheetdb.io/api/v1/pp3tkazlfqhvu?sheet=الحالات")
   })
   .catch(err => console.error("❌ خطأ في جلب الحالات:", err));
 
-// عرض الحالات بكروت أفقية
 function renderCases() {
   casesList.innerHTML = "";
   cases.forEach(c => {
@@ -34,13 +31,12 @@ function renderCases() {
     card.innerHTML = `<h3>${c.name}</h3><ul></ul>`;
     const ul = card.querySelector("ul");
 
-    c.steps.forEach((step, index) => {
+    c.steps.forEach(step => {
       const li = document.createElement("li");
       li.textContent = step;
       ul.appendChild(li);
     });
 
-    // زر الاتصال 997 في نهاية الكرت
     const callBtn = document.createElement("button");
     callBtn.textContent = "📞 الاتصال 997";
     callBtn.onclick = () => {
@@ -54,7 +50,6 @@ function renderCases() {
   });
 }
 
-// التفاعل الصوتي
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
@@ -72,13 +67,11 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     console.log("🎤 خطأ في التعرف الصوتي:", e);
   };
 
-  // يبدأ تلقائيًا عند تحميل الصفحة
   window.addEventListener("load", () => {
     recognition.start();
   });
 }
 
-// قراءة الخطوات صوتيًا
 function speakSteps(steps) {
   if (synth.speaking) synth.cancel();
   currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
@@ -86,11 +79,4 @@ function speakSteps(steps) {
   synth.speak(currentUtterance);
 }
 
-// زر الطوارئ يعيد تنشيط المايك
-emergencyBtn.addEventListener("click", () => {
-  if (recognition) recognition.start();
-  instruction.textContent = "🎙️ جاري الاستماع... قل اسم الحالة";
-  setTimeout(() => {
-    instruction.textContent = "🚨 قل اسم الحالة أو اضغط زر الطوارئ للبدء";
-  }, 5000);
-});
+emergencyBtn
