@@ -5,7 +5,28 @@ body {
   padding: 20px;
 }
 
-.card {
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tabBtn {
+  background: #e0e0e0;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.tabBtn.active, .tabBtn:hover {
+  background: #2196F3;
+  color: white;
+}
+
+.tabContent {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -75,4 +96,10 @@ input[type="text"] {
 
 form button {
   padding: 8px 16px;
+}
+
+.voiceControls {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
 }
