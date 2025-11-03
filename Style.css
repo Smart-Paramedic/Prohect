@@ -1,104 +1,103 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
   margin: 0;
   padding: 0;
+  direction: rtl;
 }
 
-.container {
+nav {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-  padding: 40px 20px;
+  justify-content: center;
+  gap: 10px;
+  background: #c4b5fd;
+  padding: 15px;
 }
 
-h1 {
-  margin-bottom: 30px;
-  font-size: 2em;
-  color: #9333ea; /* موف غامق */
-}
-
-button {
-  margin: 5px;
-  padding: 12px 25px;
-  font-size: 1.2em;
-  border-radius: 12px;
-  cursor: pointer;
+nav button {
+  background: #8b5cf6;
+  color: white;
   border: none;
-  transition: 0.2s;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 1em;
+  cursor: pointer;
+}
+nav button:hover {
+  background: #7c3aed;
+}
+
+.tab {
+  padding: 30px 20px;
+  text-align: center;
+}
+.tab.hidden {
+  display: none;
+}
+
+h1, h2 {
+  color: #6d28d9;
 }
 
 #emergencyBtn {
-  background: #c084fc;
+  background: #9333ea;
   color: white;
   padding: 20px 50px;
-  font-size: 1.6em;
+  font-size: 1.5em;
+  border-radius: 15px;
+  margin: 20px 0;
+  cursor: pointer;
+  border: none;
 }
 #emergencyBtn:hover {
-  background: #a855f7;
-  transform: scale(1.05);
-}
-
-#showCasesBtn {
-  background: #d8b4fe;
-  color: white;
-}
-#showCasesBtn:hover {
-  background: #c084fc;
+  background: #7e22ce;
 }
 
 #hint {
-  margin: 20px 0;
-  color: #6b21a8;
   font-size: 1.1em;
+  color: #7c3aed;
+  margin-bottom: 20px;
 }
 
-#casesList {
+.horizontal-cards {
   display: flex;
-  gap: 15px;
   flex-wrap: wrap;
+  gap: 15px;
   justify-content: center;
-  margin-bottom: 30px;
 }
 
 .card {
   background: white;
-  padding: 15px 20px;
+  padding: 15px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: center;
-  min-width: 140px;
-  cursor: pointer;
+  min-width: 200px;
+  max-width: 300px;
+  text-align: right;
 }
-
-#stepsSection {
-  display: none;
-  margin-top: 20px;
-  background: #ffffffdd;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 500px;
+.card h3 {
+  color: #6d28d9;
 }
-
-ul {
+.card p {
+  color: #444;
+}
+.card ul {
   list-style: none;
   padding: 0;
-  margin-bottom: 20px;
 }
-
-li {
-  margin: 10px 0;
-  font-size: 1.2em;
-  text-align: right;
-  color: #7e22ce;
+.card li {
+  margin: 8px 0;
+  font-size: 1em;
 }
-
-.audio-controls {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+.card button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.card button:hover {
+  background: #dc2626;
 }
