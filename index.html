@@ -7,24 +7,47 @@
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-  <div class="container">
-    <h1 id="instruction">اضغط زر الطوارئ للبدء</h1>
+  <nav>
+    <button onclick="showTab('home')">الرئيسية</button>
+    <button onclick="showTab('cases')">عرض الحالات نصيًا</button>
+    <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
+    <button onclick="showTab('register')">تسجيل حالة جديدة</button>
+  </nav>
+
+  <div id="homeTab" class="tab">
+    <h1 id="instruction">🚨 قل اسم الحالة أو اضغط زر الطوارئ للبدء</h1>
     <button id="emergencyBtn">🚨 الطوارئ</button>
     <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
-    <button id="showCasesBtn">عرض الحالات نصيًا</button>
-    <div id="casesList" class="hidden"></div>
-
-    <div id="stepsSection">
-      <h2 id="caseTitle"></h2>
-      <ul id="stepsList"></ul>
-      <div class="audio-controls">
-        <button id="stopBtn">⏹️ إيقاف الصوت</button>
-        <button id="playBtn">🔁 إعادة تشغيل الصوت</button>
-        <button id="callBtn">📞 الاتصال 997</button>
-        <button id="back">⬅️ رجوع</button>
-      </div>
-    </div>
   </div>
+
+  <div id="casesTab" class="tab hidden">
+    <h2>عرض خطوات الإسعاف نصيًا</h2>
+    <div id="casesList" class="horizontal-cards"></div>
+  </div>
+
+  <div id="paramedicsTab" class="tab hidden">
+    <h2>المسعفون المؤهلون</h2>
+    <p>📋 تم تجهيز قاعدة بيانات تحتوي على الورقتين:</p>
+    <ul>
+      <li><strong>information</strong>: تحتوي على الأعمدة التالية:
+        <ul>
+          <li>اسم المستخدم</li>
+          <li>التاريخ الطبي</li>
+          <li>رقم التواصل</li>
+          <li>جهات الطوارئ</li>
+          <li>نوع الرخصة</li>
+          <li>العنوان</li>
+        </ul>
+      </li>
+      <li><strong>paramedics</strong>: ورقة مخصصة للمسعفين المؤهلين، جاهزة لإدخال البيانات لاحقًا.</li>
+    </ul>
+  </div>
+
+  <div id="registerTab" class="tab hidden">
+    <h2>تسجيل حالة جديدة</h2>
+    <p>📌 سيتم تفعيل هذه الخاصية لاحقًا لإضافة حالات جديدة.</p>
+  </div>
+
   <script src="script.js" defer></script>
 </body>
 </html>
