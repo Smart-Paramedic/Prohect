@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المسعف الذكي</title>
-<link rel="stylesheet" href="Style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المسعف الذكي</title>
+  <link rel="stylesheet" href="Style.css">
 </head>
 <body>
+  <div class="container">
+    <h1 id="instruction">اضغط زر الطوارئ للبدء</h1>
+    <button id="emergencyBtn">🚨 الطوارئ</button>
+    <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
+    <button id="showCasesBtn">عرض الحالات نصيًا</button>
+    <div id="casesList" class="hidden"></div>
 
-<div class="container">
-  <h1 id="instruction">اضغط زر الطوارئ للبدء أو قل حالة من التلميح</h1>
-
-  <button id="emergencyBtn">🚨 الطوارئ</button>
-
-  <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
-
-  <button id="showCasesBtn">عرض الحالات نصيًا</button>
-
-  <div id="casesList" class="hidden"></div>
-
-  <div id="stepsSection">
-    <h2 id="caseTitle"></h2>
-    <ul id="stepsList"></ul>
-    <div class="audio-controls">
-      <button id="stopBtn">⏹️ إيقاف الصوت</button>
-      <button id="playBtn">🔁 إعادة تشغيل الصوت</button>
-      <button id="callBtn">📞 الاتصال 997</button>
-      <button id="back">⬅️ رجوع</button>
+    <div id="stepsSection">
+      <h2 id="caseTitle"></h2>
+      <ul id="stepsList"></ul>
+      <div class="audio-controls">
+        <button id="stopBtn">⏹️ إيقاف الصوت</button>
+        <button id="playBtn">🔁 إعادة تشغيل الصوت</button>
+        <button id="callBtn">📞 الاتصال 997</button>
+        <button id="back">⬅️ رجوع</button>
+      </div>
     </div>
   </div>
-</div>
-
-<script src="script.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
