@@ -37,6 +37,7 @@ nav button:hover {
 
 h1, h2, h3 {
   color: #6d28d9;
+  margin-bottom: 15px;
 }
 
 button {
@@ -48,19 +49,34 @@ button {
   border: none;
 }
 
-#emergencyBtn, #showCasesBtn {
-  background: #9333ea;
+#emergencyBtn {
+  background: #ef4444;
   color: white;
 }
-#emergencyBtn:hover, #showCasesBtn:hover {
-  background: #7e22ce;
+#emergencyBtn:hover {
+  background: #dc2626;
 }
 
-.horizontal-cards {
+#playBtn, #stopBtn, #backBtn {
+  background: #4f46e5;
+  color: white;
+}
+#playBtn:hover, #stopBtn:hover, #backBtn:hover {
+  background: #4338ca;
+}
+
+#hint {
+  font-size: 1.1em;
+  color: #7c3aed;
+  margin-top: 10px;
+}
+
+#casesList {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .card {
@@ -70,58 +86,23 @@ button {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   min-width: 200px;
   max-width: 300px;
-  text-align: right;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: scale(1.05);
 }
 .card h3 {
   color: #6d28d9;
-}
-.card p {
-  color: #444;
+  margin: 10px 0;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 400px;
-  margin: auto;
-}
-form label {
-  text-align: right;
-  font-weight: bold;
-}
-form input, form select {
-  padding: 10px;
-  font-size: 1em;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-form button {
-  background: #10b981;
-  color: white;
-}
-form button:hover {
-  background: #059669;
-}
-
-.paramedic-box {
-  background: #f9f5ff;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: right;
-  margin-bottom: 20px;
-}
-.alert-box {
-  background: #fef3c7;
-  padding: 15px;
-  border-radius: 10px;
-  color: #92400e;
-}
-.tight-list {
+#stepsSection ul {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
-.tight-list li {
-  margin: 5px 0;
-}
+#stepsSection li {
+  background: #e0e7ff;
+  margin: 8px 0;
+  padding
