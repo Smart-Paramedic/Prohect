@@ -4,37 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>المسعف الذكي</title>
-
-  <!-- خط Cairo -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+ 
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
-  <!-- قسم المسعف الذكي الصوتي -->
-  <section class="card">
-    <h2>🎙️ المسعف الذكي الصوتي</h2>
-    <p>تحدث الآن مثلاً: <b>كسر</b> أو <b>نزيف</b> أو <b>انخفاض السكر</b></p>
-    <button id="startVoice" class="btn primary">🎧 استمع إليّ</button>
-    <div id="voiceStatus"></div>
-    <div id="result"></div>
-  </section>
+  <!-- تبويبات -->
+  <div class="tabs">
+    <button class="tabBtn active" data-tab="home"> الرئيسية</button>
+    <button class="tabBtn" data-tab="voice"> المسعف الصوتي</button>
+    <button class="tabBtn" data-tab="register"> تسجيل</button>
+  </div>
 
-  <!-- قسم الحالات النصية -->
-  <section class="card">
+  <!-- المحتوى -->
+  <div class="tabContent" id="home">
     <h2>🩺 الحالات الحرجة</h2>
     <ul id="casesList"></ul>
-  </section>
+    <button onclick="backBtn()" class="btn">⬅️ العودة</button>
+  </div>
 
-  <!-- زر التسجيل (اختياري) -->
-  <section class="card">
+  <div class="tabContent" id="voice" style="display:none;">
+    <h2>🎧 المسعف الصوتي</h2>
+    <p>تحدث الآن مثلاً: <b>كسر</b> أو <b>نزيف</b> أو <b>انخفاض السكر</b></p>
+    <button id="startVoice" class="btn primary">▶️ استمع إليّ</button>
+    <div id="voiceStatus"></div>
+    <div id="result"></div>
+    <div class="voiceControls">
+      <button onclick="playLast()" class="btn">🔁 إعادة الصوت</button>
+      <button onclick="stopSpeech()" class="btn">⏹️ إيقاف الصوت</button>
+    </div>
+  </div>
+
+  <div class="tabContent" id="register" style="display:none;">
     <h2>📝 تسجيل جديد (اختياري)</h2>
     <form id="userForm">
       <input type="text" id="name" placeholder="اسمك" />
       <button type="submit" class="btn">تسجيل</button>
     </form>
     <div id="formStatus"></div>
-  </section>
+  </div>
 
   <script src="script.js"></script>
 </body>
