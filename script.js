@@ -1,41 +1,61 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المسعف الذكي</title>
+// ------------------------ بيانات الحالات ------------------------
+const cases = {
+  "كسر": "تثبيت الجزء المكسور وعدم تحريكه، وضع الثلج لتخفيف التورم، والاتصال بالإسعاف: <a href='tel:997' class='call-emergency'>997</a>.",
+  "نزيف": "اضغط مباشرة على مكان النزيف بقطعة قماش نظيفة، ارفع الجزء المصاب إن أمكن، واتصل بالإسعاف: <a href='tel:997' class='call-emergency'>997</a>.",
+  "انخفاض السكر": "أعط المصاب مصدر سكر سريع مثل عصير أو قطعة حلوى، ثم راقب حالته واطلب المساعدة الطبية. في حالة الطوارئ اتصل بالإسعاف: <a href='tel:997' class='call-emergency'>997</a>."
+};
 
-  <!-- خط Cairo -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Style.css">
-</head>
-<body>
+// ------------------------ دالة النطق الصوتي ------------------------
+const speak = (text) => {
+  const utter = new SpeechSynthesisUtterance(text.replace(/<[^>]*>?/gm, '')); // إزالة HTML من النص عند النطق
+  utter.lang = 'ar-SA';
+  speechSynthesis.speak(utter);
+};
 
-  <!-- قسم المسعف الذكي الصوتي -->
-  <section class="card">
-    <h2>🎙️ المسعف الذكي الصوتي</h2>
-    <p>تحدث الآن مثلاً: <b>كسر</b> أو <b>نزيف</b> أو <b>انخفاض السكر</b></p>
-    <button id="startVoice" class="btn primary">🎧 استمع إليّ</button>
-    <div id="voiceStatus"></div>
-    <div id="result"></div>
-  </section>
+// ------------------------ إعداد التعرف على الصوت ------------------------
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'ar-SA';
+recognition.continuous = false;
 
-  <!-- قسم الحالات النصية -->
-  <section class="card">
-    <h2>🩺 الحالات الحرجة</h2>
-    <ul id="casesList"></ul>
-  </section>
+const statusEl = document.getElementById('voiceStatus');
+const resultEl = document.getElementById('result');
 
-  <!-- زر التسجيل (اختياري) -->
-  <section class="card">
-    <h2>📝 تسجيل جديد (اختياري)</h2>
-    <form id="userForm">
-      <input type="text" id="name" placeholder="اسمك" />
-      <button type="submit" class="btn">تسجيل</button>
-    </form>
-    <div id="formStatus"></div>
-  </section>
+recognition.onstart = () => statusEl.textContent = "🎙️ جارٍ الاستماع...";
+recognition.onerror = () => statusEl.textContent = "⚠️ لم أتعرف على الصوت، حاول مرة أخرى.";
+recognition.onend = () => statusEl.textContent = "⏹️ تم إنهاء الاستماع.";
+recognition.onresult = (event) => {
+  const transcript = event.results[0][0].transcript.trim();
+  if (cases[transcript]) {
+    resultEl.innerHTML = `<b>سمعت:</b> ${transcript}<p>${cases[transcript]}</p>`;
+    speak(cases[transcript]);
+  } else {
+    resultEl.innerHTML = `<b>سمعت:</b> ${transcript}<p>لم أفهم الحالة، حاول قول كسر أو نزيف أو انخفاض السكر.</p>`;
+    speak("لم أفهم الحالة، حاول قول كسر أو نزيف أو انخفاض السكر.");
+  }
+};
 
-  <script src="script.js"></script>
-</body>
-</html>
+document.getElementById("startVoice").onclick = () => recognition.start();
+
+// ------------------------ عرض الحالات النصية ------------------------
+const casesListEl = document.getElementById('casesList');
+Object.keys(cases).forEach(key => {
+  const li = document.createElement('li');
+  li.innerHTML = key;
+  li.onclick = () => speak(cases[key]);
+  casesListEl.appendChild(li);
+});
+
+// ------------------------ زر التسجيل (اختياري) ------------------------
+const form = document.getElementById('userForm');
+const formStatus = document.getElementById('formStatus');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  if (name) {
+    formStatus.textContent = `تم تسجيل ${name} بنجاح (اختياري).`;
+    form.reset();
+  } else {
+    formStatus.textContent = "الرجاء إدخال اسمك.";
+  }
+});
