@@ -1,112 +1,112 @@
-// ------------------------ الرابط لقاعدة بيانات SheetDB ------------------------
-const API = 'https://sheetdb.io/api/v1/pp3tkazlfqhvu';
+const emergencyBtn = document.getElementById("emergencyBtn");
+const showCasesBtn = document.getElementById("showCasesBtn");
+const casesList = document.getElementById("casesList");
+const stepsSection = document.getElementById("stepsSection");
+const caseTitle = document.getElementById("caseTitle");
+const stepsList = document.getElementById("stepsList");
+const stopBtn = document.getElementById("stopBtn");
+const playBtn = document.getElementById("playBtn");
+const backBtnEl = document.getElementById("back");
+const instruction = document.getElementById("instruction");
+const hint = document.getElementById("hint");
 
-// ------------------------ المتغيرات العامة ------------------------
-let lastSpeech = "";
-const utter = new SpeechSynthesisUtterance();
-utter.lang = 'ar-SA';
+const synth = window.speechSynthesis;
+let recognition = null;
+let currentUtterance = null;
 
-// ------------------------ التبويبات ------------------------
-const tabs = document.querySelectorAll('.tabBtn');
-const contents = document.querySelectorAll('.tabContent');
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    contents.forEach(c => c.style.display = 'none');
-    document.getElementById(tab.dataset.tab).style.display = 'block';
+const cases = [
+  {name:"نزيف", steps:["اضغط على مكان النزيف","ارفع الجزء المصاب","اطلب مساعدة طبية"], info:"اضغط على مكان النزيف واطلب المساعدة فورًا"},
+  {name:"كسر", steps:["ثبت الجزء المكسور","تجنب تحريك المصاب","اطلب مساعدة طبية"], info:"ثبت الجزء المكسور واطلب المساعدة فورًا"},
+  {name:"انخفاض السكر", steps:["قدم للمصاب عصير أو حلوى","اجلس المصاب","اطلب مساعدة طبية"], info:"قدم سكريات سريعة للمصاب وأجلسه"}
+];
+
+// عرض الخطوات وقراءتها صوتياً
+function showSteps(c){
+  stepsSection.style.display = "block";
+  caseTitle.textContent = c.name;
+  stepsList.innerHTML = "";
+  c.steps.forEach(s=>{
+    const li = document.createElement("li");
+    li.textContent = s;
+    stepsList.appendChild(li);
   });
-});
+  speakSteps(c.steps);
 
-// ------------------------ دوال الصوت ------------------------
-function speakSteps(text){
-  lastSpeech = text.replace(/<[^>]*>?/gm,'');
-  utter.text = lastSpeech;
-  speechSynthesis.speak(utter);
+  emergencyBtn.style.display = "none";
+  showCasesBtn.style.display = "none";
+  hint.style.display = "none";
 }
 
-function stopSpeech(){
-  speechSynthesis.cancel();
+function speakSteps(steps){
+  if(synth.speaking) synth.cancel();
+  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
+  currentUtterance.lang = "ar-SA";
+  synth.speak(currentUtterance);
 }
 
 function playLast(){
-  if(lastSpeech){
-    utter.text = lastSpeech;
-    speechSynthesis.speak(utter);
+  if(currentUtterance){
+    if(synth.speaking) synth.cancel();
+    synth.speak(currentUtterance);
   }
 }
 
-// ------------------------ العودة للشاشة الرئيسية ------------------------
-function backBtn(){
-  document.querySelector('.tabBtn[data-tab="home"]').click();
+function stopSpeech(){
+  if(synth.speaking) synth.cancel();
 }
 
-// ------------------------ عرض خطوات الحالة ------------------------
-function showSteps(text){
-  const resultEl = document.getElementById('result');
-  resultEl.innerHTML = `<p>${text}</p>`;
-  speakSteps(text);
-}
-
-// ------------------------ المسعف الصوتي ------------------------
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.lang = 'ar-SA';
-recognition.continuous = false;
-
-const statusEl = document.getElementById('voiceStatus');
-const resultEl = document.getElementById('result');
-
-recognition.onstart = () => statusEl.textContent = "🎙️ جارٍ الاستماع...";
-recognition.onerror = () => statusEl.textContent = "⚠️ لم أتعرف على الصوت، حاول مرة أخرى.";
-recognition.onend = () => statusEl.textContent = "⏹️ تم إنهاء الاستماع.";
-
-recognition.onresult = (event) => {
-  const transcript = event.results[0][0].transcript.trim();
-  if(casesMap[transcript]){
-    showSteps(casesMap[transcript]);
-  } else {
-    showSteps("لم أفهم الحالة، حاول قول كسر أو نزيف أو انخفاض السكر.");
-  }
-};
-
-document.getElementById("startVoice").onclick = () => recognition.start();
-
-// ------------------------ جلب البيانات من SheetDB ------------------------
-let casesMap = {}; // لتخزين الحالات والخطوات
-
-fetch(API)
-  .then(res => {
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
-  })
-  .then(data => {
-    const casesListEl = document.getElementById('casesList');
-    data.forEach(row => {
-      if(row.case && row.steps){
-        casesMap[row.case] = row.steps;
-        const li = document.createElement('li');
-        li.innerHTML = row.case;
-        li.onclick = () => showSteps(row.steps);
-        casesListEl.appendChild(li);
-      }
-    });
-  })
-  .catch(err => {
-    console.error("خطأ عند جلب البيانات:", err);
-   
+// عرض الحالات نصيًا
+showCasesBtn.addEventListener("click", () => {
+  casesList.innerHTML = "";
+  cases.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${c.name}</h3><p>${c.info}</p>`;
+    casesList.appendChild(card);
   });
+  casesList.classList.toggle("hidden");
+});
 
-// ------------------------ التسجيل ------------------------
-const form = document.getElementById('userForm');
-const formStatus = document.getElementById('formStatus');
+// التعرف على الصوت مباشرة
+if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = "ar-SA";
+  recognition.continuous = true;
+  recognition.interimResults = false;
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  if(name){
-    formStatus.textContent = `تم تسجيل ${name} بنجاح (اختياري).`;
-    form.reset();
-  } else {
-    formStatus.textContent = "الرجاء إدخال اسمك.";
+  recognition.onresult = function(event){
+    const last = event.results[event.results.length -1];
+    const word = last[0].transcript.trim().toLowerCase();
+    console.log("سمعت:", word);
+
+    const found = cases.find(c=>word.includes(c.name.toLowerCase()));
+    if(found){
+      showSteps(found);
+    }
+  };
+
+  recognition.onerror = function(e){console.log(e);}
+  recognition.start(); // يبدأ تلقائيًا
+}
+
+// تفعيل المايك عند الضغط على زر الطوارئ
+emergencyBtn.addEventListener("click", ()=>{
+  if(recognition){
+    recognition.start();
   }
+});
+
+// التحكم اليدوي بالصوت
+stopBtn.addEventListener("click", stopSpeech);
+playBtn.addEventListener("click", playLast);
+
+// زر الرجوع
+backBtnEl.addEventListener("click", ()=>{
+  stepsSection.style.display = "none";
+  if(synth.speaking) synth.cancel();
+  emergencyBtn.style.display = "inline-block";
+  showCasesBtn.style.display = "inline-block";
+  hint.style.display = "block";
+  instruction.textContent = "اضغط زر الطوارئ للبدء";
 });
