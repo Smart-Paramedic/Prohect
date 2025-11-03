@@ -16,7 +16,7 @@ const synth = window.speechSynthesis;
 let recognition = null;
 let currentUtterance = null;
 
-// رابط قاعدة بيانات SheetDB
+// رابط قاعدة البيانات SheetDB
 const API = 'https://sheetdb.io/api/v1/pp3tkazlfqhvu';
 let cases = [];
 
@@ -129,5 +129,5 @@ backBtnEl.addEventListener("click", ()=>{
   emergencyBtn.style.display = "inline-block";
   showCasesBtn.style.display = "inline-block";
   hint.style.display = "block";
-  instruction.textContent = "اضغط زر الطوارئ للبدء";
+  instruction.textContent = "اضغط زر الطوارئ للبدء أو قل حالة من التلميح";
 });
