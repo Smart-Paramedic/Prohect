@@ -4,55 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>المسعف الذكي</title>
-  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <nav>
     <button onclick="showTab('home')">الرئيسية</button>
-    <button onclick="showTab('cases')">عرض الحالات السابقة</button>
+    <button onclick="showTab('cases')">عرض الحالات</button>
+    <button onclick="showTab('register')">تسجيل حالة</button>
     <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
-    <button onclick="showTab('register')">تسجيل حالة جديدة</button>
   </nav>
 
-  <section id="homeTab" class="tab">
-    <h1 id="instruction">اضغط زر الطوارئ للبدء</h1>
+  <!-- الرئيسية -->
+  <section id="home" class="tab">
+    <h1 id="instruction">اضغط زر الطوارئ أو قل اسم الحالة</h1>
     <button id="emergencyBtn">🚨 الطوارئ</button>
-    <button id="showCasesBtn">📋 عرض الحالات</button>
     <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
   </section>
 
-  <section id="casesTab" class="tab hidden">
-    <h2>عرض خطوات الإسعاف نصياً</h2>
-    <div id="casesList" class="horizontal-cards"></div>
+  <!-- عرض الحالات -->
+  <section id="cases" class="tab hidden">
+    <h2>الحالات الإسعافية</h2>
+    <div id="casesList"></div>
     <div id="stepsSection" class="hidden">
       <h3 id="caseTitle"></h3>
       <ul id="stepsList"></ul>
       <button id="playBtn">🔊 إعادة الصوت</button>
       <button id="stopBtn">⏹️ إيقاف الصوت</button>
-      <button id="back">⬅️ رجوع</button>
+      <button id="backBtn">⬅️ رجوع</button>
     </div>
   </section>
 
-  <section id="paramedicsTab" class="tab hidden">
-    <h2>المسعفون المؤهلون</h2>
-    <div class="paramedic-box">
-      <p>📄 <strong>information</strong> (بيانات المستخدمين):</p>
-      <ul class="tight-list">
-        <li>اسم المستخدم</li>
-        <li>التاريخ الطبي</li>
-        <li>رقم التواصل</li>
-        <li>جهة الطوارئ</li>
-        <li>نوع الرخصة</li>
-        <li>العنوان</li>
-      </ul>
-      <p>📄 <strong>paramedics</strong>: ورقة مخصصة لإدخال بيانات المسعفين المؤهلين لاحقًا.</p>
-    </div>
-    <div class="alert-box">
-      <p>📌 سيتم عرض قائمة المسعفين المؤهلين هنا عند توفر البيانات.</p>
-    </div>
-  </section>
-
-  <section id="registerTab" class="tab hidden">
+  <!-- تسجيل حالة -->
+  <section id="register" class="tab hidden">
     <h2>تسجيل حالة جديدة</h2>
     <form id="registerForm">
       <label>اسم المستخدم</label>
@@ -73,8 +56,19 @@
       </select>
       <label>العنوان</label>
       <input type="text" name="العنوان">
-      <button type="submit">📤 إرسال الحالة</button>
+      <button type="submit">📤 إرسال</button>
     </form>
+  </section>
+
+  <!-- المسعفون -->
+  <section id="paramedics" class="tab hidden">
+    <h2>المسعفون المؤهلون</h2>
+    <p>📋 قاعدة البيانات تحتوي على:</p>
+    <ul>
+      <li><strong>information</strong>: اسم المستخدم، التاريخ الطبي، رقم التواصل، جهة الطوارئ، نوع الرخصة، العنوان</li>
+      <li><strong>paramedics</strong>: ورقة مخصصة للمسعفين المؤهلين، جاهزة لإدخال البيانات لاحقًا</li>
+    </ul>
+    <p>📌 سيتم عرض قائمة المسعفين عند توفر البيانات.</p>
   </section>
 
   <script src="script.js" defer></script>
