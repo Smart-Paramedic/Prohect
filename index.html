@@ -4,28 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>المسعف الذكي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
   <nav>
     <button onclick="showTab('home')">الرئيسية</button>
-    <button onclick="showTab('cases')">عرض الحالات نصيًا</button>
+    <button onclick="showTab('cases')">عرض الحالات الإسعافية</button>
     <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
     <button onclick="showTab('register')">تسجيل حالة جديدة</button>
   </nav>
 
-  <div id="homeTab" class="tab">
-    <h1 id="instruction">🚨 قل اسم الحالة أو اضغط زر الطوارئ للبدء</h1>
+  <section id="homeTab" class="tab">
+    <h1 id="instruction">🚨 اضغط زر الطوارئ أو قل اسم الحالة لعرض خطوات الإسعاف</h1>
     <button id="emergencyBtn">🚨 الطوارئ</button>
     <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
-  </div>
+  </section>
 
-  <div id="casesTab" class="tab hidden">
-    <h2>عرض خطوات الإسعاف نصيًا</h2>
+  <section id="casesTab" class="tab hidden">
+    <h2>عرض خطوات الإسعاف نصياً</h2>
     <div id="casesList" class="horizontal-cards"></div>
-  </div>
+  </section>
 
-  <div id="paramedicsTab" class="tab hidden">
+  <section id="paramedicsTab" class="tab hidden">
     <h2>المسعفون المؤهلون</h2>
     <p>📋 تم تجهيز قاعدة بيانات تحتوي على الورقتين:</p>
     <ul>
@@ -34,19 +35,27 @@
           <li>اسم المستخدم</li>
           <li>التاريخ الطبي</li>
           <li>رقم التواصل</li>
-          <li>جهات الطوارئ</li>
+          <li>جهة الطوارئ</li>
           <li>نوع الرخصة</li>
           <li>العنوان</li>
         </ul>
       </li>
       <li><strong>paramedics</strong>: ورقة مخصصة للمسعفين المؤهلين، جاهزة لإدخال البيانات لاحقًا.</li>
     </ul>
-  </div>
+  </section>
 
-  <div id="registerTab" class="tab hidden">
+  <section id="registerTab" class="tab hidden">
     <h2>تسجيل حالة جديدة</h2>
-    <p>📌 سيتم تفعيل هذه الخاصية لاحقًا لإضافة حالات جديدة.</p>
-  </div>
+    <form id="registerForm">
+      <input type="text" name="اسم المستخدم" placeholder="اسم المستخدم" required>
+      <input type="text" name="التاريخ الطبي" placeholder="التاريخ الطبي">
+      <input type="text" name="رقم التواصل" placeholder="رقم التواصل" required>
+      <input type="text" name="جهة الطوارئ" placeholder="جهة الطوارئ">
+      <input type="text" name="نوع الرخصة" placeholder="نوع الرخصة">
+      <input type="text" name="العنوان" placeholder="العنوان">
+      <button type="submit">📤 إرسال الحالة</button>
+    </form>
+  </section>
 
   <script src="script.js" defer></script>
 </body>
