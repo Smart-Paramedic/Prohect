@@ -1,157 +1,88 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>المسعف الذكي</title>
-  <style>
-    body {
-      font-family: "Cairo", sans-serif;
-      background: #f7faff;
-      color: #222;
-      padding: 20px;
-      direction: rtl;
-      text-align: right;
-    }
-    h2 {
-      color: #005ecb;
-      margin-top: 20px;
-    }
-    input, select, button {
-      display: block;
-      margin: 8px 0;
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid #aaa;
-      width: 100%;
-      max-width: 400px;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #005ecb;
-    }
-    .person {
-      background: #e9f3ff;
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-  </style>
+
+  <!-- رابط خط جميل (اختياري) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ملف الأنماط -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <main class="container">
+    <header>
+      <h1>المسعف الذكي</h1>
+      <p class="subtitle">سجّل معلوماتك واطلع على المرخّصين للإسعافات الأولية</p>
+    </header>
 
-  <h2>🩺 إضافة مستخدم جديد</h2>
-  <input id="name" placeholder="اسم المستخدم">
-  <input id="history" placeholder="التاريخ الطبي">
-  <input id="phone" placeholder="رقم التواصل">
-  <input id="emergency" placeholder="جهات الاتصال في الطوارئ">
+    <section class="card">
+      <h2>🩺 إضافة مستخدم جديد</h2>
+      <form id="userForm" onsubmit="event.preventDefault(); addUser();">
+        <label>اسم المستخدم</label>
+        <input id="name" type="text" placeholder="مثال: محمد علي" required>
 
-  <label for="license">نوع الرخصة:</label>
-  <select id="license">
-    <option value="">بدون رخصة</option>
-    <option value="رخصة إسعاف أولي">رخصة إسعاف أولي</option>
-    <option value="مسعف متقدم">مسعف متقدم</option>
-    <option value="مستجيب أولي">مستجيب أولي</option>
-  </select>
+        <label>التاريخ الطبي</label>
+        <input id="history" type="text" placeholder="أمراض، حساسية، أدوية إن وجدت">
 
-  <input id="address" placeholder="العنوان">
+        <label>رقم التواصل</label>
+        <input id="phone" type="tel" placeholder="مثال: 05xxxxxxxx" required>
 
-  <button onclick="addUser()">💾 حفظ بيانات المستخدم</button>
+        <label>جهات الاتصال في الطوارئ</label>
+        <input id="emergency" type="text" placeholder="أسماء وأرقام (مثال: ولي الأمر - 05...)">
 
-  <hr>
+        <label>نوع الرخصة</label>
+        <select id="license">
+          <option value="">بدون رخصة</option>
+          <option value="رخصة إسعاف أولي">رخصة إسعاف أولي</option>
+          <option value="مسعف متقدم">مسعف متقدم</option>
+          <option value="مستجيب أولي">مستجيب أولي</option>
+        </select>
 
-  <h2>👩‍⚕️ الأشخاص الحاصلون على رخصة إسعافات أولية</h2>
-  <button onclick="showLicensed()">🔍 عرض المرخّصين</button>
-  <div id="licensedList"></div>
+        <label>العنوان</label>
+        <input id="address" type="text" placeholder="المدينة، الحي">
 
-  <hr>
+        <div class="actions">
+          <button type="submit" class="btn primary">💾 حفظ بيانات المستخدم</button>
+          <button type="button" class="btn" onclick="clearForm()">✖ إفراغ</button>
+        </div>
+      </form>
+    </section>
 
-  <h2>🚑 الخطوات الإسعافية</h2>
-  <ul>
-    <li>افحص استجابة المصاب.</li>
-    <li>افتح مجرى التنفس.</li>
-    <li>قدّم الإنعاش القلبي الرئوي إن لزم.</li>
-    <li>اتصل بالطوارئ فورًا.</li>
-  </ul>
+    <section class="card">
+      <h2>👩‍⚕️ الأشخاص الحاصلون على رخصة إسعافات أولية</h2>
+      <div class="controls">
+        <button class="btn" onclick="showLicensed()">🔍 عرض المرخّصين</button>
+        <button class="btn" onclick="showAll()">📋 عرض جميع المستخدمين</button>
+      </div>
+      <div id="licensedList" class="list"></div>
+    </section>
 
-  <button onclick="window.location.href='tel:997'">📞 اتصل بالطوارئ (997)</button>
+    <section class="card">
+      <h2>🚑 الخطوات الإسعافية</h2>
+      <p class="steps-title">الخطوات الإسعافية</p>
+      <ol class="steps">
+        <li>افحص استجابة المصاب.</li>
+        <li>افتح مجرى التنفس وتحقّق من التنفس.</li>
+        <li>قدّم الإنعاش القلبي الرئوي إذا لزم.</li>
+        <li>أوقف النزيف الضخم بالضغط المباشر.</li>
+        <li>اتصل بالطوارئ فورًا وبيّن الموقع والحالة.</li>
+      </ol>
 
-  <script>
-    const API_URL = "https://sheetdb.io/api/v1/abcd1234"; // ← استبدلي هذا برابط الـ API الخاص بك
+      <div class="emergency-call">
+        <a class="btn call" href="tel:997">📞 اتصل بالطوارئ (997)</a>
+        <p class="note">اضغط للاتصال مباشرة من هاتفك.</p>
+      </div>
+    </section>
 
-    // إضافة مستخدم جديد إلى قاعدة البيانات
-    async function addUser() {
-      const name = document.getElementById("name").value;
-      const history = document.getElementById("history").value;
-      const phone = document.getElementById("phone").value;
-      const emergency = document.getElementById("emergency").value;
-      const license = document.getElementById("license").value;
-      const address = document.getElementById("address").value;
+    <footer class="footer">
+      <p>© المسعف الذكي</p>
+    </footer>
+  </main>
 
-      const data = {
-        data: [
-          {
-            "اسم المستخدم": name,
-            "التاريخ الطبي": history,
-            "رقم التواصل": phone,
-            "جهات الطوارئ": emergency,
-            "نوع الرخصة": license,
-            "العنوان": address
-          }
-        ]
-      };
-
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        alert("✅ تم حفظ بيانات المستخدم بنجاح!");
-        document.querySelectorAll("input").forEach(i => i.value = "");
-        document.getElementById("license").value = "";
-      } else {
-        alert("⚠️ حدث خطأ أثناء الحفظ!");
-      }
-    }
-
-    // عرض الأشخاص الحاصلين على رخص إسعاف أولي
-    async function showLicensed() {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-
-      const list = document.getElementById("licensedList");
-      list.innerHTML = "";
-
-      data.forEach(row => {
-        if (row["نوع الرخصة"] && row["نوع الرخصة"] !== "بدون رخصة") {
-          const item = document.createElement("div");
-          item.className = "person";
-          item.innerHTML = `
-            <b>👨‍⚕️ ${row["اسم المستخدم"]}</b><br>
-            📞 ${row["رقم التواصل"]}<br>
-            📍 ${row["العنوان"]}<br>
-            🪪 ${row["نوع الرخصة"]}
-          `;
-          list.appendChild(item);
-        }
-      });
-
-      if (list.innerHTML === "") {
-        list.innerHTML = "<p>لا يوجد أشخاص حاصلون على رخصة إسعاف أولي حاليًا.</p>";
-      }
-    }
-  </script>
-
+  <!-- ملف الجافاسكربت -->
+  <script src="app.js"></script>
 </body>
 </html>
-
-
-
