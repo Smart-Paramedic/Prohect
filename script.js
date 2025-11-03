@@ -7,13 +7,13 @@ let recognition = null;
 let currentUtterance = null;
 let cases = [];
 
-// عرض تبويبات
+// عرض التبويبات
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(tab => tab.classList.add("hidden"));
   document.getElementById(tabId + "Tab").classList.remove("hidden");
 }
 
-// جلب الحالات من Google Sheets عبر SheetDB
+// جلب الحالات من ورقة "الحالات" في SheetDB
 fetch("https://sheetdb.io/api/v1/pp3tkazlfqhvu?sheet=الحالات")
   .then(res => res.json())
   .then(data => {
@@ -25,7 +25,7 @@ fetch("https://sheetdb.io/api/v1/pp3tkazlfqhvu?sheet=الحالات")
   })
   .catch(err => console.error("❌ خطأ في جلب الحالات:", err));
 
-// عرض الحالات نصيًا بكروت أفقية
+// عرض الحالات بكروت أفقية
 function renderCases() {
   casesList.innerHTML = "";
   cases.forEach(c => {
@@ -34,17 +34,17 @@ function renderCases() {
     card.innerHTML = `<h3>${c.name}</h3><ul></ul>`;
     const ul = card.querySelector("ul");
 
-    c.steps.forEach(step => {
+    c.steps.forEach((step, index) => {
       const li = document.createElement("li");
       li.textContent = step;
       ul.appendChild(li);
     });
 
-    // زر الاتصال 997 في نهاية كل كرت
+    // زر الاتصال 997 في نهاية الكرت
     const callBtn = document.createElement("button");
     callBtn.textContent = "📞 الاتصال 997";
     callBtn.onclick = () => {
-      if (confirm("سيتم إجراء مكالمة طوارئ الآن")) {
+      if (confirm("⚠️ سيتم إجراء مكالمة طوارئ الآن")) {
         window.location.href = "tel:997";
       }
     };
