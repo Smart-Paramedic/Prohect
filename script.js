@@ -47,47 +47,4 @@ function speakSteps(steps){
 }
 
 playBtn.addEventListener("click", () => {
-  if(currentUtterance){
-    synth.cancel();
-    synth.speak(currentUtterance);
-  }
-});
-
-stopBtn.addEventListener("click", () => {
-  synth.cancel();
-});
-
-backBtn.addEventListener("click", () => {
-  stepsSection.classList.add("hidden");
-  emergencyBtn.style.display = "inline-block";
-  hint.style.display = "block";
-  instruction.textContent = "اضغط زر الطوارئ أو قل اسم الحالة";
-});
-
-cases.forEach(c => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `<h3>${c.name}</h3>`;
-  card.onclick = () => showSteps(c);
-  casesList.appendChild(card);
-});
-
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.lang = "ar-SA";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-
-  recognition.onresult = function(event){
-    const last = event.results[event.results.length -1][0].transcript.trim().toLowerCase();
-    const found = cases.find(c => last.includes(c.name.toLowerCase()));
-    if(found) showSteps(found);
-  };
-
-  recognition.onerror = function(e){ console.log(e); }
-}
-
-emergencyBtn.addEventListener("click", () => {
-  if(recognition) recognition.start();
-});
+  if(currentUtter
