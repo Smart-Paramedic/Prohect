@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>المسعف الذكي</title>
-  <link rel="stylesheet" href="Style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المسعف الذكي</title>
+<link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
-
-  <div class="tabs">
-    <button class="tabBtn active" data-tab="home">🏠 الرئيسية</button>
-    <button class="tabBtn" data-tab="voice">🎙️ المسعف الصوتي</button>
-    <button class="tabBtn" data-tab="register">📝 تسجيل</button>
-  </div>
-
-  <div class="tabContent" id="home">
-    <h2> الحالات الحرجة</h2>
-    <ul id="casesList"></ul>
-  </div>
-
-  <!-- محتوى تبويب المسعف الصوتي -->
-  <div class="tabContent" id="voice" style="display:none;">
-    <h2>المسعف الصوتي</h2>
-    <p>تحدث الآن مثلاً: <b>كسر</b> أو <b>نزيف</b> أو <b>انخفاض السكر</b></p>
-    <button id="startVoice" class="btn primary">▶️ استمع إليّ</button>
-    <div id="voiceStatus"></div>
-    <div id="result"></div>
-    <div class="voiceControls">
-      <button onclick="playLast()" class="btn">🔁 إعادة الصوت</button>
-      <button onclick="stopSpeech()" class="btn">⏹️ إيقاف الصوت</button>
-      <button onclick="backBtn()" class="btn">⬅️ العودة</button>
+<div class="container">
+  <h1 id="instruction">اضغط زر الطوارئ للبدء</h1>
+  
+  <button id="emergencyBtn">🚨 الطوارئ</button>
+  
+  <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
+  
+  <button id="showCasesBtn">عرض الحالات نصيًا</button>
+  
+  <div id="casesList" class="hidden"></div>
+  
+  <div id="stepsSection">
+    <h2 id="caseTitle"></h2>
+    <ul id="stepsList"></ul>
+    <div class="audio-controls">
+      <button id="stopBtn">⏹️ إيقاف الصوت</button>
+      <button id="playBtn">🔁 إعادة تشغيل الصوت</button>
+      <button id="back">⬅️ رجوع</button>
     </div>
   </div>
+</div>
 
-  <div class="tabContent" id="register" style="display:none;">
-    <h2> تسجيل جديد (اختياري)</h2>
-    <form id="userForm">
-      <input type="text" id="name" placeholder="اسمك" />
-      <button type="submit" class="btn">تسجيل</button>
-    </form>
-    <div id="formStatus"></div>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>
