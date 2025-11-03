@@ -1,12 +1,12 @@
 const emergencyBtn = document.getElementById("emergencyBtn");
-const showCasesBtn = document.getElementById("showCasesBtn");
+const showTabs = document.querySelectorAll(".tab");
 const casesList = document.getElementById("casesList");
 const stepsSection = document.getElementById("stepsSection");
 const caseTitle = document.getElementById("caseTitle");
 const stepsList = document.getElementById("stepsList");
-const stopBtn = document.getElementById("stopBtn");
 const playBtn = document.getElementById("playBtn");
-const backBtn = document.getElementById("back");
+const stopBtn = document.getElementById("stopBtn");
+const backBtn = document.getElementById("backBtn");
 const instruction = document.getElementById("instruction");
 const hint = document.getElementById("hint");
 
@@ -15,22 +15,79 @@ let recognition = null;
 let currentUtterance = null;
 
 const cases = [
-  {name:"نزيف", steps:["1. اضغط على مكان النزيف","2. ارفع الجزء المصاب","3. اطلب مساعدة طبية 📞997"], info:"اضغط على مكان النزيف واطلب المساعدة فورًا"},
-  {name:"كسر", steps:["1. ثبت الجزء المكسور","2. تجنب تحريك المصاب","3. اطلب مساعدة طبية 📞997"], info:"ثبت الجزء المكسور واطلب المساعدة فورًا"},
-  {name:"انخفاض السكر", steps:["1. قدم للمصاب عصير أو حلوى","2. اجلس المصاب","3. اطلب مساعدة طبية 📞997"], info:"قدم سكريات سريعة للمصاب وأجلسه"}
+  {name:"نزيف", steps:["اضغط على مكان النزيف","ارفع الجزء المصاب","اطلب مساعدة طبية 📞997"]},
+  {name:"كسر", steps:["ثبت الجزء المكسور","تجنب تحريك المصاب","اطلب مساعدة طبية 📞997"]},
+  {name:"انخفاض السكر", steps:["قدم للمصاب عصير أو حلوى","اجلس المصاب","اطلب مساعدة طبية 📞997"]}
 ];
 
-function showTab(tabId) {
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.add("hidden"));
-  document.getElementById(tabId + "Tab").classList.remove("hidden");
+function showTab(id){
+  showTabs.forEach(tab => tab.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 
 function showSteps(c){
   stepsSection.classList.remove("hidden");
   caseTitle.textContent = c.name;
   stepsList.innerHTML = "";
-  c.steps.forEach(s=>{
+  c.steps.forEach(s => {
     const li = document.createElement("li");
     li.textContent = s;
     stepsList.appendChild(li);
   });
+  speakSteps(c.steps);
+  emergencyBtn.style.display = "none";
+  hint.style.display = "none";
+}
+
+function speakSteps(steps){
+  if(synth.speaking) synth.cancel();
+  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
+  currentUtterance.lang = "ar-SA";
+  synth.speak(currentUtterance);
+}
+
+playBtn.addEventListener("click", () => {
+  if(currentUtterance){
+    synth.cancel();
+    synth.speak(currentUtterance);
+  }
+});
+
+stopBtn.addEventListener("click", () => {
+  synth.cancel();
+});
+
+backBtn.addEventListener("click", () => {
+  stepsSection.classList.add("hidden");
+  emergencyBtn.style.display = "inline-block";
+  hint.style.display = "block";
+  instruction.textContent = "اضغط زر الطوارئ أو قل اسم الحالة";
+});
+
+cases.forEach(c => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<h3>${c.name}</h3>`;
+  card.onclick = () => showSteps(c);
+  casesList.appendChild(card);
+});
+
+if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = "ar-SA";
+  recognition.continuous = true;
+  recognition.interimResults = false;
+
+  recognition.onresult = function(event){
+    const last = event.results[event.results.length -1][0].transcript.trim().toLowerCase();
+    const found = cases.find(c => last.includes(c.name.toLowerCase()));
+    if(found) showSteps(found);
+  };
+
+  recognition.onerror = function(e){ console.log(e); }
+}
+
+emergencyBtn.addEventListener("click", () => {
+  if(recognition) recognition.start();
+});
