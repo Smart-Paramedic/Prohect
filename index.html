@@ -19,75 +19,20 @@
     </header>
 
     <section class="card">
-      <h2>🩺 إضافة مستخدم جديد</h2>
-      <form id="userForm" onsubmit="event.preventDefault(); addUser();">
-        <label>اسم المستخدم</label>
-       
+    <h2>🎙️ المسعف الذكي الصوتي</h2>
+    <p>تحدث الآن مثلاً: <b>كسر</b> أو <b>نزيف</b> أو <b>انخفاض السكر</b></p>
+    <button id="startVoice" class="btn primary">🎧 استمع إليّ</button>
+    <div id="voiceStatus"></div>
+    <div id="result"></div>
+  </section>
 
-        <label>التاريخ الطبي</label>
-        <input id="history" type="text" placeholder="أمراض، حساسية، أدوية إن وجدت">
+ 
+  <section class="card">
+    <h2>🩺 الحالات الحرجة</h2>
+    <ul id="casesList"></ul>
+  </section>
 
-        <label>رقم التواصل</label>
-        <input id="phone" type="tel" placeholder="مثال: 05xxxxxxxx" required>
-
-        <label>جهات الاتصال في الطوارئ</label>
-        <input id="emergency" type="text" placeholder="أسماء وأرقام (مثال: ولي الأمر - 05...)">
-
-        <label>نوع الرخصة</label>
-        <select id="license">
-          <option value="">بدون رخصة</option>
-          <option value="رخصة إسعاف أولي">رخصة إسعاف أولي</option>
-          <option value="مسعف متقدم">مسعف متقدم</option>
-          <option value="مستجيب أولي">مستجيب أولي</option>
-        </select>
-
-        <label>العنوان</label>
-        <input id="address" type="text" placeholder="المدينة، الحي">
-
-        <div class="actions">
-          <button type="submit" class="btn primary"> حفظ  </button>
-          <button type="button" class="btn" onclick="clearForm()"> مسح الكل </button>
-        </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2>👩‍⚕️ الأشخاص الحاصلون على رخصة إسعافات أولية</h2>
-      <div class="controls">
-        <button class="btn" onclick="showLicensed()"> عرض المرخّصين</button>
-        <button class="btn" onclick="showAll()"> عرض جميع المستخدمين</button>
-      </div>
-      <div id="licensedList" class="list"></div>
-    </section>
-
-    <section class="card">
-      <h2>🚑 الخطوات الإسعافية</h2>
-      <p class="steps-title">الخطوات الإسعافية</p>
-      <ol class="steps">
-        <li>افحص استجابة المصاب.</li>
-        <li>افتح مجرى التنفس وتحقّق من التنفس.</li>
-        <li>قدّم الإنعاش القلبي الرئوي إذا لزم.</li>
-        <li>أوقف النزيف الضخم بالضغط المباشر.</li>
-        <li>اتصل بالطوارئ فورًا وبيّن الموقع والحالة.</li>
-      </ol>
-
-      <div class="emergency-call">
-        <a class="btn call" href="tel:997">📞 اتصل بالطوارئ (997)</a>
-        <p class="note">اضغط للاتصال مباشرة من هاتفك.</p>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <p>© المسعف الذكي</p>
-    </footer>
-  </main>
-
-  
+ 
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
