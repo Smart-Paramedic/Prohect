@@ -4,55 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>المسعف الذكي</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
   <nav>
     <button onclick="showTab('home')">الرئيسية</button>
-    <button onclick="showTab('cases')">عرض الحالات الإسعافية</button>
+    <button onclick="showTab('cases')">عرض الحالات السابقة</button>
     <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
     <button onclick="showTab('register')">تسجيل حالة جديدة</button>
   </nav>
 
+  <!-- الرئيسية -->
   <section id="homeTab" class="tab">
-    <h1 id="instruction">🚨 اضغط زر الطوارئ أو قل اسم الحالة لعرض خطوات الإسعاف</h1>
+    <h1 id="instruction">اضغط زر الطوارئ للبدء</h1>
     <button id="emergencyBtn">🚨 الطوارئ</button>
+    <button id="showCasesBtn">📋 عرض الحالات</button>
     <div id="hint">الحالات المتاحة: نزيف، كسر، انخفاض السكر</div>
   </section>
 
+  <!-- عرض الحالات -->
   <section id="casesTab" class="tab hidden">
     <h2>عرض خطوات الإسعاف نصياً</h2>
     <div id="casesList" class="horizontal-cards"></div>
+    <div id="stepsSection" class="hidden">
+      <h3 id="caseTitle"></h3>
+      <ul id="stepsList"></ul>
+      <button id="playBtn">🔊 إعادة الصوت</button>
+      <button id="stopBtn">⏹️ إيقاف الصوت</button>
+      <button id="back">⬅️ رجوع</button>
+    </div>
   </section>
 
+  <!-- المسعفون المؤهلون -->
   <section id="paramedicsTab" class="tab hidden">
     <h2>المسعفون المؤهلون</h2>
     <p>📋 تم تجهيز قاعدة بيانات تحتوي على الورقتين:</p>
-    <ul>
-      <li><strong>information</strong>: تحتوي على الأعمدة التالية:
-        <ul>
-          <li>اسم المستخدم</li>
-          <li>التاريخ الطبي</li>
-          <li>رقم التواصل</li>
-          <li>جهة الطوارئ</li>
-          <li>نوع الرخصة</li>
-          <li>العنوان</li>
-        </ul>
-      </li>
-      <li><strong>paramedics</strong>: ورقة مخصصة للمسعفين المؤهلين، جاهزة لإدخال البيانات لاحقًا.</li>
-    </ul>
+    <div class="paramedic-info">
+      <h3>information</h3>
+      <p>تحتوي على الأعمدة التالية:</p>
+      <ul class="tight-list">
+        <li>اسم المستخدم</li>
+        <li>التاريخ الطبي</li>
+        <li>رقم التواصل</li>
+        <li>جهة الطوارئ</li>
+        <li>نوع الرخصة</li>
+        <li>العنوان</li>
+      </ul>
+      <h3>paramedics</h3>
+      <p>ورقة مخصصة للمسعفين المؤهلين، جاهزة لإدخال البيانات لاحقًا.</p>
+    </div>
+    <button onclick="alert('سيتم عرض المسعفين عند توفر البيانات')">عرض المسعفين</button>
   </section>
 
+  <!-- تسجيل حالة جديدة -->
   <section id="registerTab" class="tab hidden">
     <h2>تسجيل حالة جديدة</h2>
     <form id="registerForm">
-      <input type="text" name="اسم المستخدم" placeholder="اسم المستخدم" required>
-      <input type="text" name="التاريخ الطبي" placeholder="التاريخ الطبي">
-      <input type="text" name="رقم التواصل" placeholder="رقم التواصل" required>
-      <input type="text" name="جهة الطوارئ" placeholder="جهة الطوارئ">
-      <input type="text" name="نوع الرخصة" placeholder="نوع الرخصة">
-      <input type="text" name="العنوان" placeholder="العنوان">
+      <label>اسم المستخدم</label>
+      <input type="text" name="اسم المستخدم" required>
+      <label>التاريخ الطبي</label>
+      <input type="text" name="التاريخ الطبي">
+      <label>رقم التواصل</label>
+      <input type="text" name="رقم التواصل" required>
+      <label>جهة الطوارئ</label>
+      <input type="text" name="جهة الطوارئ">
+      <label>نوع الرخصة</label>
+      <input type="text" name="نوع الرخصة">
+      <label>العنوان</label>
+      <input type="text" name="العنوان">
       <button type="submit">📤 إرسال الحالة</button>
     </form>
   </section>
