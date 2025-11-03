@@ -1,115 +1,145 @@
-const emergencyBtn = document.getElementById("emergencyBtn");
-const showCasesBtn = document.getElementById("showCasesBtn");
-const casesList = document.getElementById("casesList");
-const stepsSection = document.getElementById("stepsSection");
-const caseTitle = document.getElementById("caseTitle");
-const stepsList = document.getElementById("stepsList");
-const stopBtn = document.getElementById("stopBtn");
-const playBtn = document.getElementById("playBtn");
-const backBtn = document.getElementById("back");
-const instruction = document.getElementById("instruction");
-const hint = document.getElementById("hint");
+// ======= ضبط رابط API =======
+// استبدلي النص داخل علامات الاقتباس برابط API الخاص بك من SheetDB
+const API_URL = "https://sheetdb.io/api/v1/abcd1234"; // ← ضع هنا رابطك
 
-const synth = window.speechSynthesis;
-let recognition = null;
-let currentUtterance = null;
+// عناصر الواجهة
+const licensedList = document.getElementById("licensedList");
+const form = document.getElementById("userForm");
 
-const cases = [
-  {name:"نزيف", steps:["اضغط على مكان النزيف","ارفع الجزء المصاب","اطلب مساعدة طبية"], info:"اضغط على مكان النزيف واطلب المساعدة فورًا"},
-  {name:"كسر", steps:["ثبت الجزء المكسور","تجنب تحريك المصاب","اطلب مساعدة طبية"], info:"ثبت الجزء المكسور واطلب المساعدة فورًا"},
-  {name:"انخفاض السكر", steps:["قدم للمصاب عصير أو حلوى","اجلس المصاب","اطلب مساعدة طبية"], info:"قدم سكريات سريعة للمصاب وأجلسه"}
-];
+// إضافة مستخدم جديد
+async function addUser() {
+  const name = document.getElementById("name").value.trim();
+  const history = document.getElementById("history").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const emergency = document.getElementById("emergency").value.trim();
+  const license = document.getElementById("license").value;
+  const address = document.getElementById("address").value.trim();
 
-// عرض الخطوات وقراءتها صوتياً
-function showSteps(c){
-  stepsSection.style.display = "block";
-  caseTitle.textContent = c.name;
-  stepsList.innerHTML = "";
-  c.steps.forEach(s=>{
-    const li = document.createElement("li");
-    li.textContent = s;
-    stepsList.appendChild(li);
-  });
-  speakSteps(c.steps);
-
-  // إخفاء الشاشة الرئيسية أثناء عرض الخطوات
-  emergencyBtn.style.display = "none";
-  showCasesBtn.style.display = "none";
-  hint.style.display = "none";
-}
-
-// التحكم بالصوت
-function speakSteps(steps){
-  if(synth.speaking) synth.cancel();
-  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
-  currentUtterance.lang = "ar-SA";
-  synth.speak(currentUtterance);
-}
-
-function playLast(){
-  if(currentUtterance){
-    if(synth.speaking) synth.cancel();
-    synth.speak(currentUtterance);
+  if (!name || !phone) {
+    alert("الرجاء إدخال الاسم ورقم التواصل.");
+    return;
   }
-}
 
-function stopSpeech(){
-  if(synth.speaking) synth.cancel();
-}
-
-// عرض الحالات نصيًا
-showCasesBtn.addEventListener("click", () => {
-  casesList.innerHTML = "";
-  cases.forEach(c => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<h3>${c.name}</h3><p>${c.info}</p>`;
-    casesList.appendChild(card);
-  });
-  casesList.classList.toggle("hidden");
-});
-
-// تفعيل المايك عند الضغط على زر الطوارئ
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.lang = "ar-SA";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-
-  recognition.onresult = function(event){
-    const last = event.results[event.results.length -1];
-    const word = last[0].transcript.trim().toLowerCase();
-    console.log("سمعت:", word);
-
-    const found = cases.find(c=>word.includes(c.name.toLowerCase()));
-    if(found){
-      showSteps(found);
-    }
+  const payload = {
+    data: [
+      {
+        "اسم المستخدم": name,
+        "التاريخ الطبي": history,
+        "رقم التواصل": phone,
+        "جهات الطوارئ": emergency,
+        "نوع الرخصة": license,
+        "العنوان": address
+      }
+    ]
   };
 
-  recognition.onerror = function(e){console.log(e);}
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      alert("✅ تم حفظ بيانات المستخدم بنجاح!");
+      clearForm();
+    } else {
+      const err = await res.text();
+      console.error("خطأ من الخادم:", err);
+      alert("⚠️ حدث خطأ أثناء الحفظ. تحقق من رابط API وصلاحيات Google Sheet.");
+    }
+  } catch (e) {
+    console.error(e);
+    alert("⚠️ تعذر الاتصال بالـ API. تأكدي من أن الرابط صحيح وأن الصلاحيات مضبوطة.");
+  }
 }
 
-emergencyBtn.addEventListener("click", ()=>{
-  if(recognition){
-    recognition.start();
+// إفراغ الحقول
+function clearForm(){
+  form.reset();
+}
+
+// إظهار المرخّصين فقط
+async function showLicensed(){
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("API response not ok");
+    const data = await res.json();
+    renderList(data.filter(r => r["نوع الرخصة"] && r["نوع الرخصة"] !== ""));
+  } catch (e) {
+    console.error(e);
+    alert("⚠️ خطأ عند جلب البيانات. تحقق من رابط API وصلاحيات SheetDB.");
   }
-});
+}
 
-// التحكم اليدوي بالصوت
-stopBtn.addEventListener("click", stopSpeech);
-playBtn.addEventListener("click", playLast);
+// إظهار كل المستخدمين
+async function showAll(){
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("API response not ok");
+    const data = await res.json();
+    renderList(data);
+  } catch (e) {
+    console.error(e);
+    alert("⚠️ خطأ عند جلب البيانات. تحقق من رابط API وصلاحيات SheetDB.");
+  }
+}
 
-// زر الرجوع: العودة للشاشة الرئيسية
-backBtn.addEventListener("click", ()=>{
-  stepsSection.style.display = "none";
-  if(synth.speaking) synth.cancel();
+// رندر القائمة في الصفحة
+function renderList(items){
+  licensedList.innerHTML = "";
+  if (!items || items.length === 0) {
+    licensedList.innerHTML = "<p>لا توجد بيانات للعرض.</p>";
+    return;
+  }
 
-  // إعادة عرض الشاشة الرئيسية
-  emergencyBtn.style.display = "inline-block";
-  showCasesBtn.style.display = "inline-block";
-  hint.style.display = "block";
-  instruction.textContent = "اضغط زر الطوارئ للبدء";
-});
+  items.forEach(row => {
+    const el = document.createElement("div");
+    el.className = "person";
 
+    const left = document.createElement("div");
+    left.className = "left";
+    const name = row["اسم المستخدم"] || "—";
+    const phone = row["رقم التواصل"] || "—";
+    const address = row["العنوان"] || "—";
+    const license = row["نوع الرخصة"] || "بدون رخصة";
+    const emergency = row["جهات الطوارئ"] || "";
+
+    left.innerHTML = `
+      <b>${escapeHtml(name)}</b>
+      <small>📞 ${escapeHtml(phone)} ${emergency ? " | " + escapeHtml(emergency) : ""}</small>
+      <small>📍 ${escapeHtml(address)}</small>
+      <small>🪪 ${escapeHtml(license)}</small>
+    `;
+
+    // زر اتصال سريع (سيعمل على الجوال)
+    const callBtn = document.createElement("a");
+    callBtn.href = `tel:${phone || ''}`;
+    callBtn.className = "btn call";
+    callBtn.textContent = "اتصال";
+
+    el.appendChild(left);
+    el.appendChild(callBtn);
+    licensedList.appendChild(el);
+  });
+}
+
+// دالة بسيطة لحماية من إدخال HTML
+function escapeHtml(text) {
+  if (!text) return "";
+  return text.replace(/[&<>"'`=\/]/g, function (s) {
+    return ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '/': '&#x2F;',
+      '`': '&#x60;',
+      '=': '&#x3D;'
+    })[s];
+  });
+}
+
+// تحميل مرخّصين افتراضياً عند فتح الصفحة (اختياري)
+// showLicensed();
