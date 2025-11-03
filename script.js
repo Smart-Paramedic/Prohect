@@ -1,133 +1,89 @@
-// ======= المتغيرات =======
-const emergencyBtn = document.getElementById("emergencyBtn");
-const showCasesBtn = document.getElementById("showCasesBtn");
-const casesList = document.getElementById("casesList");
-const stepsSection = document.getElementById("stepsSection");
-const caseTitle = document.getElementById("caseTitle");
-const stepsList = document.getElementById("stepsList");
-const stopBtn = document.getElementById("stopBtn");
-const playBtn = document.getElementById("playBtn");
-const callBtn = document.getElementById("callBtn");
-const backBtnEl = document.getElementById("back");
-const instruction = document.getElementById("instruction");
-const hint = document.getElementById("hint");
-
-const synth = window.speechSynthesis;
-let recognition = null;
-let currentUtterance = null;
-
-// رابط قاعدة بيانات SheetDB
-const API = 'https://sheetdb.io/api/v1/pp3tkazlfqhvu';
-let cases = [];
-
-// ======= جلب البيانات =======
-fetch(API)
-  .then(res => res.json())
-  .then(data => {
-    cases = data.map(row => ({
-      name: row.case,
-      steps: row.steps.split('|'),
-      info: row.info || ''
-    }));
-    renderCases();
-  })
-  .catch(err => console.error("خطأ عند جلب البيانات:", err));
-
-// ======= عرض الحالات نصيًا =======
-function renderCases(){
-  casesList.innerHTML = "";
-  cases.forEach(c=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<h3>${c.name}</h3><p>${c.info}</p>`;
-    card.onclick = () => showSteps(c);
-    casesList.appendChild(card);
-  });
-  casesList.classList.remove("hidden");
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  margin: 0;
+  padding: 0;
 }
 
-// ======= عرض الخطوات وقراءتها صوتيًا =======
-function showSteps(c){
-  stepsSection.style.display = "block";
-  caseTitle.textContent = c.name;
-  stepsList.innerHTML = "";
-  c.steps.forEach(s => {
-    const li = document.createElement("li");
-    li.textContent = s;
-    stepsList.appendChild(li);
-  });
-  speakSteps(c.steps);
-
-  emergencyBtn.style.display = "none";
-  showCasesBtn.style.display = "none";
-  hint.style.display = "none";
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 40px 20px;
 }
 
-function speakSteps(steps){
-  if(synth.speaking) synth.cancel();
-  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
-  currentUtterance.lang = "ar-SA";
-  synth.speak(currentUtterance);
+h1 {
+  margin-bottom: 30px;
+  font-size: 2em;
+  color: #a33; /* أحمر فاتح */
 }
 
-function playLast(){
-  if(currentUtterance){
-    if(synth.speaking) synth.cancel();
-    synth.speak(currentUtterance);
-  }
+button {
+  margin: 5px;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
 }
 
-function stopSpeech(){
-  if(synth.speaking) synth.cancel();
+#emergencyBtn {
+  background: #b0b0b0;
+  color: white;
+  padding: 20px 50px;
+  font-size: 1.6em;
+}
+#emergencyBtn:hover { background: #999; transform: scale(1.05); }
+
+#showCasesBtn {
+  background: #c0c0c0;
+  color: white;
+}
+#showCasesBtn:hover { background: #999; }
+
+#hint {
+  margin: 20px 0;
+  color: #333;
+  font-size: 1.1em;
 }
 
-// ======= زر الاتصال بالطوارئ =======
-callBtn.addEventListener("click", ()=>{
-  window.location.href = "tel:997";
-});
-
-// ======= زر عرض الحالات =======
-showCasesBtn.addEventListener("click", renderCases);
-
-// ======= التعرف على الصوت مباشرة =======
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.lang = "ar-SA";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-
-  recognition.onresult = function(event){
-    const last = event.results[event.results.length-1][0].transcript.trim().toLowerCase();
-    console.log("سمعت:", last);
-
-    const found = cases.find(c => last.includes(c.name.toLowerCase()));
-    if(found){
-      showSteps(found);
-    }
-  };
-
-  recognition.onerror = function(e){console.log(e);}
-  recognition.start(); // يبدأ تلقائيًا
+#casesList {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
-// ======= زر الطوارئ =======
-emergencyBtn.addEventListener("click", ()=>{
-  if(recognition){
-    recognition.start();
-  }
-});
+.card {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  min-width: 140px;
+  cursor: pointer;
+}
 
-// ======= أزرار التحكم الصوتي =======
-stopBtn.addEventListener("click", stopSpeech);
-playBtn.addEventListener("click", playLast);
+#stepsSection {
+  display: none;
+  margin-top: 20px;
+  background: #ffffffdd;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 500px;
+}
 
-// ======= زر العودة =======
-backBtnEl.addEventListener("click", ()=>{
-  stepsSection.style.display = "none";
-  if(synth.speaking) synth.cancel();
-  emergencyBtn.style.display = "inline-block";
-  showCasesBtn.style.display = "inline-block";
-  hint.style.display = "block";
-  instruction.textContent = "اضغط زر الطوارئ للبدء";
-});
+ul { list-style: none; padding: 0; margin-bottom: 20px; }
+li { margin: 10px 0; font-size: 1.2em; text-align: right; }
+
+.audio-controls {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
