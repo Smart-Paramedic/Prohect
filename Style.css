@@ -105,4 +105,32 @@ button {
 #stepsSection li {
   background: #e0e7ff;
   margin: 8px 0;
-  padding
+  padding: 10px;
+  border-radius: 8px;
+  text-align: right;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: auto;
+}
+form label {
+  text-align: right;
+  font-weight: bold;
+}
+form input, form select {
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+form button {
+  background: #10b981;
+  color: white;
+}
+form button:hover {
+  background: #059669;
+}
