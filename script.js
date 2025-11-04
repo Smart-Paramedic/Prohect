@@ -1,79 +1,49 @@
-// ===== إعداد البيانات =====
 const SHEETDB_API = "https://sheetdb.io/api/v1/pp3tkazlfqhvu";
+
 const caseStepsData = {
-  "نزيف": [
-    "اضغط على الجرح لوقف النزيف.",
-    "ارفع العضو المصاب.",
-    "ضع ضمادة واستدعِ الطوارئ فوراً."
-  ],
-  "كسر": [
-    "ثبّت الجزء المصاب.",
-    "تجنب تحريكه نهائياً.",
-    "اتصل بالإسعاف فوراً."
-  ],
-  "انخفاض السكر": [
-    "أعط المصاب سكريات سريعة الامتصاص.",
-    "راقب الوعي.",
-    "استدعِ الطوارئ إذا فقد الوعي."
-  ]
+  "نزيف": ["اضغط على الجرح لوقف النزيف.","ارفع العضو المصاب.","ضع ضمادة واستدعِ الطوارئ فوراً."],
+  "كسر": ["ثبّت الجزء المصاب.","تجنب تحريكه.","اتصل بالإسعاف فوراً."],
+  "انخفاض السكر": ["أعط المصاب سكريات.","راقب وعيه.","استدعِ الطوارئ إذا فقد الوعي."]
 };
 
-// ===== عناصر الواجهة =====
-const tabs = document.querySelectorAll(".tab");
-const navBtns = document.querySelectorAll(".nav-btn");
+// ======== عناصر الواجهة ========
+const emergencyBtn = document.getElementById("emergencyBtn");
 const micStatus = document.getElementById("micStatus");
 const casesList = document.getElementById("casesList");
 const stepsSection = document.getElementById("stepsSection");
 const caseTitle = document.getElementById("caseTitle");
 const stepsList = document.getElementById("stepsList");
+const backBtn = document.getElementById("backBtn");
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
-const backBtn = document.getElementById("backBtn");
+const paramedicsList = document.getElementById("paramedicsList");
+const navBtns = document.querySelectorAll(".nav-btn");
+const tabs = document.querySelectorAll(".tab");
 const registerForm = document.getElementById("registerForm");
 const registerStatus = document.getElementById("registerStatus");
-const paramedicsList = document.getElementById("paramedicsList");
-const emergencyBtn = document.getElementById("emergencyBtn");
 
-// ===== تبويبات =====
+let recognition;
+let synth = window.speechSynthesis;
+let lastSpoken = null;
+
+// ======== تبويبات ========
 function showTab(id){
-  tabs.forEach(tab => tab.classList.add("hidden"));
-  navBtns.forEach(btn => btn.classList.remove("active"));
+  tabs.forEach(t=>t.classList.add("hidden"));
+  navBtns.forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.remove("hidden");
   document.querySelector(`[data-tab="${id}"]`).classList.add("active");
 }
 
-navBtns.forEach(btn=>{
-  btn.addEventListener("click", ()=>showTab(btn.dataset.tab));
-});
+navBtns.forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 
-// ===== إنشاء قائمة الحالات =====
-Object.keys(caseStepsData).forEach(name=>{
+// ======== عرض الحالات ========
+Object.keys(caseStepsData).forEach(c=>{
   const div = document.createElement("div");
-  div.className="case-item";
-  div.innerHTML=`<span>${name}</span><button onclick="showSteps('${name}')">عرض</button>`;
+  div.className = "case-item";
+  div.innerHTML = `<span>${c}</span> <button onclick="showSteps('${c}')">عرض</button>`;
   casesList.appendChild(div);
 });
 
-// ===== دوال الصوت =====
-let synth = window.speechSynthesis;
-let recognition;
-let lastUtterance;
-let currentCase;
-
-// تشغيل الصوت
-function speakSteps(name){
-  const text = caseStepsData[name]?.join("، ");
-  if(!text) return;
-  stopSpeech();
-  const utter = new SpeechSynthesisUtterance(`${name}: ${text}`);
-  utter.lang = "ar-SA";
-  synth.speak(utter);
-  lastUtterance = utter;
-  currentCase = name;
-  showSteps(name);
-}
-
-// عرض الخطوات
 function showSteps(name){
   stepsSection.classList.remove("hidden");
   caseTitle.textContent = name;
@@ -83,65 +53,60 @@ function showSteps(name){
     li.textContent=s;
     stepsList.appendChild(li);
   });
+  speakSteps(name);
 }
 
-function stopSpeech(){
-  if(synth.speaking) synth.cancel();
+function speakSteps(name){
+  const text = caseStepsData[name]?.join("، ");
+  if(!text) return;
+  stopSpeech();
+  const utter = new SpeechSynthesisUtterance(`${name}: ${text}`);
+  utter.lang="ar-SA";
+  synth.speak(utter);
+  lastSpoken = utter;
 }
 
-function playLast(){
-  if(lastUtterance) synth.speak(new SpeechSynthesisUtterance(lastUtterance.text));
-}
+function stopSpeech(){ if(synth.speaking) synth.cancel(); }
+function playLast(){ if(lastSpoken) synth.speak(lastSpoken); }
 
 backBtn.onclick = ()=> stepsSection.classList.add("hidden");
 
-// ===== تعرف صوتي =====
+// ======== تعرف صوتي ========
 function initRecognition(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ micStatus.textContent="المتصفح لا يدعم التعرف الصوتي"; return; }
-
+  if(!SR){ micStatus.textContent="❌ جهازك لا يدعم التعرف الصوتي"; return; }
   recognition = new SR();
   recognition.lang="ar-SA";
   recognition.continuous=true;
-  recognition.onstart=()=> micStatus.textContent=" الميكروفون يعمل، تحدث الآن...";
-  recognition.onend=()=> micStatus.textContent=" توقف مؤقت، اضغط للطوارئ لإعادة التشغيل";
-  recognition.onerror=()=> micStatus.textContent="⚠️ خطأ في الميكروفون";
-
+  recognition.onstart=()=> micStatus.textContent="🎤 الميكروفون يعمل";
+  recognition.onend=()=> micStatus.textContent="🟡 متوقف، يمكنك الضغط لإعادة التشغيل";
   recognition.onresult=(e)=>{
     const text = e.results[e.resultIndex][0].transcript.trim();
-    micStatus.textContent = `✅ تم التعرف على: ${text}`;
-    for(let key of Object.keys(caseStepsData)){
-      if(text.includes(key)){
-        speakSteps(key);
-        return;
-      }
+    micStatus.textContent=`✅ تم التعرف على: ${text}`;
+    for(const key in caseStepsData){
+      if(text.includes(key)){ showSteps(key); return; }
     }
-    const msg = new SpeechSynthesisUtterance("لم أفهم الحالة، جرّب قول نزيف أو كسر أو انخفاض السكر");
-    msg.lang="ar-SA";
-    synth.speak(msg);
+    speak("لم أفهم الحالة. قل نزيف أو كسر أو انخفاض السكر.");
   };
 }
 
-// ===== زر الطوارئ =====
-emergencyBtn.onclick = ()=>{
+function speak(t){
   stopSpeech();
-  speakNow("تم تفعيل الطوارئ، يمكنك قول اسم الحالة الآن.");
-  startListening();
-};
-
-function speakNow(text){
-  const u = new SpeechSynthesisUtterance(text);
+  const u = new SpeechSynthesisUtterance(t);
   u.lang="ar-SA";
   synth.speak(u);
 }
 
-function startListening(){
+// ======== زر الطوارئ ========
+emergencyBtn.onclick = ()=>{
   if(!recognition) initRecognition();
   try{ recognition.start(); }catch{}
-}
+  micStatus.textContent="🎤 الميكروفون جاهز... تحدث الآن";
+  speak("تم تفعيل الطوارئ. يمكنك قول اسم الحالة مثل نزيف أو كسر أو انخفاض السكر.");
+};
 
-// ===== فورم التسجيل =====
-registerForm.addEventListener("submit", async (e)=>{
+// ======== التسجيل ========
+registerForm.addEventListener("submit", async e=>{
   e.preventDefault();
   const formData = new FormData(registerForm);
   const payload = {
@@ -154,37 +119,38 @@ registerForm.addEventListener("submit", async (e)=>{
       address:formData.get("address")
     }
   };
-
   registerStatus.textContent="⏳ جاري الإرسال...";
   const res = await fetch(SHEETDB_API,{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
+    method:"POST", headers:{'Content-Type':'application/json'},
     body:JSON.stringify(payload)
   });
-
   if(res.ok){
-    registerStatus.textContent=" تم التسجيل بنجاح";
+    registerStatus.textContent="✅ تم التسجيل بنجاح";
     registerForm.reset();
     loadParamedics();
-  }else registerStatus.textContent=" فشل التسجيل";
+  } else registerStatus.textContent="❌ حدث خطأ أثناء الإرسال";
 });
 
-// ===== تحميل المسعفين =====
+// ======== تحميل المسعفين ========
 async function loadParamedics(){
+  paramedicsList.innerHTML="⏳ تحميل...";
   try{
     const res = await fetch(SHEETDB_API);
     const data = await res.json();
     paramedicsList.innerHTML="";
-    data.forEach(d=>{
-      const item=document.createElement("div");
-      item.className="paramedic-item";
-      item.innerHTML=`<strong>${d.name||"غير معروف"}</strong> - ${d.license_type||"غير محدد"}`;
-      paramedicsList.appendChild(item);
+    data.forEach(p=>{
+      const card=document.createElement("div");
+      card.className="paramedic-card";
+      card.innerHTML=`
+        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="paramedic">
+        <strong>${p.name||"غير معروف"}</strong>
+        <span>${p.license_type||"غير محدد"}</span>
+        <span>${p.emergency_agency||""}</span>
+      `;
+      paramedicsList.appendChild(card);
     });
   }catch{
-    paramedicsList.textContent=" فشل تحميل البيانات";
+    paramedicsList.textContent="❌ لم يتم تحميل المسعفين";
   }
 }
-
 loadParamedics();
-
