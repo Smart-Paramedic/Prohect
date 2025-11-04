@@ -1,78 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>المسعف الذكي</title>
-  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="nav">
-    <button data-tab="home" class="nav-btn active">الرئيسية</button>
-    <button data-tab="cases" class="nav-btn">عرض الحالات</button>
-    <button data-tab="register" class="nav-btn">تسجيل حالة</button>
-    <button data-tab="paramedics" class="nav-btn">المسعفون المؤهلون</button>
+  <header>
+    <h1>🚑 المسعف الذكي</h1>
+    <p class="subtitle">تحدث باسم الحالة أو اخترها لتتعرف على الخطوات الإسعافية</p>
+  </header>
+
+  <nav>
+    <button onclick="showTab('home')">🏠 الرئيسية</button>
+    <button onclick="showTab('cases')">💉 الحالات</button>
+    <button onclick="showTab('register')">📝 تسجيل حالة</button>
+    <button onclick="showTab('paramedics')">👨‍⚕️ المسعفون المؤهلون</button>
   </nav>
 
-  <main class="container">
-    <section id="home" class="tab">
-      <h1 id="instruction">تحدث مباشرة باسم الحالة أو اضغط زر الطوارئ</h1>
-      <div class="controls">
-        <button id="emergencyBtn" class="big-btn">🎤 بدء الاستماع</button>
-        <div id="micStatus" class="mic-status">🔴 غير نشط</div>
-      </div>
-      <div id="hint" class="hint">
-        🩺 الحالات المتاحة: <strong>نزيف</strong>، <strong>كسر</strong>، <strong>انخفاض السكر</strong>
-      </div>
-    </section>
+  <!-- الرئيسية -->
+  <section id="home" class="tab">
+    <h2>الاستجابة الصوتية</h2>
+    <button id="emergencyBtn" class="big-btn">🎙 اضغط للتحدث</button>
+    <p class="hint">يمكنك القول: "نزيف" – "كسر" – "انخفاض السكر"</p>
+    <p id="status"></p>
+  </section>
 
-    <section id="cases" class="tab hidden">
-      <h2>الحالات الإسعافية</h2>
-      <div id="casesList"></div>
+  <!-- الحالات -->
+  <section id="cases" class="tab hidden">
+    <h2>الحالات الإسعافية</h2>
+    <div class="case" onclick="showSteps('نزيف')">🩸 نزيف</div>
+    <div class="case" onclick="showSteps('كسر')">🦴 كسر</div>
+    <div class="case" onclick="showSteps('انخفاض السكر')">🩺 انخفاض السكر</div>
 
-      <div id="stepsSection" class="hidden">
-        <h3 id="caseTitle"></h3>
-        <ul id="stepsList"></ul>
+    <div id="stepsSection" class="hidden">
+      <h3 id="caseTitle"></h3>
+      <ul id="stepsList"></ul>
+      <button id="callBtn">📞 الاتصال بالإسعاف (997)</button>
+      <button id="backBtn">⬅️ رجوع</button>
+    </div>
+  </section>
 
-        <div class="step-controls">
-          <button id="playBtn">🔊 إعادة الصوت</button>
-          <button id="stopBtn">⏹️ إيقاف الصوت</button>
-          <button id="backBtn">⬅️ رجوع</button>
-        </div>
-      </div>
-    </section>
+  <!-- التسجيل -->
+  <section id="register" class="tab hidden">
+    <h2>تسجيل حالة جديدة</h2>
+    <form id="registerForm">
+      <label>اسم المستخدم</label>
+      <input type="text" name="اسم المستخدم" required>
 
-    <section id="register" class="tab hidden">
-      <h2>تسجيل حالة جديدة</h2>
-      <form id="registerForm">
-        <label>اسم المستخدم</label>
-        <input type="text" name="name" required>
-        <label>التاريخ الطبي</label>
-        <input type="text" name="medical_history">
-        <label>رقم التواصل</label>
-        <input type="text" name="phone" required>
-        <label>جهة الطوارئ</label>
-        <input type="text" name="emergency_agency">
-        <label>نوع الرخصة</label>
-        <select name="license_type">
-          <option value="">-- اختر إن وجد --</option>
-          <option value="مسعف أولي">مسعف أولي</option>
-          <option value="فني إسعاف">فني إسعاف</option>
-          <option value="طبيب طوارئ">طبيب طوارئ</option>
-          <option value="مستخدم عادي">مستخدم عادي</option>
-        </select>
-        <label>العنوان</label>
-        <input type="text" name="address">
-        <button type="submit">📤 إرسال</button>
-        <div id="registerStatus"></div>
-      </form>
-    </section>
+      <label>التاريخ الطبي</label>
+      <input type="text" name="التاريخ الطبي">
 
-    <section id="paramedics" class="tab hidden">
-      <h2>👩‍⚕️ المسعفون المؤهلون</h2>
-      <div id="paramedicsList" class="paramedics-list"></div>
-    </section>
-  </main>
+      <label>رقم التواصل</label>
+      <input type="text" name="رقم التواصل" required>
+
+      <label>جهة الطوارئ</label>
+      <input type="text" name="جهة الطوارئ">
+
+      <label>نوع الرخصة (اختياري)</label>
+      <select name="نوع الرخصة">
+        <option value="">-- اختر إن وجد --</option>
+        <option value="مسعف أولي">مسعف أولي</option>
+        <option value="فني إسعاف">فني إسعاف</option>
+        <option value="طبيب طوارئ">طبيب طوارئ</option>
+        <option value="مستخدم عادي">مستخدم عادي</option>
+      </select>
+
+      <label>العنوان</label>
+      <input type="text" name="العنوان">
+
+      <button type="submit">📤 إرسال</button>
+    </form>
+  </section>
+
+  <!-- المسعفون -->
+  <section id="paramedics" class="tab hidden">
+    <h2>المسعفون المؤهلون</h2>
+    <p>📋 يمكنك طلب إذن رسمي من <strong>وزارة الصحة السعودية</strong> لتفعيل إمكانية إضافة أو تعديل بيانات المسعفين المؤهلين في النظام.</p>
+    <p>🚨 هذه البيانات تخضع لمراجعة واعتماد الجهات الصحية لضمان دقتها وسلامتها.</p>
+    <p>📞 للاستفسار يمكن التواصل عبر <a href="https://www.moh.gov.sa" target="_blank">الموقع الرسمي لوزارة الصحة</a>.</p>
+  </section>
 
   <script src="script.js" defer></script>
 </body>
