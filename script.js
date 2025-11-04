@@ -29,7 +29,7 @@ function showTab(id) {
 
 showTab("home");
 
-// 🔊 نطق
+
 function speak(text) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ar-SA";
@@ -38,7 +38,7 @@ function speak(text) {
   window.speechSynthesis.speak(u);
 }
 
-// 🩹 عرض خطوات الحالة
+
 function showSteps(caseName) {
   const stepsSection = document.getElementById("stepsSection");
   const caseTitle = document.getElementById("caseTitle");
@@ -56,19 +56,19 @@ function showSteps(caseName) {
   speak(CASES[caseName].join("، ثم "));
 }
 
-// زر الرجوع
+
 document.getElementById("backBtn").onclick = () => {
   document.getElementById("stepsSection").classList.add("hidden");
 };
 
-// 📞 الاتصال بالإسعاف
+
 document.getElementById("callBtn").onclick = () => {
   if (confirm("هل الحالة طارئة فعلاً وتريد الاتصال بالإسعاف؟")) {
     window.location.href = "tel:997";
   }
 };
 
-// 🎙️ التعرف الصوتي
+
 function initVoice() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return alert("المتصفح لا يدعم التعرف على الصوت.");
@@ -94,7 +94,6 @@ function initVoice() {
 
 initVoice();
 
-// 📝 إرسال بيانات التسجيل
 document.getElementById("registerForm").addEventListener("submit", async e => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target).entries());
@@ -112,3 +111,4 @@ document.getElementById("registerForm").addEventListener("submit", async e => {
     alert("❌ حدث خطأ أثناء التسجيل.");
   }
 });
+
