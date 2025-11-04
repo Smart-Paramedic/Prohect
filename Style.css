@@ -1,33 +1,91 @@
-.paramedics-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.paramedic-card {
-  background: #f9f7fc;
-  border: 1px solid #e0d5f5;
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+body {
+  font-family: "Cairo", sans-serif;
+  background-color: #f7f3fa;
+  color: #3d2a58;
+  margin: 0;
   text-align: center;
 }
 
-.paramedic-card img {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
+.nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #c8b5e8;
+  padding: 10px;
 }
 
-.paramedic-card strong {
-  display: block;
-  color: #5a3d8c;
-  margin-bottom: 5px;
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.paramedic-card span {
-  display: block;
-  font-size: 14px;
-  color: #555;
+.nav-btn.active {
+  border-bottom: 2px solid white;
+}
+
+.tab.hidden {
+  display: none;
+}
+
+.container {
+  padding: 20px;
+}
+
+.big-btn {
+  background-color: #b89ee0;
+  border: none;
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.big-btn:hover {
+  background-color: #a98fd2;
+}
+
+.mic-status {
+  margin-top: 10px;
+  color: #5c408b;
+}
+
+.hint {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #53357d;
+}
+
+.case-item {
+  background: #ede5f7;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.case-item button {
+  background-color: #c2a6eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+#stepsList li {
+  text-align: right;
+  margin: 5px 0;
+}
+
+.paramedics-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.paramedic-card {
+  background: #ede5f7;
+  border-radius: 10px;
+  padding: 10px;
 }
