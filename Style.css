@@ -1,91 +1,122 @@
+:root {
+  --accent: #b79de2;
+  --accent-dark: #9b82c7;
+  --bg: #f8f5fb;
+}
+
 body {
   font-family: "Cairo", sans-serif;
-  background-color: #f7f3fa;
-  color: #3d2a58;
+  background: var(--bg);
+  color: #2e1b45;
   margin: 0;
+  padding: 0;
   text-align: center;
 }
 
-.nav {
-  display: flex;
-  justify-content: space-around;
-  background-color: #c8b5e8;
-  padding: 10px;
-}
-
-.nav-btn {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.nav-btn.active {
-  border-bottom: 2px solid white;
-}
-
-.tab.hidden {
-  display: none;
-}
-
-.container {
+header {
   padding: 20px;
 }
 
-.big-btn {
-  background-color: #b89ee0;
+.subtitle {
+  color: #5f4a7a;
+  margin-bottom: 10px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #e8e1f3;
+  padding: 10px;
+}
+
+nav button {
+  background: var(--accent);
+  color: white;
   border: none;
-  color: #fff;
-  padding: 15px 25px;
-  border-radius: 12px;
-  font-size: 18px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: 0.2s;
+}
+nav button:hover {
+  background: var(--accent-dark);
 }
 
-.big-btn:hover {
-  background-color: #a98fd2;
+.tab {
+  display: none;
+  padding: 20px;
+}
+.tab.active {
+  display: block;
 }
 
-.mic-status {
-  margin-top: 10px;
-  color: #5c408b;
+.big-btn {
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  border: none;
+  color: white;
+  padding: 18px 36px;
+  border-radius: 14px;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 .hint {
-  margin-top: 20px;
-  font-size: 16px;
-  color: #53357d;
+  color: #6c5b8a;
 }
 
-.case-item {
-  background: #ede5f7;
-  margin: 10px;
-  padding: 10px;
+.case {
+  background: white;
+  border: 2px solid var(--accent);
+  color: #2e1b45;
+  padding: 15px;
   border-radius: 10px;
+  margin: 10px auto;
+  width: 80%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s;
+}
+.case:hover {
+  background: var(--accent);
+  color: white;
 }
 
-.case-item button {
-  background-color: #c2a6eb;
+#stepsList {
+  text-align: right;
+  list-style: disc;
+  margin: 20px;
+}
+
+input, select {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1.5px solid #bfa6e9;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(180, 150, 210, 0.2);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button[type="submit"] {
+  background: var(--accent-dark);
   color: white;
   border: none;
+  padding: 12px 24px;
   border-radius: 8px;
-  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 10px;
 }
-
-#stepsList li {
-  text-align: right;
-  margin: 5px 0;
-}
-
-.paramedics-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
-}
-
-.paramedic-card {
-  background: #ede5f7;
-  border-radius: 10px;
-  padding: 10px;
+button[type="submit"]:hover {
+  background: var(--accent);
 }
