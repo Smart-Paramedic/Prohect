@@ -1,7 +1,7 @@
 :root {
-  --lavender: #d9c6ff;
-  --purple: #9370db;
-  --soft-purple: #b39ddb;
+  --lavender: #ede7f6;
+  --purple: #a78bfa;
+  --deep-purple: #7c3aed;
   --white: #fff;
   --gray: #555;
 }
@@ -12,64 +12,98 @@ body {
   color: #222;
   text-align: center;
   margin: 0;
-  padding: 0;
 }
 
 header {
-  background: var(--purple);
+  background: var(--deep-purple);
   color: white;
   padding: 20px;
   border-radius: 0 0 20px 20px;
 }
 
 .subtitle {
-  color: #f4f4f4;
+  color: #f0eaff;
 }
 
 nav {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin: 20px;
+  margin: 15px;
 }
 
 nav button {
-  background: var(--soft-purple);
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
+  background: var(--purple);
   color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
 }
 nav button:hover {
-  background: var(--purple);
+  background: var(--deep-purple);
 }
 
-.tab {
-  display: none;
-  padding: 20px;
-}
-
-.tab.active {
-  display: block;
-}
-
-.hidden {
+.tab.hidden {
   display: none;
 }
 
 .main-btn {
   background: var(--purple);
-  color: white;
-  padding: 18px 40px;
   border: none;
+  padding: 18px 40px;
   border-radius: 20px;
-  font-size: 22px;
+  font-size: 20px;
+  color: white;
   cursor: pointer;
+  transition: background 0.3s;
 }
 .main-btn:hover {
-  background: #7b5fc9;
+  background: var(--deep-purple);
+}
+
+.hint {
+  color: #666;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.case-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin: 25px auto;
+  padding: 20px;
+  max-width: 400px;
+}
+
+.case-card h3 {
+  color: var(--deep-purple);
+  font-size: 20px;
+}
+
+.case-card ul {
+  text-align: right;
+  line-height: 1.8;
+  list-style: decimal;
+  padding-right: 20px;
+}
+
+.controls {
+  margin-top: 10px;
+}
+.controls button {
+  background: var(--purple);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  margin: 4px;
+}
+.controls button:hover {
+  background: var(--deep-purple);
 }
 
 form {
@@ -77,44 +111,28 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-width: 400px;
-  margin: 0 auto;
-  background: var(--white);
+  max-width: 350px;
+  margin: auto;
+  background: white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 form input, form select {
   width: 90%;
   padding: 8px;
-  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 15px;
+  border-radius: 8px;
 }
 
 .submit-btn {
-  background: var(--purple);
+  background: var(--deep-purple);
   color: white;
   border: none;
-  padding: 10px 25px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
 }
 .submit-btn:hover {
-  background: #7b5fc9;
-}
-
-.controls button {
-  margin: 5px;
-  padding: 10px 15px;
-  border: none;
-  background: var(--soft-purple);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.controls button:hover {
   background: var(--purple);
 }
