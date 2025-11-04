@@ -8,52 +8,52 @@
 </head>
 <body>
   <header>
-    <h1> المسعف الذكي</h1>
-    <p class="subtitle">تحدث باسم الحالة أو اخترها للتعرّف على الخطوات الإسعافية</p>
+    <h1>المسعف الذكي</h1>
+    <p class="subtitle">تحدث باسم الحالة أو اخترها للتعرّف على خطوات الإسعاف الأولي</p>
   </header>
 
   <nav>
-    <button onclick="showTab('home')"> الرئيسية</button>
-    <button onclick="showTab('cases')"> الحالات</button>
-    <button onclick="showTab('register')"> تسجيل حالة</button>
-    <button onclick="showTab('paramedics')">👨‍⚕️ المسعفون المؤهلون</button>
+    <button onclick="showTab('home')">الرئيسية</button>
+    <button onclick="showTab('cases')">الحالات</button>
+    <button onclick="showTab('register')">تسجيل حالة</button>
+    <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
   </nav>
 
   <section id="home" class="tab active">
-
-    <button id="emergencyBtn" class="main-btn">🎤 اضغط للتحدث</button>
-    <p class="hint">يمكنك القول: "نزيف" - "كسر" - "انخفاض السكر"</p>
+    <h2>اضغط أو تحدث</h2>
+    <button id="emergencyBtn" class="main-btn">بدء التحدث</button>
+    <p class="hint">يمكنك القول: نزيف - كسر - انخفاض السكر</p>
 
     <div id="cardContainer" class="hidden">
       <div class="case-card">
         <h3 id="caseTitle"></h3>
         <ul id="stepsList"></ul>
         <div class="controls">
-          <button id="playBtn">🔊 إعادة</button>
-          <button id="stopBtn">⏹️ إيقاف</button>
-          <button id="backBtn">⬅️ رجوع</button>
+          <button id="playBtn">إعادة</button>
+          <button id="stopBtn">إيقاف</button>
+          <button id="backBtn">رجوع</button>
         </div>
       </div>
     </div>
   </section>
 
   <section id="cases" class="tab hidden">
-    <h2>🩺 الحالات الإسعافية</h2>
-    <div id="casesList"></div>
+    <h2>خطوات الإسعافات الأولية للحالات الشائعة</h2>
+    <div id="casesList" class="cases-container"></div>
   </section>
 
   <section id="register" class="tab hidden">
-    <h2>📝 تسجيل حالة جديدة</h2>
+    <h2>تسجيل حالة جديدة</h2>
     <form id="registerForm">
-      <label>👤 اسم المستخدم</label>
+      <label>اسم المستخدم</label>
       <input type="text" name="اسم المستخدم" required>
-      <label>📞 رقم التواصل</label>
+      <label>رقم التواصل</label>
       <input type="text" name="رقم التواصل" required>
-      <label>🩸 التاريخ الطبي</label>
+      <label>التاريخ الطبي</label>
       <input type="text" name="التاريخ الطبي">
-      <label>🏥 جهة الطوارئ</label>
+      <label>جهة الطوارئ</label>
       <input type="text" name="جهة الطوارئ">
-      <label>🎓 نوع الرخصة (اختياري)</label>
+      <label>نوع الرخصة (اختياري)</label>
       <select name="نوع الرخصة">
         <option value="">-- اختر --</option>
         <option value="مسعف أولي">مسعف أولي</option>
@@ -61,18 +61,17 @@
         <option value="طبيب طوارئ">طبيب طوارئ</option>
         <option value="مستخدم عادي">مستخدم عادي</option>
       </select>
-      <label>📍 العنوان</label>
+      <label>العنوان</label>
       <input type="text" name="العنوان">
-      <button type="submit" class="submit-btn">📤 إرسال</button>
+      <button type="submit" class="submit-btn">إرسال</button>
     </form>
   </section>
 
   <section id="paramedics" class="tab hidden">
-    <h2>👨‍⚕️ المسعفون المؤهلون</h2>
-    <p> للاستفسار يمكن التواصل عبر الموقع الرسمي لوزارة الصحة.</p>
+    <h2>المسعفون المؤهلون</h2>
+    <p>للاستفسار يمكن التواصل عبر الموقع الرسمي لوزارة الصحة.</p>
   </section>
 
   <script src="script.js" defer></script>
 </body>
 </html>
-
