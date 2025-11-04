@@ -9,12 +9,12 @@ const CASES = {
   ],
   "كسر": [
     "لا تحرك الجزء المصاب.",
-    "ثبت المنطقة جيداً باستخدام جبيرة مؤقتة.",
+    "ثبت المنطقة باستخدام جبيرة مؤقتة.",
     "ضع ثلجاً ملفوفاً لتقليل التورم.",
     "اتصل بالإسعاف فوراً. (997)"
   ],
   "انخفاض السكر": [
-    "أعطِ المصاب شيئاً يحتوي على سكر سريع مثل العصير أو الحلوى.",
+    "أعطِ المصاب شيئاً يحتوي على سكر سريع مثل العصير.",
     "إذا فقد وعيه لا تعطه شيئاً عن طريق الفم.",
     "راقب تنفسه حتى تصل المساعدة.",
     "اتصل بالإسعاف فوراً. (997)"
@@ -22,46 +22,26 @@ const CASES = {
 };
 
 const emergencyBtn = document.getElementById("emergencyBtn");
-const casesList = document.getElementById("casesList");
-const stepsSection = document.getElementById("stepsSection");
+const cardContainer = document.getElementById("cardContainer");
 const caseTitle = document.getElementById("caseTitle");
 const stepsList = document.getElementById("stepsList");
-
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const backBtn = document.getElementById("backBtn");
 
-let currentSpeech = null;
 let currentSteps = [];
 
-function showTab(tabId) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
-  document.getElementById(tabId).classList.remove("hidden");
-  if (tabId === "cases") renderCases();
-}
-
-function renderCases() {
-  casesList.innerHTML = "";
-  for (const [key, steps] of Object.entries(CASES)) {
-    const btn = document.createElement("button");
-    btn.textContent = key;
-    btn.className = "main-btn";
-    btn.onclick = () => showSteps(key, steps);
-    casesList.appendChild(btn);
-  }
-}
-
-function showSteps(name, steps) {
-  caseTitle.textContent = name;
+function showCard(caseName, steps) {
+  caseTitle.textContent = caseName;
   stepsList.innerHTML = "";
   currentSteps = steps;
-  steps.forEach(s => {
+  steps.forEach(step => {
     const li = document.createElement("li");
-    li.textContent = s;
-    if (s.includes("997")) {
+    li.textContent = step;
+    if (step.includes("997")) {
       const link = document.createElement("a");
-      link.href = "#";
       link.textContent = "📞 997";
+      link.href = "#";
       link.onclick = () => {
         alert("هل الحالة طارئة فعلاً؟ سيتم تحويلك لطلب الإسعاف.");
         window.location.href = "tel:997";
@@ -71,26 +51,29 @@ function showSteps(name, steps) {
     }
     stepsList.appendChild(li);
   });
-  casesList.classList.add("hidden");
-  stepsSection.classList.remove("hidden");
+  cardContainer.classList.remove("hidden");
+  speakSteps();
 }
 
-function speakText(text) {
+function speakSteps() {
   if (!("speechSynthesis" in window)) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "ar-SA";
+  const utterance = new SpeechSynthesisUtterance(currentSteps.join("، ثم "));
+  utterance.lang = "ar-SA";
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
-  currentSpeech = u;
+  window.speechSynthesis.speak(utterance);
 }
 
-playBtn.onclick = () => speakText(currentSteps.join("، ثم "));
+playBtn.onclick = speakSteps;
 stopBtn.onclick = () => window.speechSynthesis.cancel();
 backBtn.onclick = () => {
-  stepsSection.classList.add("hidden");
-  casesList.classList.remove("hidden");
+  cardContainer.classList.add("hidden");
   window.speechSynthesis.cancel();
 };
+
+function showTab(tabId) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+  document.getElementById(tabId).classList.remove("hidden");
+}
 
 async function sendForm(e) {
   e.preventDefault();
@@ -98,7 +81,7 @@ async function sendForm(e) {
   await fetch(API_URL, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({data: data})
+    body: JSON.stringify({data})
   });
   alert("✅ تم إرسال البيانات بنجاح!");
   e.target.reset();
@@ -106,24 +89,21 @@ async function sendForm(e) {
 document.getElementById("registerForm").addEventListener("submit", sendForm);
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recog = new SpeechRecognition();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recog = new SR();
   recog.lang = "ar-SA";
   recog.continuous = false;
 
-  recog.onresult = e => {
+  recog.onresult = (e) => {
     const text = e.results[0][0].transcript;
     for (const [key, steps] of Object.entries(CASES)) {
       if (text.includes(key)) {
-        showTab("cases");
-        showSteps(key, steps);
-        speakText(steps.join("، ثم "));
+        showCard(key, steps);
         return;
       }
     }
   };
-
   emergencyBtn.onclick = () => recog.start();
 } else {
-  alert("❌ متصفحك لا يدعم ميزة التعرف على الصوت.");
+  alert("❌ متصفحك لا يدعم التعرف على الصوت.");
 }
