@@ -98,13 +98,13 @@ backBtn.onclick = ()=> stepsSection.classList.add("hidden");
 // ===== تعرف صوتي =====
 function initRecognition(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ micStatus.textContent="❌ المتصفح لا يدعم التعرف الصوتي"; return; }
+  if(!SR){ micStatus.textContent="المتصفح لا يدعم التعرف الصوتي"; return; }
 
   recognition = new SR();
   recognition.lang="ar-SA";
   recognition.continuous=true;
-  recognition.onstart=()=> micStatus.textContent="🎤 الميكروفون يعمل، تحدث الآن...";
-  recognition.onend=()=> micStatus.textContent="🟠 توقف مؤقت، اضغط للطوارئ لإعادة التشغيل";
+  recognition.onstart=()=> micStatus.textContent=" الميكروفون يعمل، تحدث الآن...";
+  recognition.onend=()=> micStatus.textContent=" توقف مؤقت، اضغط للطوارئ لإعادة التشغيل";
   recognition.onerror=()=> micStatus.textContent="⚠️ خطأ في الميكروفون";
 
   recognition.onresult=(e)=>{
@@ -163,10 +163,10 @@ registerForm.addEventListener("submit", async (e)=>{
   });
 
   if(res.ok){
-    registerStatus.textContent="✅ تم التسجيل بنجاح";
+    registerStatus.textContent=" تم التسجيل بنجاح";
     registerForm.reset();
     loadParamedics();
-  }else registerStatus.textContent="❌ فشل التسجيل";
+  }else registerStatus.textContent=" فشل التسجيل";
 });
 
 // ===== تحميل المسعفين =====
@@ -182,8 +182,9 @@ async function loadParamedics(){
       paramedicsList.appendChild(item);
     });
   }catch{
-    paramedicsList.textContent="❌ فشل تحميل البيانات";
+    paramedicsList.textContent=" فشل تحميل البيانات";
   }
 }
 
 loadParamedics();
+
