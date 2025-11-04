@@ -9,37 +9,37 @@
 <body>
   <header>
     <h1> المسعف الذكي</h1>
-  
+    <p class="subtitle">تحدث باسم الحالة أو اخترها للتعرّف على الخطوات الإسعافية</p>
   </header>
 
   <nav>
-    <button onclick="showTab('home')">الرئيسية</button>
-    <button onclick="showTab('cases')">الحالات</button>
-    <button onclick="showTab('register')">تسجيل حالة</button>
-    <button onclick="showTab('paramedics')">المسعفون المؤهلون</button>
+    <button onclick="showTab('home')">🏠 الرئيسية</button>
+    <button onclick="showTab('cases')">🩺 الحالات</button>
+    <button onclick="showTab('register')">📝 تسجيل حالة</button>
+    <button onclick="showTab('paramedics')">👨‍⚕️ المسعفون المؤهلون</button>
   </nav>
 
   <section id="home" class="tab active">
-      <p class="subtitle">انطق حالتك أو اخترها لعرض الإرشادات الطبية</p>
-    <h2>🎙 انطق الحالة أو اضغط زر الطوارئ</h2>
-    <button id="emergencyBtn" class="main-btn">🚨 الطوارئ</button>
-    <p class="hint">الحالات المتاحة: نزيف – كسر – انخفاض السكر</p>
+    <h2>🎙 اضغط أو تحدث</h2>
+    <button id="emergencyBtn" class="main-btn">🎤 اضغط للتحدث</button>
+    <p class="hint">يمكنك القول: "نزيف" - "كسر" - "انخفاض السكر"</p>
+
+    <div id="cardContainer" class="hidden">
+      <div class="case-card">
+        <h3 id="caseTitle"></h3>
+        <ul id="stepsList"></ul>
+        <div class="controls">
+          <button id="playBtn">🔊 إعادة</button>
+          <button id="stopBtn">⏹️ إيقاف</button>
+          <button id="backBtn">⬅️ رجوع</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="cases" class="tab hidden">
     <h2>🩺 الحالات الإسعافية</h2>
     <div id="casesList"></div>
-
-    <div id="stepsSection" class="hidden">
-      <h3 id="caseTitle"></h3>
-      <ul id="stepsList"></ul>
-
-      <div class="controls">
-        <button id="playBtn">🔊 إعادة الصوت</button>
-        <button id="stopBtn">⏹️ إيقاف الصوت</button>
-        <button id="backBtn">⬅️ رجوع</button>
-      </div>
-    </div>
   </section>
 
   <section id="register" class="tab hidden">
@@ -47,16 +47,12 @@
     <form id="registerForm">
       <label>👤 اسم المستخدم</label>
       <input type="text" name="اسم المستخدم" required>
-
-      <label>🩸 التاريخ الطبي</label>
-      <input type="text" name="التاريخ الطبي">
-
       <label>📞 رقم التواصل</label>
       <input type="text" name="رقم التواصل" required>
-
+      <label>🩸 التاريخ الطبي</label>
+      <input type="text" name="التاريخ الطبي">
       <label>🏥 جهة الطوارئ</label>
       <input type="text" name="جهة الطوارئ">
-
       <label>🎓 نوع الرخصة (اختياري)</label>
       <select name="نوع الرخصة">
         <option value="">-- اختر --</option>
@@ -65,20 +61,17 @@
         <option value="طبيب طوارئ">طبيب طوارئ</option>
         <option value="مستخدم عادي">مستخدم عادي</option>
       </select>
-
-      <label> العنوان</label>
+      <label>📍 العنوان</label>
       <input type="text" name="العنوان">
-
       <button type="submit" class="submit-btn">📤 إرسال</button>
     </form>
   </section>
 
   <section id="paramedics" class="tab hidden">
     <h2>👨‍⚕️ المسعفون المؤهلون</h2>
-    <p> للاستفسار يمكن التواصل عبر الموقع الرسمي لوزارة الصحة.</p>
+    <p>📞 للاستفسار يمكن التواصل عبر الموقع الرسمي لوزارة الصحة.</p>
   </section>
 
   <script src="script.js" defer></script>
 </body>
 </html>
-
