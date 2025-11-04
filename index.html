@@ -8,10 +8,10 @@
 </head>
 <body>
   <nav class="nav">
-    <button onclick="showTab('home')" class="nav-btn">الرئيسية</button>
-    <button onclick="showTab('cases')" class="nav-btn">عرض الحالات</button>
-    <button onclick="showTab('register')" class="nav-btn">تسجيل حالة</button>
-    <button onclick="showTab('paramedics')" class="nav-btn">المسعفون المؤهلون</button>
+    <button data-tab="home" class="nav-btn active">الرئيسية</button>
+    <button data-tab="cases" class="nav-btn">عرض الحالات</button>
+    <button data-tab="register" class="nav-btn">تسجيل حالة</button>
+    <button data-tab="paramedics" class="nav-btn">المسعفون المؤهلون</button>
   </nav>
 
   <main class="container">
@@ -19,7 +19,7 @@
       <h1 id="instruction">اضغط زر الطوارئ أو قل اسم الحالة</h1>
       <div class="controls">
         <button id="emergencyBtn" class="big-btn">🚨 الطوارئ</button>
-        <div class="mic-status" id="micStatus">🔴 غير متصل بالميكروفون</div>
+        <div class="mic-status" id="micStatus">🔴 الميكروفون غير مفعل</div>
       </div>
       <div id="hint" class="hint">الحالات المتاحة: <strong>نزيف</strong>، <strong>كسر</strong>، <strong>انخفاض السكر</strong></div>
     </section>
@@ -45,16 +45,12 @@
       <form id="registerForm" class="card">
         <label>اسم المستخدم</label>
         <input type="text" name="name" required />
-
         <label>التاريخ الطبي</label>
         <input type="text" name="medical_history" />
-
         <label>رقم التواصل</label>
         <input type="text" name="phone" required />
-
         <label>جهة الطوارئ</label>
         <input type="text" name="emergency_agency" />
-
         <label>نوع الرخصة (اختياري)</label>
         <select name="license_type">
           <option value="">-- اختر إن وجد --</option>
@@ -63,10 +59,8 @@
           <option value="طبيب طوارئ">طبيب طوارئ</option>
           <option value="مستخدم عادي">مستخدم عادي</option>
         </select>
-
         <label>العنوان</label>
         <input type="text" name="address" />
-
         <button type="submit" class="submit-btn">📤 إرسال</button>
         <div id="registerStatus" class="status"></div>
       </form>
@@ -75,16 +69,14 @@
     <section id="paramedics" class="tab hidden">
       <h2>المسعفون المؤهلون</h2>
       <div class="card">
-        <p>📋 قاعدة البيانات (SheetDB) تحتوي على ورقة <strong>information</strong> تُسجل بها الحالات. هنا ستعرض المسعفون تلقائيا عند وجود بيانات.</p>
-        <div id="paramedicsList" class="paramedics-list">
-          <!-- سيتم تعبئتها برمجياً -->
-        </div>
+        <p>📋 قاعدة البيانات (SheetDB) تحتوي على ورقة <strong>information</strong> تُسجل بها الحالات.</p>
+        <div id="paramedicsList" class="paramedics-list"></div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <small>المسعف الذكي — واجهة عربية بـدرجات الموف واللافندر</small>
+    <small>المسعف الذكي — بدرجات الموف واللافندر</small>
   </footer>
 
   <script src="script.js" defer></script>
