@@ -14,7 +14,7 @@ const CASES = {
     "اتصل بالإسعاف فوراً. (997)"
   ],
   "انخفاض السكر": [
-    "أعطِ المصاب شيئاً يحتوي على سكر سريع مثل العصير.",
+    "أعط المصاب شيئاً يحتوي على سكر سريع مثل العصير.",
     "إذا فقد وعيه لا تعطه شيئاً عن طريق الفم.",
     "راقب تنفسه حتى تصل المساعدة.",
     "اتصل بالإسعاف فوراً. (997)"
@@ -28,9 +28,11 @@ const stepsList = document.getElementById("stepsList");
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const backBtn = document.getElementById("backBtn");
+const casesList = document.getElementById("casesList");
 
 let currentSteps = [];
 
+// عرض الكارد
 function showCard(caseName, steps) {
   caseTitle.textContent = caseName;
   stepsList.innerHTML = "";
@@ -40,7 +42,7 @@ function showCard(caseName, steps) {
     li.textContent = step;
     if (step.includes("997")) {
       const link = document.createElement("a");
-      link.textContent = "📞 997";
+      link.textContent = "997";
       link.href = "#";
       link.onclick = () => {
         alert("هل الحالة طارئة فعلاً؟ سيتم تحويلك لطلب الإسعاف.");
@@ -67,6 +69,7 @@ playBtn.onclick = speakSteps;
 stopBtn.onclick = () => window.speechSynthesis.cancel();
 backBtn.onclick = () => {
   cardContainer.classList.add("hidden");
+  showTab('home');
   window.speechSynthesis.cancel();
 };
 
@@ -75,7 +78,16 @@ function showTab(tabId) {
   document.getElementById(tabId).classList.remove("hidden");
 }
 
-async function sendForm(e) {
+// عرض الحالات في تبويب الحالات
+Object.entries(CASES).forEach(([name, steps]) => {
+  const box = document.createElement("div");
+  box.className = "case-box";
+  box.innerHTML = `<h3>${name}</h3><ul>${steps.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+  casesList.appendChild(box);
+});
+
+// إرسال البيانات لقاعدة البيانات
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());
   await fetch(API_URL, {
@@ -83,19 +95,19 @@ async function sendForm(e) {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({data})
   });
-  alert("✅ تم إرسال البيانات بنجاح!");
+  alert("تم إرسال البيانات بنجاح!");
   e.target.reset();
-}
-document.getElementById("registerForm").addEventListener("submit", sendForm);
+});
 
+// التعرف الصوتي
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recog = new SR();
   recog.lang = "ar-SA";
-  recog.continuous = false;
+  recog.continuous = true;
 
   recog.onresult = (e) => {
-    const text = e.results[0][0].transcript;
+    const text = e.results[e.results.length - 1][0].transcript.trim();
     for (const [key, steps] of Object.entries(CASES)) {
       if (text.includes(key)) {
         showCard(key, steps);
@@ -103,7 +115,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       }
     }
   };
+
+  // يبدأ تلقائياً عند فتح الصفحة
+  recog.start();
+  // أو عند النقر على الزر
   emergencyBtn.onclick = () => recog.start();
+
 } else {
-  alert("❌ متصفحك لا يدعم التعرف على الصوت.");
+  alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
 }
