@@ -16,10 +16,10 @@
 
   <main class="container">
     <section id="home" class="tab">
-      <h1 id="instruction">اضغط زر الطوارئ أو قل اسم الحالة</h1>
+      <h1 id="instruction">تحدث مباشرة باسم الحالة أو اضغط زر الطوارئ</h1>
       <div class="controls">
-        <button id="emergencyBtn" class="big-btn">🚨 الطوارئ</button>
-        <div id="micStatus" class="mic-status">🔴 الميكروفون غير مفعل</div>
+        <button id="emergencyBtn" class="big-btn">🎤 بدء الاستماع</button>
+        <div id="micStatus" class="mic-status">🔴 غير نشط</div>
       </div>
       <div id="hint" class="hint">
         🩺 الحالات المتاحة: <strong>نزيف</strong>، <strong>كسر</strong>، <strong>انخفاض السكر</strong>
@@ -28,32 +28,32 @@
 
     <section id="cases" class="tab hidden">
       <h2>الحالات الإسعافية</h2>
-      <div id="casesList" class="cases-list"></div>
+      <div id="casesList"></div>
 
-      <div id="stepsSection" class="card hidden">
+      <div id="stepsSection" class="hidden">
         <h3 id="caseTitle"></h3>
-        <ul id="stepsList" class="steps-list"></ul>
+        <ul id="stepsList"></ul>
 
         <div class="step-controls">
-          <button id="playBtn" class="small-btn"> إعادة الصوت</button>
-          <button id="stopBtn" class="small-btn"> إيقاف الصوت</button>
-          <button id="backBtn" class="small-btn"> رجوع</button>
+          <button id="playBtn">🔊 إعادة الصوت</button>
+          <button id="stopBtn">⏹️ إيقاف الصوت</button>
+          <button id="backBtn">⬅️ رجوع</button>
         </div>
       </div>
     </section>
 
     <section id="register" class="tab hidden">
       <h2>تسجيل حالة جديدة</h2>
-      <form id="registerForm" class="card">
+      <form id="registerForm">
         <label>اسم المستخدم</label>
-        <input type="text" name="name" required />
+        <input type="text" name="name" required>
         <label>التاريخ الطبي</label>
-        <input type="text" name="medical_history" />
+        <input type="text" name="medical_history">
         <label>رقم التواصل</label>
-        <input type="text" name="phone" required />
+        <input type="text" name="phone" required>
         <label>جهة الطوارئ</label>
-        <input type="text" name="emergency_agency" />
-        <label>نوع الرخصة (اختياري)</label>
+        <input type="text" name="emergency_agency">
+        <label>نوع الرخصة</label>
         <select name="license_type">
           <option value="">-- اختر إن وجد --</option>
           <option value="مسعف أولي">مسعف أولي</option>
@@ -62,22 +62,18 @@
           <option value="مستخدم عادي">مستخدم عادي</option>
         </select>
         <label>العنوان</label>
-        <input type="text" name="address" />
-        <button type="submit" class="submit-btn"> إرسال</button>
-        <div id="registerStatus" class="status"></div>
+        <input type="text" name="address">
+        <button type="submit">📤 إرسال</button>
+        <div id="registerStatus"></div>
       </form>
     </section>
 
     <section id="paramedics" class="tab hidden">
       <h2>👩‍⚕️ المسعفون المؤهلون</h2>
-      <p class="paramedic-note">القائمة التالية تحتوي على المسعفين المسجلين في النظام</p>
       <div id="paramedicsList" class="paramedics-list"></div>
     </section>
   </main>
 
-
-
   <script src="script.js" defer></script>
 </body>
 </html>
-
