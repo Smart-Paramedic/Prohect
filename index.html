@@ -12,10 +12,13 @@
   <p class="subtitle">دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
 </header>
 
+<!-- زر الطوارئ مباشر -->
+<button id="emergencyBtn" class="main-btn">🎙 الطوارئ</button>
+
 <nav>
-  <button onclick="showTab('register')"> التسجيل</button>
-  <button onclick="showTab('firstaid')"> الإسعافات الأولية</button>
-  <button onclick="showTab('licensed')"> المسعفون المرخصون</button>
+  <button data-tab="register"> التسجيل</button>
+  <button data-tab="firstaid"> الإسعافات الأولية</button>
+  <button data-tab="licensed"> المسعفون المرخصون</button>
 </nav>
 
 <section id="register" class="tab">
@@ -24,7 +27,7 @@
     <input type="text" name="full_name" placeholder="الاسم الكامل" required>
     <input type="email" name="email" placeholder="البريد الإلكتروني" required>
     <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
-    <select name="blood_type">
+    <select name="blood_type" required>
       <option value="">فصيلة الدم</option>
       <option value="A+">A+</option>
       <option value="A-">A-</option>
@@ -42,7 +45,6 @@
 
 <section id="firstaid" class="tab hidden">
   <h2>الإسعافات الأولية</h2>
-  <button id="emergencyBtn" class="main-btn">🎙 زر الطوارئ</button>
   <div id="cardContainer" class="case-card hidden">
     <h3 id="caseTitle"></h3>
     <ul id="stepsList"></ul>
@@ -62,6 +64,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
