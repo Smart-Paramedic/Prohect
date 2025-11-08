@@ -20,18 +20,18 @@ const CASES = {
   ]
 };
 
-// ================== عناصر DOM ==================
+
 const emergencyBtn = document.getElementById("emergencyBtn");
 const casesContainer = document.getElementById("casesContainer");
 
-// ================== عرض تبويب ==================
+
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
   document.getElementById(tabId).classList.remove("hidden");
   if(tabId === "firstaid") renderCases();
 }
 
-// ================== توليد كروت الحالات ==================
+
 function renderCases() {
   casesContainer.innerHTML = "";
   for (const [caseName, steps] of Object.entries(CASES)) {
@@ -62,7 +62,7 @@ function renderCases() {
   }
 }
 
-// ================== التبويبات تعمل على النقر واللمس ==================
+
 document.querySelectorAll("nav button").forEach(btn => {
   btn.addEventListener("click", () => {
     const tabId = btn.getAttribute("data-tab");
@@ -70,7 +70,7 @@ document.querySelectorAll("nav button").forEach(btn => {
   });
 });
 
-// ================== زر الطوارئ والتعرف الصوتي ==================
+
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SR();
@@ -79,7 +79,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   recognition.onresult = function(e) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
-    for (const [key, steps] of Object.entries(CASES)) {
+    for (const key of Object.keys(CASES)) {
       if (text.includes(key)) {
         alert(`تم الكشف على الحالة: ${key}`);
         return;
@@ -93,11 +93,11 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
 }
 
-// ================== نموذج التسجيل ==================
+
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target).entries());
-  const API_URL = "https://sheetdb.io/api/v1/pp3tkazlfqhvu"; // عدلي حسب قاعدة بياناتك
+  const API_URL = "https://sheetdb.io/api/v1/pp3tkazlfqhvu";
   await fetch(API_URL, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
