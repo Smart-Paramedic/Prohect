@@ -31,8 +31,6 @@ nav {
   gap: 8px;
   margin: 15px;
   flex-wrap: wrap;
-  z-index: 10;
-  position: relative;
 }
 
 nav button {
@@ -70,16 +68,17 @@ nav button:hover {
 
 .cases-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* عرض الكروت أفقي */
   gap: 12px;
-  margin: 10px;
+  overflow-x: auto;
+  padding: 10px;
 }
 
 .case-card {
+  min-width: 250px;
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   background: var(--white);
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -87,13 +86,13 @@ nav button:hover {
 }
 
 .case-card h3 {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 18px;
   color: var(--babyblue);
 }
 
 .case-card ul {
-  margin: 0;
+  margin: 0 0 8px 0;
   padding-left: 20px;
   text-align: right;
 }
@@ -139,5 +138,25 @@ form input, form select, form textarea {
 }
 
 .submit-btn:hover {
+  background: #64b5f6;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.controls button {
+  background: var(--babyblue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.controls button:hover {
   background: #64b5f6;
 }
