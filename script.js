@@ -31,7 +31,6 @@ const stopBtn = document.getElementById("stopBtn");
 const backBtn = document.getElementById("backBtn");
 
 let currentSteps = [];
-let lastSpokenSteps = "";
 
 // ================== التبويبات ==================
 function showTab(tabId) {
@@ -81,7 +80,6 @@ function showSteps(caseName, steps) {
   caseTitle.textContent = caseName;
   stepsList.innerHTML = "";
   currentSteps = steps;
-  lastSpokenSteps = steps.join("، ثم ");
   steps.forEach((step, index) => {
     const li = document.createElement("li");
     li.textContent = `${index + 1}. ${step}`;
@@ -105,11 +103,6 @@ function speakSteps(steps = currentSteps) {
 // ================== إيقاف الصوت ==================
 function stopSpeech() {
   window.speechSynthesis.cancel();
-}
-
-// ================== إعادة تشغيل آخر قراءة ==================
-function playLast() {
-  speakSteps();
 }
 
 // ================== التبويبات تعمل على النقر واللمس ==================
@@ -138,9 +131,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   };
 
   emergencyBtn.onclick = () => recognition.start();
-} else {
-  alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
-}
+} 
 
 // ================== نموذج التسجيل ==================
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
