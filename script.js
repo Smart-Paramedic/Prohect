@@ -21,64 +21,46 @@ const CASES = {
 };
 
 // ================== عناصر DOM ==================
-const cardContainer = document.getElementById("cardContainer");
-const caseTitle = document.getElementById("caseTitle");
-const stepsList = document.getElementById("stepsList");
-const playBtn = document.getElementById("playBtn");
-const stopBtn = document.getElementById("stopBtn");
-const backBtn = document.getElementById("backBtn");
 const emergencyBtn = document.getElementById("emergencyBtn");
-
-// ================== متغيرات مساعدة ==================
-let currentSteps = [];
-let lastSpokenSteps = "";
+const casesContainer = document.getElementById("casesContainer");
 
 // ================== عرض تبويب ==================
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
   document.getElementById(tabId).classList.remove("hidden");
+  if(tabId === "firstaid") renderCases();
 }
 
-// ================== عرض خطوات الحالة ==================
-function showSteps(caseName, steps) {
-  caseTitle.textContent = caseName;
-  stepsList.innerHTML = "";
-  currentSteps = steps;
-  lastSpokenSteps = steps.join("، ثم ");
-  steps.forEach(step => {
-    const li = document.createElement("li");
-    li.textContent = step;
-    stepsList.appendChild(li);
-  });
-  cardContainer.classList.remove("hidden");
-  speakSteps();
-}
+// ================== توليد كروت الحالات ==================
+function renderCases() {
+  casesContainer.innerHTML = "";
+  for (const [caseName, steps] of Object.entries(CASES)) {
+    const card = document.createElement("div");
+    card.className = "case-card";
 
-// ================== قراءة الخطوات صوتياً ==================
-function speakSteps() {
-  if (!("speechSynthesis" in window)) return;
-  const utterance = new SpeechSynthesisUtterance(lastSpokenSteps);
-  utterance.lang = "ar-SA";
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
-}
+    const title = document.createElement("h3");
+    title.textContent = caseName;
 
-// ================== إيقاف الصوت ==================
-function stopSpeech() {
-  window.speechSynthesis.cancel();
-}
+    const list = document.createElement("ul");
+    steps.forEach(step => {
+      const li = document.createElement("li");
+      li.textContent = step;
+      list.appendChild(li);
+    });
 
-// ================== إعادة تشغيل آخر قراءة ==================
-function playLast() {
-  speakSteps();
-}
+    const speakBtn = document.createElement("button");
+    speakBtn.textContent = "🔊 استمع";
+    speakBtn.onclick = () => {
+      const utter = new SpeechSynthesisUtterance(steps.join("، ثم "));
+      utter.lang = "ar-SA";
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    };
 
-// ================== زر العودة ==================
-backBtn.onclick = () => {
-  cardContainer.classList.add("hidden");
-  showTab('firstaid');
-  stopSpeech();
-};
+    card.append(title, list, speakBtn);
+    casesContainer.appendChild(card);
+  }
+}
 
 // ================== التبويبات تعمل على النقر واللمس ==================
 document.querySelectorAll("nav button").forEach(btn => {
@@ -99,7 +81,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
     for (const [key, steps] of Object.entries(CASES)) {
       if (text.includes(key)) {
-        showSteps(key, steps);
+        alert(`تم الكشف على الحالة: ${key}`);
         return;
       }
     }
@@ -110,10 +92,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 } else {
   alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
 }
-
-// ================== أزرار التحكم الصوتي ==================
-playBtn.onclick = playLast;
-stopBtn.onclick = stopSpeech;
 
 // ================== نموذج التسجيل ==================
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
