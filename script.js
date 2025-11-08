@@ -33,7 +33,7 @@ const backBtn = document.getElementById("backBtn");
 let currentSteps = [];
 let lastSpokenSteps = "";
 
-// ================== تبويبات ==================
+// ================== التبويبات ==================
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
   document.getElementById(tabId).classList.remove("hidden");
@@ -51,17 +51,27 @@ function renderCases() {
     title.textContent = caseName;
 
     const list = document.createElement("ul");
-    steps.forEach(step => {
+    steps.forEach((step, index) => {
       const li = document.createElement("li");
-      li.textContent = step;
+      li.textContent = `${index + 1}. ${step}`;
+      li.onclick = () => window.location.href = "tel:997";
+      li.onmousedown = () => li.classList.toggle("highlight");
       list.appendChild(li);
     });
 
-    const speakBtn = document.createElement("button");
-    speakBtn.textContent = "🔊 استمع";
-    speakBtn.onclick = () => showSteps(caseName, steps);
+    const playBtn = document.createElement("button");
+    playBtn.textContent = "🔄 إعادة";
+    playBtn.onclick = () => speakSteps(steps);
 
-    card.append(title, list, speakBtn);
+    const stopBtn = document.createElement("button");
+    stopBtn.textContent = "⏹ إيقاف";
+    stopBtn.onclick = stopSpeech;
+
+    const backBtn = document.createElement("button");
+    backBtn.textContent = "⬅ رجوع";
+    backBtn.onclick = () => card.remove();
+
+    card.append(title, list, playBtn, stopBtn, backBtn);
     casesContainer.appendChild(card);
   }
 }
@@ -72,19 +82,21 @@ function showSteps(caseName, steps) {
   stepsList.innerHTML = "";
   currentSteps = steps;
   lastSpokenSteps = steps.join("، ثم ");
-  steps.forEach(step => {
+  steps.forEach((step, index) => {
     const li = document.createElement("li");
-    li.textContent = step;
+    li.textContent = `${index + 1}. ${step}`;
+    li.onclick = () => window.location.href = "tel:997";
+    li.onmousedown = () => li.classList.toggle("highlight");
     stepsList.appendChild(li);
   });
   caseCard.classList.remove("hidden");
-  speakSteps();
+  speakSteps(steps);
 }
 
 // ================== القراءة الصوتية ==================
-function speakSteps() {
+function speakSteps(steps = currentSteps) {
   if (!("speechSynthesis" in window)) return;
-  const utter = new SpeechSynthesisUtterance(lastSpokenSteps);
+  const utter = new SpeechSynthesisUtterance(steps.join("، ثم "));
   utter.lang = "ar-SA";
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
@@ -99,13 +111,6 @@ function stopSpeech() {
 function playLast() {
   speakSteps();
 }
-
-// ================== زر العودة ==================
-backBtn.onclick = () => {
-  caseCard.classList.add("hidden");
-  showTab("firstaid");
-  stopSpeech();
-};
 
 // ================== التبويبات تعمل على النقر واللمس ==================
 document.querySelectorAll("nav button").forEach(btn => {
@@ -126,7 +131,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
     for (const [caseName, steps] of Object.entries(CASES)) {
       if (text.includes(caseName)) {
-        showSteps(caseName, steps);
+        showSteps(caseName, steps); // الاستجابة الصوتية مباشرة
         return;
       }
     }
