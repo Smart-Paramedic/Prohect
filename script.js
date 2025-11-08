@@ -20,18 +20,27 @@ const CASES = {
   ]
 };
 
-
+// ================== عناصر DOM ==================
 const emergencyBtn = document.getElementById("emergencyBtn");
 const casesContainer = document.getElementById("casesContainer");
+const caseCard = document.getElementById("caseCard");
+const caseTitle = document.getElementById("caseTitle");
+const stepsList = document.getElementById("stepsList");
+const playBtn = document.getElementById("playBtn");
+const stopBtn = document.getElementById("stopBtn");
+const backBtn = document.getElementById("backBtn");
 
+let currentSteps = [];
+let lastSpokenSteps = "";
 
+// ================== تبويبات ==================
 function showTab(tabId) {
   document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
   document.getElementById(tabId).classList.remove("hidden");
   if(tabId === "firstaid") renderCases();
 }
 
-
+// ================== توليد كروت الحالات ==================
 function renderCases() {
   casesContainer.innerHTML = "";
   for (const [caseName, steps] of Object.entries(CASES)) {
@@ -50,19 +59,55 @@ function renderCases() {
 
     const speakBtn = document.createElement("button");
     speakBtn.textContent = "🔊 استمع";
-    speakBtn.onclick = () => {
-      const utter = new SpeechSynthesisUtterance(steps.join("، ثم "));
-      utter.lang = "ar-SA";
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utter);
-    };
+    speakBtn.onclick = () => showSteps(caseName, steps);
 
     card.append(title, list, speakBtn);
     casesContainer.appendChild(card);
   }
 }
 
+// ================== عرض خطوات الحالة ==================
+function showSteps(caseName, steps) {
+  caseTitle.textContent = caseName;
+  stepsList.innerHTML = "";
+  currentSteps = steps;
+  lastSpokenSteps = steps.join("، ثم ");
+  steps.forEach(step => {
+    const li = document.createElement("li");
+    li.textContent = step;
+    stepsList.appendChild(li);
+  });
+  caseCard.classList.remove("hidden");
+  speakSteps();
+}
 
+// ================== القراءة الصوتية ==================
+function speakSteps() {
+  if (!("speechSynthesis" in window)) return;
+  const utter = new SpeechSynthesisUtterance(lastSpokenSteps);
+  utter.lang = "ar-SA";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+// ================== إيقاف الصوت ==================
+function stopSpeech() {
+  window.speechSynthesis.cancel();
+}
+
+// ================== إعادة تشغيل آخر قراءة ==================
+function playLast() {
+  speakSteps();
+}
+
+// ================== زر العودة ==================
+backBtn.onclick = () => {
+  caseCard.classList.add("hidden");
+  showTab("firstaid");
+  stopSpeech();
+};
+
+// ================== التبويبات تعمل على النقر واللمس ==================
 document.querySelectorAll("nav button").forEach(btn => {
   btn.addEventListener("click", () => {
     const tabId = btn.getAttribute("data-tab");
@@ -70,7 +115,7 @@ document.querySelectorAll("nav button").forEach(btn => {
   });
 });
 
-
+// ================== زر الطوارئ والتعرف الصوتي ==================
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SR();
@@ -79,21 +124,20 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   recognition.onresult = function(e) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
-    for (const key of Object.keys(CASES)) {
-      if (text.includes(key)) {
-        alert(`تم الكشف على الحالة: ${key}`);
+    for (const [caseName, steps] of Object.entries(CASES)) {
+      if (text.includes(caseName)) {
+        showSteps(caseName, steps);
         return;
       }
     }
   };
 
   emergencyBtn.onclick = () => recognition.start();
-
 } else {
   alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
 }
 
-
+// ================== نموذج التسجيل ==================
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target).entries());
