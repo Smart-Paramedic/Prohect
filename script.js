@@ -53,7 +53,11 @@ function renderCases() {
     steps.forEach((step, index) => {
       const li = document.createElement("li");
       li.textContent = `${index + 1}. ${step}`;
-      li.onclick = () => window.location.href = "tel:997";
+      li.onclick = () => {
+        if(confirm("هل تريد الاتصال بالإسعاف 997؟")) {
+          window.location.href = "tel:997";
+        }
+      };
       li.onmousedown = () => li.classList.toggle("highlight");
       list.appendChild(li);
     });
@@ -83,7 +87,11 @@ function showSteps(caseName, steps) {
   steps.forEach((step, index) => {
     const li = document.createElement("li");
     li.textContent = `${index + 1}. ${step}`;
-    li.onclick = () => window.location.href = "tel:997";
+    li.onclick = () => {
+      if(confirm("هل تريد الاتصال بالإسعاف 997؟")) {
+        window.location.href = "tel:997";
+      }
+    };
     li.onmousedown = () => li.classList.toggle("highlight");
     stepsList.appendChild(li);
   });
@@ -124,12 +132,13 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
     for (const [caseName, steps] of Object.entries(CASES)) {
       if (text.includes(caseName)) {
-        showSteps(caseName, steps); // الاستجابة الصوتية مباشرة
+        showSteps(caseName, steps);
         return;
       }
     }
   };
 
+  recognition.start(); // يبدأ تلقائيًا عند فتح الموقع
   emergencyBtn.onclick = () => recognition.start();
 } 
 
