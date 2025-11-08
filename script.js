@@ -1,126 +1,133 @@
-const API_URL = "https://sheetdb.io/api/v1/pp3tkazlfqhvu";
-
-const CASES = {
-  "نزيف": [
-    "اضغط على مكان النزيف مباشرة بقطعة قماش نظيفة.",
-    "ارفع الجزء المصاب فوق مستوى القلب.",
-    "لا تزل الأجسام العالقة في الجرح.",
-    "اتصل بالإسعاف فوراً. (997)"
-  ],
-  "كسر": [
-    "لا تحرك الجزء المصاب.",
-    "ثبت المنطقة باستخدام جبيرة مؤقتة.",
-    "ضع ثلجاً ملفوفاً لتقليل التورم.",
-    "اتصل بالإسعاف فوراً. (997)"
-  ],
-  "انخفاض السكر": [
-    "أعط المصاب شيئاً يحتوي على سكر سريع مثل العصير.",
-    "إذا فقد وعيه لا تعطه شيئاً عن طريق الفم.",
-    "راقب تنفسه حتى تصل المساعدة.",
-    "اتصل بالإسعاف فوراً. (997)"
-  ]
-};
-
+// ======= المتغيرات =======
 const emergencyBtn = document.getElementById("emergencyBtn");
-const cardContainer = document.getElementById("cardContainer");
+const showCasesBtn = document.getElementById("showCasesBtn");
+const casesList = document.getElementById("casesList");
+const stepsSection = document.getElementById("stepsSection");
 const caseTitle = document.getElementById("caseTitle");
 const stepsList = document.getElementById("stepsList");
-const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
-const backBtn = document.getElementById("backBtn");
-const casesList = document.getElementById("casesList");
+const playBtn = document.getElementById("playBtn");
+const callBtn = document.getElementById("callBtn");
+const backBtnEl = document.getElementById("back");
+const instruction = document.getElementById("instruction");
+const hint = document.getElementById("hint");
 
-let currentSteps = [];
+const synth = window.speechSynthesis;
+let recognition = null;
+let currentUtterance = null;
 
-// عرض الكارد
-function showCard(caseName, steps) {
-  caseTitle.textContent = caseName;
+// رابط قاعدة البيانات SheetDB
+const API = 'https://sheetdb.io/api/v1/pp3tkazlfqhvu';
+let cases = [];
+
+// ======= جلب البيانات =======
+fetch(API)
+  .then(res => res.json())
+  .then(data => {
+    cases = data.map(row => ({
+      name: row.case,
+      steps: row.steps ? row.steps.split('|') : [],
+      info: row.info || ''
+    }));
+    renderCases();
+  })
+  .catch(err => console.error("خطأ عند جلب البيانات:", err));
+
+// ======= عرض الحالات نصيًا =======
+function renderCases(){
+  casesList.innerHTML = "";
+  cases.forEach(c=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${c.name}</h3><p>${c.info}</p>`;
+    card.onclick = () => showSteps(c);
+    casesList.appendChild(card);
+  });
+  casesList.classList.remove("hidden");
+}
+
+// ======= عرض الخطوات وقراءتها صوتيًا =======
+function showSteps(c){
+  stepsSection.style.display = "block";
+  caseTitle.textContent = c.name;
   stepsList.innerHTML = "";
-  currentSteps = steps;
-  steps.forEach(step => {
+  c.steps.forEach(s => {
     const li = document.createElement("li");
-    li.textContent = step;
-    if (step.includes("997")) {
-      const link = document.createElement("a");
-      link.textContent = "997";
-      link.href = "#";
-      link.onclick = () => {
-        alert("هل الحالة طارئة فعلاً؟ سيتم تحويلك لطلب الإسعاف.");
-        window.location.href = "tel:997";
-      };
-      li.appendChild(document.createElement("br"));
-      li.appendChild(link);
-    }
+    li.textContent = s;
     stepsList.appendChild(li);
   });
-  cardContainer.classList.remove("hidden");
-  speakSteps();
+  speakSteps(c.steps);
+
+  emergencyBtn.style.display = "none";
+  showCasesBtn.style.display = "none";
+  hint.style.display = "none";
 }
 
-function speakSteps() {
-  if (!("speechSynthesis" in window)) return;
-  const utterance = new SpeechSynthesisUtterance(currentSteps.join("، ثم "));
-  utterance.lang = "ar-SA";
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+function speakSteps(steps){
+  if(synth.speaking) synth.cancel();
+  currentUtterance = new SpeechSynthesisUtterance(steps.join(". "));
+  currentUtterance.lang = "ar-SA";
+  synth.speak(currentUtterance);
 }
 
-playBtn.onclick = speakSteps;
-stopBtn.onclick = () => window.speechSynthesis.cancel();
-backBtn.onclick = () => {
-  cardContainer.classList.add("hidden");
-  showTab('home');
-  window.speechSynthesis.cancel();
-};
-
-function showTab(tabId) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
-  document.getElementById(tabId).classList.remove("hidden");
+function playLast(){
+  if(currentUtterance){
+    if(synth.speaking) synth.cancel();
+    synth.speak(currentUtterance);
+  }
 }
 
-// عرض الحالات في تبويب الحالات
-Object.entries(CASES).forEach(([name, steps]) => {
-  const box = document.createElement("div");
-  box.className = "case-box";
-  box.innerHTML = `<h3>${name}</h3><ul>${steps.map(s=>`<li>${s}</li>`).join('')}</ul>`;
-  casesList.appendChild(box);
+function stopSpeech(){
+  if(synth.speaking) synth.cancel();
+}
+
+// ======= زر الاتصال بالطوارئ =======
+callBtn.addEventListener("click", ()=>{
+  window.location.href = "tel:997";
 });
 
-// إرسال البيانات لقاعدة البيانات
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target).entries());
-  await fetch(API_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({data})
-  });
-  alert("تم إرسال البيانات بنجاح!");
-  e.target.reset();
-});
+// ======= زر عرض الحالات =======
+showCasesBtn.addEventListener("click", renderCases);
 
-// التعرف الصوتي
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recog = new SR();
-  recog.lang = "ar-SA";
-  recog.continuous = true;
+// ======= التعرف على الصوت مباشرة =======
+if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = "ar-SA";
+  recognition.continuous = true;
+  recognition.interimResults = false;
 
-  recog.onresult = (e) => {
-    const text = e.results[e.results.length - 1][0].transcript.trim();
-    for (const [key, steps] of Object.entries(CASES)) {
-      if (text.includes(key)) {
-        showCard(key, steps);
-        return;
-      }
+  recognition.onresult = function(event){
+    const last = event.results[event.results.length-1][0].transcript.trim().toLowerCase();
+    console.log("سمعت:", last);
+
+    const found = cases.find(c => last.includes(c.name.toLowerCase()));
+    if(found){
+      showSteps(found);
     }
   };
 
-  // يبدأ تلقائياً عند فتح الصفحة
-  recog.start();
-  // أو عند النقر على الزر
-  emergencyBtn.onclick = () => recog.start();
-
-} else {
-  alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
+  recognition.onerror = function(e){console.log(e);}
+  recognition.start(); // يبدأ تلقائيًا
 }
+
+// ======= زر الطوارئ =======
+emergencyBtn.addEventListener("click", ()=>{
+  if(recognition){
+    recognition.start();
+  }
+});
+
+// ======= أزرار التحكم الصوتي =======
+stopBtn.addEventListener("click", stopSpeech);
+playBtn.addEventListener("click", playLast);
+
+// ======= زر العودة =======
+backBtnEl.addEventListener("click", ()=>{
+  stepsSection.style.display = "none";
+  if(synth.speaking) synth.cancel();
+  emergencyBtn.style.display = "inline-block";
+  showCasesBtn.style.display = "inline-block";
+  hint.style.display = "block";
+  instruction.textContent = "اضغط زر الطوارئ للبدء أو قل حالة من التلميح";
+});
