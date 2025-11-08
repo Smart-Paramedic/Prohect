@@ -16,10 +16,23 @@
 <button id="emergencyBtn" class="main-btn">🎙 الطوارئ</button>
 
 <nav>
+   <button data-tab="register"> الرئيسية</button>
   <button data-tab="register"> التسجيل</button>
   <button data-tab="firstaid"> الإسعافات الأولية</button>
   <button data-tab="licensed"> المسعفون المرخصون</button>
 </nav>
+
+  <section id="home" class="tab">
+  <h2>الواجهة الرئيسية</h2>
+  <button id="emergencyBtn" class="main-btn">🎙 زر الطوارئ</button>
+</section>
+
+<section id="firstaid" class="tab hidden">
+  <h2>الإسعافات الأولية</h2>
+  <div id="casesContainer" class="cases-container">
+  
+  </div>
+</section>
 
 <section id="register" class="tab">
   <h2>نموذج التسجيل</h2>
@@ -64,3 +77,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
