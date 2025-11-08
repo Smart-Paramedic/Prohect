@@ -80,14 +80,21 @@ backBtn.onclick = () => {
   stopSpeech();
 };
 
-// ================== زر الطوارئ ==================
+// ================== التبويبات تعمل على النقر واللمس ==================
+document.querySelectorAll("nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tabId = btn.getAttribute("data-tab");
+    showTab(tabId);
+  });
+});
+
+// ================== زر الطوارئ والتعرف الصوتي ==================
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SR();
   recognition.lang = "ar-SA";
   recognition.continuous = true;
 
-  // ================== التعرف على الصوت ==================
   recognition.onresult = function(e) {
     const text = e.results[e.results.length - 1][0].transcript.trim();
     for (const [key, steps] of Object.entries(CASES)) {
@@ -98,11 +105,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     }
   };
 
-  // يبدأ التعرف عند الضغط على زر الطوارئ
   emergencyBtn.onclick = () => recognition.start();
-
-  // تشغيل التعرف تلقائياً عند فتح الموقع
-  recognition.start();
 
 } else {
   alert("المتصفح لا يدعم خاصية التعرف على الصوت.");
