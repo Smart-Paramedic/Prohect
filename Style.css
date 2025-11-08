@@ -4,6 +4,7 @@
   --white: #fff;
   --dark: #222;
   --darkblue: #1565c0;
+  --highlight: #ffd54f;
 }
 
 body {
@@ -68,10 +69,10 @@ nav button:hover {
 
 .cases-container {
   display: flex;
-  flex-direction: row; /* عرض الكروت أفقي */
-  gap: 12px;
+  flex-direction: row;
+  gap: 16px;
   overflow-x: auto;
-  padding: 10px;
+  padding: 12px;
 }
 
 .case-card {
@@ -82,7 +83,8 @@ nav button:hover {
   background: var(--white);
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 12px 16px;
+  padding: 12px;
+  cursor: pointer;
 }
 
 .case-card h3 {
@@ -97,16 +99,34 @@ nav button:hover {
   text-align: right;
 }
 
-.case-card button {
-  background: var(--babyblue);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
+.case-card ul li {
+  margin: 4px 0;
   cursor: pointer;
 }
 
-.case-card button:hover {
+.case-card ul li.highlight {
+  background: var(--highlight);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.controls button {
+  background: var(--babyblue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.controls button:hover {
   background: #64b5f6;
 }
 
@@ -138,25 +158,5 @@ form input, form select, form textarea {
 }
 
 .submit-btn:hover {
-  background: #64b5f6;
-}
-
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.controls button {
-  background: var(--babyblue);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.controls button:hover {
   background: #64b5f6;
 }
