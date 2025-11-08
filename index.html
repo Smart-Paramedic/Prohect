@@ -12,29 +12,20 @@
   <p class="subtitle">دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
 </header>
 
-<!-- زر الطوارئ مباشر -->
-<button id="emergencyBtn" class="main-btn">🎙 الطوارئ</button>
-
 <nav>
-   <button data-tab="register"> الرئيسية</button>
+  <button data-tab="home"> الرئيسية</button>
   <button data-tab="register"> التسجيل</button>
   <button data-tab="firstaid"> الإسعافات الأولية</button>
   <button data-tab="licensed"> المسعفون المرخصون</button>
 </nav>
 
-  <section id="home" class="tab">
+<!-- الواجهة الرئيسية مع زر الطوارئ -->
+<section id="home" class="tab">
   <h2>الواجهة الرئيسية</h2>
   <button id="emergencyBtn" class="main-btn">🎙 زر الطوارئ</button>
 </section>
 
-<section id="firstaid" class="tab hidden">
-  <h2>الإسعافات الأولية</h2>
-  <div id="casesContainer" class="cases-container">
-  
-  </div>
-</section>
-
-<section id="register" class="tab">
+<section id="register" class="tab hidden">
   <h2>نموذج التسجيل</h2>
   <form id="registerForm">
     <input type="text" name="full_name" placeholder="الاسم الكامل" required>
@@ -58,14 +49,8 @@
 
 <section id="firstaid" class="tab hidden">
   <h2>الإسعافات الأولية</h2>
-  <div id="cardContainer" class="case-card hidden">
-    <h3 id="caseTitle"></h3>
-    <ul id="stepsList"></ul>
-    <div class="controls">
-      <button id="playBtn">إعادة</button>
-      <button id="stopBtn">إيقاف</button>
-      <button id="backBtn">رجوع</button>
-    </div>
+  <div id="casesContainer" class="cases-container">
+    <!-- سيتم توليد الكروت بواسطة JS -->
   </div>
 </section>
 
@@ -77,4 +62,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
