@@ -69,7 +69,7 @@ nav button:hover {
 
 .cases-container {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   gap: 16px;
   overflow-x: auto;
   padding: 12px;
