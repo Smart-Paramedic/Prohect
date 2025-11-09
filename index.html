@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="Style.css" />
 </head>
 <body>
-  
+
+  <header>
+    <h1 class="site-title"> أسعفني</h1>
+  </header>
 
   <nav class="nav-tabs" role="navigation" aria-label="التبويبات">
     <button class="nav-tab active" onclick="showTab('home', event)">الرئيسية</button>
@@ -21,7 +24,6 @@
     <section id="home" class="tab-content active" aria-labelledby="home">
       <div class="home-center">
         <button id="emergencyBtn" class="emergency-btn" aria-label="زر الطوارئ">زر الطوارئ</button>
-        <p class="hint">انقر على الزر أو تحدث باسم الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
       </div>
     </section>
 
@@ -54,7 +56,7 @@
       </form>
     </section>
 
-    <!-- المسعفون (يظهر هنا فقط) -->
+    <!-- المسعفون -->
     <section id="paramedics" class="tab-content center-content" aria-labelledby="paramedics">
       <h2 class="section-title">المسعفون المرخصون</h2>
       <p>يتم عرض بيانات المسعفين المرخصين بعد موافقة وزارة الصحة.</p>
