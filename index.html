@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>أسعفني - المساعد الطبي الذكي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أسعفني</title>
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
@@ -10,29 +11,25 @@
     <h1> أسعفني</h1>
   </header>
 
-  <nav>
-    <button class="tab-btn active" data-tab="home">الرئيسية</button>
-    <button class="tab-btn" data-tab="cases">الإسعافات الأولية</button>
-    <button class="tab-btn" data-tab="register">التسجيل</button>
-    <button class="tab-btn" data-tab="about">حول</button>
-  </nav>
-
   <main>
-    <!-- الصفحة الرئيسية -->
-    <section id="home" class="tab-content active">
-      <h2>ابدأ المساعدة الآن</h2>
-      <button id="emergencyBtn">🚨 زر الطوارئ</button>
-      <p id="hint">🩺 الحالات الممكنة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
+    <section id="home" class="tab active">
+      <h2>مرحباً بك</h2>
+      <p>تحدث أو انقر على الزر لذكر الحالة</p>
+      <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
+      <div id="hint">تحدث أو انقر على الزر لذكر الحالة مثل: "حروق" أو "صرع"</div>
     </section>
 
-    <!-- الإسعافات الأولية -->
-    <section id="cases" class="tab-content">
-      <h2>🩺 خطوات الإسعافات الأولية</h2>
-      <div id="casesList"></div>
+    <section id="cases" class="tab">
+      <h2>الحالات الإسعافية</h2>
+      <div id="casesList" class="card-container"></div>
     </section>
 
-    <!-- تبويب التسجيل -->
-    <section id="register" class="tab-content">
+    <section id="licensed" class="tab">
+      <h2>المسعفون المرخصون</h2>
+      <p>تُعرض بيانات المسعفين ورخصهم هنا بعد الموافقة من وزارة الصحة.</p>
+    </section>
+
+    <section id="register" class="tab">
       <h2>نموذج التسجيل</h2>
       <form id="registerForm">
         <input type="text" name="full_name" placeholder="الاسم الكامل" required>
@@ -49,25 +46,14 @@
         <button type="submit" class="submit-btn">تسجيل</button>
       </form>
     </section>
-
-    <!-- تبويب حول -->
-    <section id="about" class="tab-content">
-      <h2>عن النظام</h2>
-      <p>نظام ذكي لتقديم خطوات الإسعافات الأولية صوتيًا وبشكل تفاعلي للمستخدم.</p>
-    </section>
   </main>
 
-  <div id="stepsCard" class="hidden">
-    <div class="card-content">
-      <h3 id="caseTitle"></h3>
-      <div id="stepsText"></div>
-      <div class="controls">
-        <button id="backBtn">رجوع</button>
-        <button id="stopBtn">إيقاف</button>
-        <button id="replayBtn">إعادة</button>
-      </div>
-    </div>
-  </div>
+  <footer>
+    <button class="tab-btn" data-target="home">الصفحة الرئيسية</button>
+    <button class="tab-btn" data-target="cases">الإسعافات الأولية</button>
+    <button class="tab-btn" data-target="licensed">المسعفون</button>
+    <button class="tab-btn" data-target="register">التسجيل</button>
+  </footer>
 
   <script src="script.js"></script>
 </body>
