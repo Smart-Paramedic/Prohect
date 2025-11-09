@@ -7,7 +7,7 @@ const CASES = {
       "أخذ مسكن إذا لزم الأمر",
       "طلب المساعدة فورًا إذا كانت الحروق شديدة"
     ],
-    image: "images/إرشادات عامة للحروق.png"
+    image: "images/burn.jpg"
   },
   "الصرع": {
     steps: [
@@ -18,6 +18,14 @@ const CASES = {
       "وضع المصاب في وضع الإفاقة بعد انتهاء النوبة"
     ],
     video: "https://www.youtube.com/embed/gynQdWDHbeI?start=101"
+  },
+  "انخفاض السكر": {
+    steps: [
+      "أعط المصاب شيئاً يحتوي على سكر سريع",
+      "إذا فقد وعيه لا تعطه شيئاً عن طريق الفم",
+      "راقب تنفسه حتى تصل المساعدة",
+      "اتصل بالإسعاف فوراً على 997"
+    ]
   },
   "الإختناق": {
     steps: [
@@ -59,13 +67,4 @@ function showTab(tabId, event) {
 function renderCases() {
   casesContainer.innerHTML = "";
   for (const [caseName, obj] of Object.entries(CASES)) {
-    const card = document.createElement("div");
-    card.className = "case-card";
-    card.textContent = caseName;
-    card.onclick = () => showSteps(caseName, obj.steps, obj.image, obj.video);
-    casesContainer.appendChild(card);
-  }
-}
-
-function showSteps(caseName, steps, image = "", video = "") {
-  caseTitle.text
+    const card
