@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>المسعف الذكي</title>
-<link rel="stylesheet" href="Style.css">
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <header>
@@ -13,60 +13,48 @@
 </header>
 
 <nav>
-  <button data-tab="home"> الرئيسية</button>
-  <button data-tab="register"> التسجيل</button>
-  <button data-tab="firstaid"> الإسعافات الأولية</button>
-  <button data-tab="licensed"> المسعفون المرخصون</button>
+  <button data-tab="home">🏠 الرئيسية</button>
+  <button data-tab="register">📝 التسجيل</button>
+  <button data-tab="firstaid">🚑 الإسعافات الأولية</button>
+  <button data-tab="licensed">👨‍⚕️ المسعفون المرخصون</button>
 </nav>
 
-<!-- تبويب الرئيسية -->
+<!-- HOME: زر الطوارئ (بدون نص "الواجهة الرئيسية") -->
 <section id="home" class="tab">
   <button id="emergencyBtn" class="main-btn">🎙 زر الطوارئ</button>
   <p class="note">تحدث باسم الحالة: كسر، نزيف، انخفاض السكر</p>
 </section>
 
-<!-- تبويب التسجيل -->
+<!-- التسجيل -->
 <section id="register" class="tab hidden">
   <h2>نموذج التسجيل</h2>
-  <form id="registerForm">
-    <input type="text" name="full_name" placeholder="الاسم الكامل" required>
-    <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-    <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
-    <select name="blood_type" required>
-      <option value="">فصيلة الدم</option>
-      <option value="A+">A+</option>
-      <option value="A-">A-</option>
-      <option value="B+">B+</option>
-      <option value="B-">B-</option>
-      <option value="AB+">AB+</option>
-      <option value="AB-">AB-</option>
-      <option value="O+">O+</option>
-      <option value="O-">O-</option>
-    </select>
-    <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
-    <button type="submit" class="submit-btn">تسجيل</button>
-  </form>
+  <form id="registerForm"> ... أحقِم الحقول كما لديك ... </form>
 </section>
 
-<!-- تبويب الإسعافات الأولية -->
+<!-- تبويب الاسعافات (كروت أفقية) -->
 <section id="firstaid" class="tab hidden">
   <div id="casesContainer" class="cases-container"></div>
 </section>
 
-<!-- تبويب المسعفون المرخصون -->
+<!-- المسعفون -->
 <section id="licensed" class="tab hidden">
   <h2>المسعفون المرخصون</h2>
   <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
+  <div id="paramedicsContainer"></div>
 </section>
 
-<!-- كارد حالة الطوارئ عند التعرف على الصوت -->
+<!-- Card عرض خطوات الحالة (يظهر فقط عند الاستجابة الصوتية أو عند فتح حالة) -->
 <section id="caseCard" class="tab hidden">
-  <h3 id="caseTitle"></h3>
-  <ul id="stepsList"></ul>
-  <div class="controls">
-    <button id="playBtn">🔄 إعادة</button>
-    <button id="stopBtn">⏹ إيقاف</button>
-    <button id="backBtn">⬅ رجوع</button>
+  <div class="case-card-inner">
+    <h3 id="caseTitle"></h3>
+    <div id="stepsList" class="steps-list"></div>
+
+    <div class="controls">
+      <button id="playBtn" class="ctrl">🔄 إعادة</button>
+      <button id="stopBtn" class="ctrl">⏹ إيقاف</button>
+      <button id="backBtn" class="ctrl">⬅ رجوع</button>
+      <a id="callBtn" class="ctrl call" href="#" role="button">📞 اتصال الطوارئ</a>
+    </div>
   </div>
 </section>
 
