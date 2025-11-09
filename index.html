@@ -10,7 +10,6 @@
   <div class="container">
     <div class="header">
       <h1>نظام الإسعافات الأولية</h1>
-      <p>دليلك للإسعافات الأولية في حالات الطوارئ</p>
     </div>
 
     <div class="nav-tabs">
@@ -19,39 +18,35 @@
       <div class="nav-tab" onclick="showTab('profile', event)">ملفي الشخصي</div>
     </div>
 
-    <!-- تبويب الإسعافات الأولية -->
     <div id="firstaid" class="tab">
       <div id="casesContainer" class="cases-container"></div>
       <div id="caseCard" class="case-card hidden">
         <h3 id="caseTitle"></h3>
-        <img id="caseImage" src="" alt="صورة توضيحية" class="case-image">
+        <img id="caseImage" class="case-image" alt="صورة توضيحية">
         <iframe id="caseVideo" class="case-video hidden" width="100%" height="250" frameborder="0" allowfullscreen></iframe>
         <ul id="stepsList" class="steps-list"></ul>
         <div class="buttons">
-          <button id="playBtn">إعادة التشغيل</button>
-          <button id="stopBtn">إيقاف</button>
-          <button id="backBtn">رجوع</button>
+          <button id="playBtn">🔁 إعادة التشغيل</button>
+          <button id="stopBtn">⏹ إيقاف</button>
+          <button id="backBtn">🔙 رجوع</button>
+          <button id="mediaBtn">🎥 فيديو توضيحي</button>
         </div>
       </div>
     </div>
 
-    <!-- تبويب المسعفون المعتمدون -->
     <div id="paramedics" class="tab hidden">
       <h2>المسعفون المعتمدون</h2>
-      <div id="paramedicsList"></div>
+      <div id="paramedicsList">سيتم عرض بيانات المسعفين قريبًا.</div>
     </div>
 
-    <!-- تبويب الملف الشخصي -->
     <div id="profile" class="tab hidden">
       <h2>ملفي الشخصي</h2>
-      <div id="profileInfo"></div>
-      <div id="emergencyContacts"></div>
+      <div id="profileInfo">معلومات المستخدم هنا.</div>
     </div>
 
-    <button id="emergencyBtn" class="emergency-btn">بدء الاستماع</button>
+    <button id="emergencyBtn" class="emergency-btn">🎙 زر الطوارئ</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
