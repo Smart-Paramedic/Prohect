@@ -1,98 +1,113 @@
-const tabs = document.querySelectorAll('.nav-tab');
-const tabContents = document.querySelectorAll('.tab-content');
-const emergencyBtn = document.getElementById('emergencyBtn');
-let synth = window.speechSynthesis;
-let currentUtterances = [];
-
+// ================= البيانات الأساسية للحالات =================
 const CASES = {
     "الحروق": [
-        "تبريد الحرق بوضع المنطقة المصابة تحت ماء جاري 10-15 دقيقة.",
-        "إزالة الإكسسوارات والملابس الضيقة.",
-        "تغطية منطقة الحرق بضمادة نظيفة.",
-        "اتصل بالإسعاف فوراً على 997."
+        "تبريد الحرق تحت ماء جاري لمدة 10-15 دقيقة",
+        "إزالة الملابس الضيقة",
+        "تغطية الحرق بضمادة نظيفة",
+        "عدم لمس الفقاعات أو وضع أي مراهم",
+        "الاتصال بالإسعاف فوراً على 997"
     ],
     "الصرع": [
-        "احمِ المصاب من الأجسام المحيطة.",
-        "ادعم رأس المصاب بقطعة قماش.",
-        "إذا استمرت النوبة أكثر من 5 دقائق، اطلب الإسعاف فوراً.",
-        "بعد انتهاء النوبة ضع المصاب على جانبه."
+        "لاحظ الوقت المستغرق في النوبة",
+        "احمِ المصاب من الأجسام المحيطة",
+        "ادعم رأس المصاب",
+        "لا تضع شيء في فمه",
+        "بعد انتهاء النوبة ضع المصاب على جانبه",
+        "اتصل بالإسعاف إذا استمرت النوبة أكثر من 5 دقائق"
     ],
     "انخفاض الضغط": [
-        "أعط المصاب شيئًا يحتوي على سكر سريع.",
-        "راقب تنفسه ونبضه.",
-        "إذا فقد وعيه لا تعطه شيئًا عن طريق الفم.",
-        "اتصل بالإسعاف فوراً على 997."
+        "إجلس أو استلقِ المصاب",
+        "رفع القدمين قليلاً",
+        "تقديم ماء أو مشروبات بسيطة إذا كان واعياً",
+        "مراقبة التنفس والنبض",
+        "الاتصال بالإسعاف فوراً على 997 إذا لم يتحسن"
     ],
     "الاختناق": [
-        "الوقوف خلف الشخص المصاب.",
-        "ضع إحدى قدميك أمام الأخرى لتحقيق التوازن.",
-        "لف ذراعيك حول خصر الشخص المصاب واضغط بقوة نحو الأعلى.",
-        "إذا فقد وعيه، ابدأ بالإنعاش فوراً.",
-        "اتصل بالإسعاف فوراً على 997."
+        "الوقوف خلف المصاب",
+        "لف الذراعين حول خصر المصاب",
+        "اصنع قبضة وضعها فوق السرة",
+        "اضغط بقوة نحو الأعلى 6-10 مرات",
+        "إذا فقد وعيه، ابدأ بالإنعاش القلبي الرئوي",
+        "الاتصال بالإسعاف فوراً على 997"
     ]
 };
 
-// عرض التبويب المطلوب وإيقاف الصوت
-function showTab(tabId, event){
+// ================= التبويبات =================
+function showTab(tabId, event) {
     stopSpeech();
-    tabContents.forEach(tc => tc.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    tabs.forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
     event.currentTarget.classList.add('active');
 }
 
-// توليد كروت الحالات
+// ================= توليد كروت الحالات =================
 function renderCases() {
     const container = document.getElementById('cases-container');
     container.innerHTML = '';
-    for(let caseName in CASES){
+    for (let caseName in CASES) {
         const card = document.createElement('div');
         card.classList.add('case-card');
-        card.innerHTML = `<div class="case-title">${caseName}</div>`;
-        CASES[caseName].forEach(step => {
-            const p = document.createElement('div');
-            p.classList.add('step');
-            p.textContent = step;
-            card.appendChild(p);
-        });
-        const callBtn = document.createElement('button');
-        callBtn.textContent = "اتصال بالإسعاف 997";
-        callBtn.classList.add('emergency-call-btn');
-        callBtn.onclick = () => alert("تأكيد: سيتم الاتصال بالإسعاف على الرقم 997");
-        card.appendChild(callBtn);
 
-        card.onclick = () => speakSteps(CASES[caseName]);
+        let html = `<h3>${caseName}</h3><ul>`;
+        CASES[caseName].forEach(step => {
+            html += `<li>${step}</li>`;
+        });
+        html += `</ul><button onclick="callEmergency('${caseName}')">الاتصال بالإسعاف 997</button>`;
+        card.innerHTML = html;
+
+        card.onclick = () => speakSteps([caseName].concat(CASES[caseName]));
         container.appendChild(card);
     }
 }
 
-// تحويل الخطوات إلى صوت
-function speakSteps(steps){
+// ================= تحويل الخطوات إلى صوت =================
+let synth = window.speechSynthesis;
+let currentUtterance;
+
+function speakSteps(steps) {
     stopSpeech();
-    steps.forEach(text => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ar-SA';
-        synth.speak(utterance);
-        currentUtterances.push(utterance);
-    });
+    const text = steps.join('. ');
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.lang = 'ar-SA';
+    synth.speak(currentUtterance);
 }
 
-// إيقاف الصوت فورًا
-function stopSpeech(){
-    synth.cancel();
-    currentUtterances = [];
+// ================= إيقاف الصوت =================
+function stopSpeech() {
+    if (synth.speaking) synth.cancel();
 }
 
-// زر الطوارئ
-emergencyBtn.onclick = () => {
-    let allSteps = [];
-    for(let caseName in CASES){
-        allSteps = allSteps.concat([caseName]).concat(CASES[caseName]);
+// ================= الاتصال بالطوارئ =================
+function callEmergency(caseName) {
+    stopSpeech();
+    if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
+        window.location.href = 'tel:997';
     }
-    speakSteps(allSteps);
 }
 
-// بدء التهيئة
-document.addEventListener('DOMContentLoaded', () => {
-    renderCases();
-});
+// ================= التعرف الصوتي =================
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'ar-SA';
+recognition.continuous = false;
+
+recognition.onresult = function(event) {
+    const spoken = event.results[0][0].transcript.trim();
+    for (let caseName in CASES) {
+        if (spoken.includes(caseName)) {
+            speakSteps([caseName].concat(CASES[caseName]));
+            break;
+        }
+    }
+};
+
+function startListening() {
+    recognition.start();
+}
+
+// ================= زر الطوارئ =================
+const emergencyBtn = document.getElementById('emergencyBtn');
+emergencyBtn.onclick = () => startListening();
+
+// ================= بدء تحميل الكروت =================
+renderCases();
