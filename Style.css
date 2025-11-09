@@ -1,105 +1,163 @@
+/* ================= ألوان عامة ================= */
 :root {
-    --babyblue: #a3d2f2;
-    --darkblue: #004080;
-    --btnblue: #0066cc;
-    --light: #f8f9fa;
-    --dark: #333;
+    --babyblue: #BEE3F8;
+    --darkblue: #1E40AF;
+    --btnblue: #2563EB;
+    --textcolor: #1E293B;
+    --cardbg: #EFF6FF;
 }
 
+/* ================= الجسم ================= */
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--light);
-    line-height: 1.6;
-}
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    padding: 0;
+    background: #f5f7fa;
+    color: var(--textcolor);
 }
 
-/* الرئيسية */
-.header {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-.hint {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: var(--darkblue);
-}
-.control-buttons {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-.control-buttons button {
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: none;
-    background: var(--btnblue);
-    color: white;
-    cursor: pointer;
-}
-.control-buttons button:hover {
-    background: var(--darkblue);
-}
-
-/* التبويبات */
+/* ================= التبويبات ================= */
 .nav-tabs {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 1rem;
+    background: var(--babyblue);
+    padding: 10px 0;
+    gap: 15px;
 }
+
 .nav-tab {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
-    background: var(--babyblue);
-    transition: all 0.3s;
+    transition: 0.3s;
+    font-weight: bold;
 }
+
 .nav-tab.active {
     background: var(--darkblue);
     color: white;
 }
 
-/* كروت الحالات */
-.cases-container {
+/* ================= تبويبات المحتوى ================= */
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ================= كروت الحالات ================= */
+#cases-container {
     display: flex;
-    gap: 15px;
     flex-wrap: wrap;
+    gap: 20px;
     justify-content: center;
 }
+
 .case-card {
-    background: white;
+    background: var(--cardbg);
     border-radius: 10px;
     padding: 15px;
-    width: 280px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
 }
+
+.case-card:hover {
+    transform: scale(1.05);
+}
+
 .case-card h3 {
-    margin-bottom: 10px;
+    margin-top: 0;
+    color: var(--darkblue);
 }
+
 .case-card ul {
-    list-style-type: disc;
-    padding-right: 20px;
+    padding-left: 20px;
 }
+
 .case-card button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
     background: var(--btnblue);
     color: white;
-    border: none;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
     cursor: pointer;
 }
+
 .case-card button:hover {
     background: var(--darkblue);
 }
 
-/* تبويب المسعفين */
+/* ================= زر الطوارئ ================= */
+#emergencyBtn {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: var(--btnblue);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#emergencyBtn:hover {
+    background: var(--darkblue);
+}
+
+/* ================= أزرار التحكم ================= */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.control-buttons button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: var(--btnblue);
+    color: white;
+    cursor: pointer;
+}
+
+.control-buttons button:hover {
+    background: var(--darkblue);
+}
+
+/* ================= تبويب التسجيل ================= */
+#register form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#register input, #register select, #register textarea, #register button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#register button.submit-btn {
+    background: var(--btnblue);
+    color: white;
+    cursor: pointer;
+}
+
+#register button.submit-btn:hover {
+    background: var(--darkblue);
+}
+
+/* ================= تبويب المسعفون ================= */
 .center-content {
     text-align: center;
     display: flex;
@@ -109,30 +167,13 @@ body {
     gap: 10px;
 }
 
-/* زر الطوارئ */
-.emergency-btn {
-    background: var(--btnblue);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.emergency-btn:hover {
-    background: var(--darkblue);
+.center-content a {
+    margin-top: 10px;
+    color: var(--darkblue);
+    text-decoration: none;
+    font-weight: bold;
 }
 
-/* تبويب التسجيل */
-#register form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
-    margin: 0 auto;
-}
-#register input, #register select, #register textarea, #register button {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.center-content a:hover {
+    text-decoration: underline;
 }
