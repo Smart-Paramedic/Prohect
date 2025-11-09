@@ -1,4 +1,3 @@
-// ========== بيانات الحالات ==========
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
@@ -46,16 +45,18 @@ function speakSteps(steps) {
   currentUtterance.lang = 'ar-SA';
   synth.speak(currentUtterance);
 }
+
 function stopSpeech() {
   if (!synth) return;
   if (synth.speaking || synth.pending) synth.cancel();
   currentUtterance = null;
 }
+
 function repeatSpeech() {
   if (lastSpokenSteps && lastSpokenSteps.length) speakSteps(lastSpokenSteps);
 }
 
-// ========== عرض الكروت (عرض كل الحالات أو حالة واحدة) ==========
+// ========== عرض الكروت ==========
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
@@ -74,15 +75,26 @@ function renderCases(filtered = null) {
         <button class="call-btn" type="button">اتصال 997</button>
       </div>
     `;
-    // ربط الأزرار
     const playBtn = card.querySelector('.play-btn');
     const stopBtn = card.querySelector('.stop-btn');
     const backBtn = card.querySelector('.back-btn');
     const callBtn = card.querySelector('.call-btn');
 
-    playBtn.addEventListener('click', (ev) => { ev.stopPropagation(); speakSteps([caseName].concat(steps)); });
-    stopBtn.addEventListener('click', (ev) => { ev.stopPropagation(); stopSpeech(); });
-    backBtn.addEventListener('click', (ev) => { ev.stopPropagation(); renderCases(); });
+    playBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      speakSteps([caseName].concat(steps));
+    });
+
+    stopBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      stopSpeech();
+    });
+
+    backBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      renderCases();
+    });
+
     callBtn.addEventListener('click', (ev) => {
       ev.stopPropagation();
       stopSpeech();
@@ -91,7 +103,6 @@ function renderCases(filtered = null) {
       }
     });
 
-    // لا نقرأ عند النقر على الكارد: القراءة مسموحة فقط عند التعرف الصوتي
     casesContainer.appendChild(card);
   }
 }
@@ -104,11 +115,13 @@ function showTab(tabId, event) {
   if (el) el.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  if (tabId === 'home' && recognition) recognition.start(); // ✅ تفعيل المايك عند الدخول للرئيسية
 }
 
 // ========== التعرف الصوتي ==========
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 let recognition = null;
+
 if (SpeechRec) {
   recognition = new SpeechRec();
   recognition.lang = 'ar-SA';
@@ -118,7 +131,6 @@ if (SpeechRec) {
   recognition.onresult = (e) => {
     const spoken = e.results[0][0].transcript.trim();
     const low = spoken.toLowerCase();
-    // نبحث عن أي اسم حالة ظاهر في النص
     for (const caseName of Object.keys(CASES)) {
       if (low.includes(caseName.toLowerCase())) {
         showTab('cases');
@@ -130,12 +142,13 @@ if (SpeechRec) {
     alert('لم أتعرف على اسم حالة مناسب. كرر اسم الحالة مثل: الحروق أو الصرع.');
   };
 
-  recognition.onstart = () => { /* متصفح طلب إذن مايك ثم بدأ الاستماع - لا نعرض مؤشر هنا */ };
-  recognition.onend = () => { /* انتهى الاستماع */ };
-  recognition.onerror = (err) => { console.warn('Recognition error', err); alert('حدث خطأ في التعرف الصوتي.'); };
+  recognition.onerror = (err) => {
+    console.warn('Recognition error', err);
+    alert('حدث خطأ في التعرف الصوتي.');
+  };
 }
 
-// زر الطوارئ يبدأ الاستماع (مطلوب إذن مايك من المتصفح)
+// زر الطوارئ يبدأ الاستماع
 emergencyBtn.addEventListener('click', (e) => {
   e.preventDefault();
   stopSpeech();
@@ -146,12 +159,11 @@ emergencyBtn.addEventListener('click', (e) => {
   try {
     recognition.start();
   } catch (err) {
-    // بعض المتصفحات تمنع إعادة start إذا كان يعمل - نتعامل بهدوء
     console.warn('recognition.start() error', err);
   }
 });
 
-// ========== نموذج التسجيل (تجريبي) ==========
+// ========== نموذج التسجيل ==========
 if (registerForm) {
   registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -161,4 +173,7 @@ if (registerForm) {
 }
 
 // ========== تهيئة أولية ==========
-renderCases();
+document.addEventListener("DOMContentLoaded", () => {
+  renderCases();
+  if (recognition) recognition.start(); // ✅ يبدأ المايك تلقائيًا عند تحميل الصفحة
+});
