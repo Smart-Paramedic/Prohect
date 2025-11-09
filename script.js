@@ -42,21 +42,21 @@ function showTab(tabId, event) {
 }
 
 // ================= توليد كروت الحالات =================
-function renderCases() {
+function renderCases(filteredCase = null) {
     const container = document.getElementById('cases-container');
     container.innerHTML = '';
-    for (let caseName in CASES) {
+    const casesToShow = filteredCase ? {[filteredCase]: CASES[filteredCase]} : CASES;
+
+    for (let caseName in casesToShow) {
         const card = document.createElement('div');
         card.classList.add('case-card');
 
         let html = `<h3>${caseName}</h3><ul>`;
-        CASES[caseName].forEach(step => {
-            html += `<li>${step}</li>`;
-        });
+        casesToShow[caseName].forEach(step => html += `<li>${step}</li>`);
         html += `</ul><button onclick="callEmergency('${caseName}')">الاتصال بالإسعاف 997</button>`;
         card.innerHTML = html;
 
-        card.onclick = () => speakSteps([caseName].concat(CASES[caseName]));
+        card.onclick = () => speakSteps([caseName].concat(casesToShow[caseName]));
         container.appendChild(card);
     }
 }
@@ -64,9 +64,11 @@ function renderCases() {
 // ================= تحويل الخطوات إلى صوت =================
 let synth = window.speechSynthesis;
 let currentUtterance;
+let lastSpokenSteps = [];
 
 function speakSteps(steps) {
     stopSpeech();
+    lastSpokenSteps = steps;
     const text = steps.join('. ');
     currentUtterance = new SpeechSynthesisUtterance(text);
     currentUtterance.lang = 'ar-SA';
@@ -76,6 +78,11 @@ function speakSteps(steps) {
 // ================= إيقاف الصوت =================
 function stopSpeech() {
     if (synth.speaking) synth.cancel();
+}
+
+// ================= إعادة الصوت =================
+function repeatSpeech() {
+    if (lastSpokenSteps.length > 0) speakSteps(lastSpokenSteps);
 }
 
 // ================= الاتصال بالطوارئ =================
@@ -95,6 +102,8 @@ recognition.onresult = function(event) {
     const spoken = event.results[0][0].transcript.trim();
     for (let caseName in CASES) {
         if (spoken.includes(caseName)) {
+            showTab('cases', {currentTarget: document.querySelector('.nav-tab:nth-child(2)')});
+            renderCases(caseName);
             speakSteps([caseName].concat(CASES[caseName]));
             break;
         }
@@ -105,9 +114,11 @@ function startListening() {
     recognition.start();
 }
 
-// ================= زر الطوارئ =================
-const emergencyBtn = document.getElementById('emergencyBtn');
-emergencyBtn.onclick = () => startListening();
+// ================= أزرار التحكم =================
+document.getElementById('emergencyBtn').onclick = startListening;
+document.getElementById('stopBtn').onclick = stopSpeech;
+document.getElementById('repeatBtn').onclick = repeatSpeech;
+document.getElementById('backBtn').onclick = () => renderCases();
 
 // ================= بدء تحميل الكروت =================
 renderCases();
