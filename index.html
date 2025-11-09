@@ -8,56 +8,66 @@
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="header">
             <h1>أسعفني</h1>
-
-            <!-- التبويبات -->
-            <div class="nav-tabs">
-                <div class="nav-tab active" onclick="showTab('cases', this)">الحالات الطبية</div>
-                <div class="nav-tab" onclick="showTab('paramedics', this)">المسعفون المرخصون</div>
-            </div>
-
-            <!-- زر الطوارئ -->
-            <button id="emergencyBtn">زر الطوارئ</button>
-            <p class="hint">انقر على الزر أو تحدث: "الحروق"، "الصرع"، "انخفاض الضغط"، "اختناق" لعرض خطوات الإسعاف.</p>
+            <p>دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
         </header>
 
-        <!-- تبويب الحالات -->
-        <div id="cases" class="tab-content active">
-            <div class="case-card" onclick="showCaseSteps('حروق')">
-                <h3>الحروق</h3>
-                <div class="steps-container" id="steps-حروق"></div>
-                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
-            </div>
-
-            <div class="case-card" onclick="showCaseSteps('صرع')">
-                <h3>الصرع</h3>
-                <div class="steps-container" id="steps-صرع"></div>
-                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
-            </div>
-
-            <div class="case-card" onclick="showCaseSteps('انخفاض الضغط')">
-                <h3>انخفاض الضغط</h3>
-                <div class="steps-container" id="steps-انخفاض الضغط"></div>
-                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
-            </div>
-
-            <div class="case-card" onclick="showCaseSteps('اختناق')">
-                <h3>الاختناق</h3>
-                <div class="steps-container" id="steps-اختناق"></div>
-                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
-            </div>
+        <!-- التبويبات أعلى الزر -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
+            <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
+            <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
+            <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
         </div>
 
-        <!-- تبويب المسعفين -->
+        <!-- زر الطوارئ -->
+        <div class="emergency-section" id="emergencySection">
+            <button class="emergency-btn" id="emergencyBtn">زر الطوارئ (انقر أو تحدث)</button>
+            <p class="hint" id="emergencyHint">انقر على الزر أو تحدث لذكر الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
+        </div>
+
+        <!-- تبويبات المحتوى -->
+        <div id="home" class="tab-content active">
+            <h2>مرحباً بك في أسعفني</h2>
+            <p>استخدم زر الطوارئ للتفاعل صوتياً أو بالنقر.</p>
+        </div>
+
+        <div id="cases" class="tab-content">
+            <h2>الحالات الطبية</h2>
+            <div id="casesContainer"></div>
+        </div>
+
         <div id="paramedics" class="tab-content">
             <h2>المسعفون المرخصون</h2>
-            <p>بيانات المسعفين ورخصهم ستوضع بعد الموافقة من وزارة الصحة. لمزيد من التفاصيل: 
-            <a href="https://www.moh.gov.sa" target="_blank">وزارة الصحة</a></p>
+            <p>بيانات المسعفين ورخصهم ستوضع بعد موافقة وزارة الصحة.</p>
+            <p>للمزيد: <a href="https://www.moh.gov.sa" target="_blank">وزارة الصحة</a></p>
         </div>
+
+        <div id="register" class="tab-content">
+            <h2>نموذج التسجيل</h2>
+            <form id="registerForm">
+                <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+                <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+                <select name="blood_type" required>
+                    <option value="">فصيلة الدم</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
+                <button type="submit" class="submit-btn">تسجيل</button>
+            </form>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
