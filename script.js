@@ -1,112 +1,160 @@
 // ================== البيانات الأساسية للحالات ==================
 const CASES = {
     "الحروق": [
+        "حروق الدرجة الأولى (الخفيفة).",
         "تبريد الحرق بوضع المنطقة المصابة تحت ماء جاري لمدة 10-15 دقيقة.",
         "إزالة الإكسسوارات والملابس الضيقة قبل انتفاخ المنطقة.",
-        "تغطية منطقة الحرق بضمادة نظيفة.",
+        "تغطية منطقة الحرق بضمادة رطبة أو قطعة قماش نظيفة.",
+        "أخذ مسكن الألم إذا لزم الأمر.",
+        "لا تحاول لمس الفقاعات.",
+        "لا تضع أي مراهم أو معجون أسنان على الحرق.",
+        "لا تستخدم الثلج مباشرة.",
         "اتصل بالإسعاف فوراً على 997."
     ],
     "الصرع": [
         "لاحظ الوقت المستغرق في النوبة.",
         "احمِ المصاب من الأجسام المحيطة.",
+        "أبعد النظارات إن كان يرتديها.",
         "ادعم رأس المصاب بقطعة قماش أو جاكيت.",
+        "إذا استمرت النوبة أكثر من 5 دقائق، اطلب الإسعاف فوراً.",
+        "لا تقيّد حركات المصاب ولا تضع شيء في فمه.",
         "بعد انتهاء النوبة، ضع المصاب على جانبه.",
+        "ابقَ معه حتى يستعيد وعيه.",
         "اتصل بالإسعاف فوراً على 997 إذا لم يستعد وعيه."
     ],
     "انخفاض الضغط": [
-        "اطلب من المصاب الاستلقاء ورفع الأرجل قليلاً.",
+        "اطلب من المصاب الاستلقاء ورفع رجليه قليلاً.",
         "راقب التنفس والنبض.",
-        "اتصل بالإسعاف فوراً على 997."
+        "إذا شعر المصاب بالدوار، ساعده على البقاء مستلقياً.",
+        "تقديم الماء إذا كان واعياً.",
+        "اتصل بالإسعاف فوراً على 997 إذا استمرت الأعراض."
     ],
     "الاختناق": [
-        "قف خلف الشخص المصاب وضع إحدى قدميك أمام الأخرى.",
-        "لف ذراعيك حول خصر الشخص المصاب واضغط بقوة على البطن.",
-        "كرر حتى يزول الجسم العالق.",
+        "الوقوف خلف الشخص المصاب.",
+        "ضع إحدى قدميك أمام الأخرى لتحقيق التوازن.",
+        "لف ذراعيك حول خصر الشخص المصاب.",
+        "أمل رأسه للأمام قليلاً.",
+        "اصنع قبضة وضعها فوق السرة.",
+        "اضغط بالقبضة الأخرى بقوة وسرعة نحو الأعلى.",
+        "كرر من 6 إلى 10 مرات حتى يزول الجسم العالق.",
         "إذا فقد وعيه، ابدأ بالإنعاش القلبي الرئوي فوراً.",
         "اتصل بالإسعاف فوراً على 997."
     ]
 };
 
-// ================== التفاعل بين التبويبات ==================
-function showTab(tabId, tabElement) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
+// ================== متغيرات لتتبع الحالة الحالية ==================
+let lastCaseName = null;
+let lastSteps = [];
 
-    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-    tabElement.classList.add('active');
-
-    // إيقاف أي صوت عند التنقل
+// ================== إيقاف الصوت فورًا ==================
+function stopSpeech() {
     if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
     }
 }
 
-// ================== إنشاء كروت الحالات ==================
-function loadCases() {
+// ================== عرض التبويب المطلوب ==================
+function showTab(tabId, event) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+    if(event) event.currentTarget.classList.add('active');
+
+    stopSpeech(); // إيقاف الصوت عند التنقل
+}
+
+// ================== تحويل الخطوات إلى صوت ==================
+function speakSteps(steps) {
+    if (!('speechSynthesis' in window)) return;
+    stopSpeech();
+
+    const utterance = new SpeechSynthesisUtterance();
+    utterance.lang = 'ar-SA';
+    utterance.rate = 0.9;
+    utterance.text = steps.join('. ');
+    window.speechSynthesis.speak(utterance);
+}
+
+// ================== إعادة تشغيل آخر حالة ==================
+function playLast() {
+    if(lastSteps.length > 0) speakSteps([lastCaseName, ...lastSteps]);
+}
+
+// ================== عرض خطوات الحالة عند النقر على كارد ==================
+function showSteps(caseName) {
+    lastCaseName = caseName;
+    lastSteps = CASES[caseName];
+
+    const stepsContainer = document.getElementById('stepsContainer');
+    stepsContainer.innerHTML = `<h3>إجراءات الإسعافات الأولية: ${caseName}</h3>`;
+
+    CASES[caseName].forEach((step, idx) => {
+        const div = document.createElement('div');
+        div.classList.add('step');
+        div.textContent = `${idx + 1}. ${step}`;
+        stepsContainer.appendChild(div);
+    });
+
+    // إضافة زر الاتصال بالإسعاف
+    const callBtn = document.createElement('button');
+    callBtn.classList.add('call-btn');
+    callBtn.textContent = 'الاتصال بالإسعاف 997';
+    callBtn.onclick = (e) => {
+        e.stopPropagation();
+        if(confirm('هل تريد الاتصال بالإسعاف على 997؟')) {
+            window.location.href = 'tel:997';
+        }
+    };
+    stepsContainer.appendChild(callBtn);
+
+    // تشغيل الصوت تلقائياً عند عرض الخطوات
+    speakSteps([caseName, ...CASES[caseName]]);
+}
+
+// ================== توليد كروت الحالات ==================
+function renderCases() {
     const container = document.getElementById('casesContainer');
     container.innerHTML = '';
 
     Object.keys(CASES).forEach(caseName => {
-        let card = document.createElement('div');
+        const card = document.createElement('div');
         card.classList.add('case-card');
+        card.textContent = caseName;
 
-        let title = document.createElement('div');
-        title.classList.add('case-title');
-        title.textContent = caseName;
-        card.appendChild(title);
-
-        let stepsDiv = document.createElement('div');
-        stepsDiv.classList.add('case-steps');
-        CASES[caseName].forEach((step, idx) => {
-            let p = document.createElement('div');
-            p.classList.add('step');
-            p.textContent = `${idx + 1}. ${step}`;
-            stepsDiv.appendChild(p);
-        });
-        card.appendChild(stepsDiv);
-
-        // زر الاتصال بالإسعاف
-        let callBtn = document.createElement('button');
-        callBtn.classList.add('call-btn');
-        callBtn.textContent = 'الاتصال بالإسعاف 997';
-        callBtn.onclick = () => {
-            if (confirm('هل تريد الاتصال بالإسعاف على 997؟')) {
-                window.location.href = 'tel:997';
-            }
-        };
-        card.appendChild(callBtn);
-
-        // النطق الصوتي عند النقر على الكارد
-        card.onclick = () => {
-            speakSteps(caseName);
-        };
+        card.onclick = () => showSteps(caseName);
 
         container.appendChild(card);
     });
 }
 
-// ================== الاستجابة الصوتية ==================
-function speakSteps(caseName) {
-    if (!('speechSynthesis' in window)) return;
+// ================== التعرف الصوتي ==================
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'ar-SA';
+recognition.interimResults = false;
 
-    window.speechSynthesis.cancel(); // إيقاف أي كلام سابق
-
-    let utterance = new SpeechSynthesisUtterance();
-    utterance.lang = 'ar-SA';
-    utterance.text = `${caseName}. ${CASES[caseName].join('. ')}`;
-    utterance.rate = 0.9; // ضبط سرعة الصوت
-    window.speechSynthesis.speak(utterance);
-}
+recognition.onresult = (event) => {
+    const spoken = event.results[0][0].transcript.trim();
+    // التحقق إذا كان المستخدم ذكر اسم حالة
+    Object.keys(CASES).forEach(caseName => {
+        if(spoken.includes(caseName)) {
+            showSteps(caseName);
+        }
+    });
+};
 
 // ================== زر الطوارئ ==================
-document.getElementById('emergencyBtn').addEventListener('click', () => {
-    let selectedCase = prompt("اذكر الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق");
-    if (selectedCase && CASES[selectedCase]) {
-        speakSteps(selectedCase);
-    } else {
-        alert('الحالة غير موجودة!');
-    }
-});
+const emergencyBtn = document.getElementById('emergencyBtn');
+emergencyBtn.onclick = () => {
+    const allSteps = [];
+    Object.keys(CASES).forEach(caseName => {
+        allSteps.push(caseName);
+        allSteps.push(...CASES[caseName]);
+    });
+    speakSteps(allSteps);
+};
 
-// تحميل الحالات عند بدء الصفحة
-loadCases();
+// ================== تهيئة الصفحة ==================
+document.addEventListener('DOMContentLoaded', () => {
+    renderCases();
+});
