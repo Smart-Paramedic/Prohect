@@ -78,6 +78,14 @@ body {
   margin: 10px 0;
 }
 
+.case-video {
+  margin: 10px 0;
+}
+
+.case-video.hidden {
+  display: none;
+}
+
 .steps-list {
   list-style: decimal inside;
   margin-top: 10px;
