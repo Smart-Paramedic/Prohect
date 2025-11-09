@@ -1,62 +1,70 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أسعفني</title>
-<link rel="stylesheet" href="Style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>أسعفني</title>
+  <link rel="stylesheet" href="Style.css" />
 </head>
 <body>
+  <header>
+    <h1 class="site-title">أسعفني</h1>
+  </header>
 
-<header>
-    <h1>أسعفني</h1>
-</header>
+  <nav class="nav-tabs" role="navigation" aria-label="التبويبات">
+    <button class="nav-tab active" onclick="showTab('home', event)">الرئيسية</button>
+    <button class="nav-tab" onclick="showTab('cases', event)">الحالات</button>
+    <button class="nav-tab" onclick="showTab('register', event)">التسجيل</button>
+    <button class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</button>
+  </nav>
 
-<!-- التبويبات -->
-<nav class="nav-tabs">
-    <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-    <div class="nav-tab" onclick="showTab('cases', event)">الحالات</div>
-    <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
-    <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
-</nav>
+  <main class="main">
+    <!-- الرئيسية -->
+    <section id="home" class="tab-content active">
+      <div class="home-center">
+        <button id="emergencyBtn" class="emergency-btn">🚨 زر الطوارئ</button>
+        <p class="hint">انقر على الزر أو تحدث باسم الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
+        <div id="listeningIndicator" class="listening hidden">🎤 جاري الاستماع... تحدث الآن</div>
+      </div>
+    </section>
 
-<!-- تبويبات المحتوى -->
-<section id="home" class="tab-content active">
-    <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
-    <p class="hint">انقر على الزر أو تحدث باسم الحالة</p>
-</section>
+    <!-- الحالات -->
+    <section id="cases" class="tab-content">
+      <h2 class="section-title">الحالات الطبية</h2>
+      <div id="cases-container" class="cases-container"></div>
+    </section>
 
-<section id="cases" class="tab-content">
-    <div id="cases-container" class="cases-container"></div>
-</section>
-
-<section id="register" class="tab-content">
-    <form id="registerForm">
-        <input type="text" name="full_name" placeholder="الاسم الكامل" required>
-        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-        <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+    <!-- التسجيل -->
+    <section id="register" class="tab-content">
+      <h2 class="section-title">نموذج التسجيل</h2>
+      <form id="registerForm" class="register-form">
+        <input type="text" name="full_name" placeholder="الاسم الكامل" required />
+        <input type="email" name="email" placeholder="البريد الإلكتروني" required />
+        <input type="tel" name="phone" placeholder="رقم الهاتف" required />
         <select name="blood_type" required>
-            <option value="">فصيلة الدم</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
+          <option value="">فصيلة الدم</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
         </select>
         <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
         <button type="submit" class="submit-btn">تسجيل</button>
-    </form>
-</section>
+      </form>
+    </section>
 
-<section id="paramedics" class="tab-content center-content">
-    <h2>المسعفون المرخصون</h2>
-    <p>يتم عرض بيانات المسعفين بعد موافقة وزارة الصحة.</p>
-    <a href="https://www.moh.gov.sa/" target="_blank">رابط وزارة الصحة للمسعفين</a>
-</section>
+    <!-- المسعفون -->
+    <section id="paramedics" class="tab-content center-content">
+      <h2 class="section-title">المسعفون المرخصون</h2>
+      <p>يتم عرض بيانات المسعفين المرخصين بعد موافقة وزارة الصحة.</p>
+      <a href="https://www.moh.gov.sa/" target="_blank" rel="noopener" class="moh-link">رابط وزارة الصحة للمسعفين</a>
+    </section>
+  </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
