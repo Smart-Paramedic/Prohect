@@ -1,97 +1,73 @@
-// ================== البيانات الأساسية للحالات ==================
+let currentUtterance = null;
+
 const CASES = {
-    "الحروق": [
-        "تبريد المنطقة المصابة تحت ماء جاري 10-15 دقيقة.",
+    "حروق": [
+        "تبريد الحرق لمدة 10-15 دقيقة تحت ماء معتدل.",
         "إزالة الإكسسوارات والملابس الضيقة.",
-        "تغطية منطقة الحرق بضمادة نظيفة.",
-        "لا تلمس الفقاعات ولا تضع مراهم أو معجون أسنان.",
+        "تغطية منطقة الحرق بقطعة قماش نظيفة.",
         "اتصل بالإسعاف فوراً على 997."
     ],
-    "الصرع": [
-        "لاحظ الوقت المستغرق في النوبة.",
+    "صرع": [
         "احمِ المصاب من الأجسام المحيطة.",
-        "ادعم رأس المصاب بقطعة قماش أو جاكيت.",
+        "ادعم رأس المصاب بقطعة قماش.",
         "إذا استمرت النوبة أكثر من 5 دقائق، اطلب الإسعاف فوراً.",
-        "بعد انتهاء النوبة، ضع المصاب على جانبه."
+        "بعد انتهاء النوبة ضع المصاب على جانبه."
     ],
     "انخفاض الضغط": [
-        "اجعل المصاب مستلقياً وارفع ساقيه.",
-        "راقب العلامات الحيوية والتنفس.",
-        "أعطه ماء إذا كان واعياً.",
-        "اتصل بالإسعاف إذا لم يتحسن."
+        "أجلس المصاب أو استلقِ برفع رجليه.",
+        "أعطِ المصاب ماء أو عصير إذا كان واعياً.",
+        "راقب التنفس والنبض.",
+        "اتصل بالإسعاف فوراً على 997 إذا استدعى الأمر."
     ],
-    "الاختناق": [
-        "الوقوف خلف الشخص المصاب.",
-        "لف ذراعيك حول خصره.",
-        "اضغط بسرعة نحو الأعلى.",
-        "كرر من 6 إلى 10 مرات حتى يزول الجسم العالق.",
+    "اختناق": [
+        "قف خلف الشخص المصاب.",
+        "ضع ذراعيك حول خصره.",
+        "اضغط بقوة نحو الأعلى عدة مرات حتى يزول الجسم العالق.",
         "إذا فقد وعيه، ابدأ بالإنعاش القلبي الرئوي فوراً."
     ]
 };
 
-// ================== التبويبات ==================
-function showTab(tabName, event) {
+function showTab(tabId, element) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
 
     document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    element.classList.add('active');
 
     stopSpeech();
 }
 
-// ================== عرض كروت الحالات ==================
-const casesContainer = document.getElementById('cases-container');
-for (let caseName in CASES) {
-    const card = document.createElement('div');
-    card.classList.add('case-card');
-    card.innerHTML = `<h3>${caseName}</h3>
-                      <div class="steps-container" style="display:none;"></div>
-                      <button class="emergency-btn" onclick="callEmergency('${caseName}')">الاتصال بالطوارئ</button>`;
-    card.addEventListener('click', () => {
-        const stepsDiv = card.querySelector('.steps-container');
-        if (stepsDiv.style.display === 'none') {
-            stopSpeech();
-            stepsDiv.innerHTML = CASES[caseName].map(step => `<p>${step}</p>`).join('');
-            stepsDiv.style.display = 'block';
-            speakSteps(CASES[caseName]);
-        } else {
-            stopSpeech();
-            stepsDiv.style.display = 'none';
-        }
+function showCaseSteps(caseName) {
+    stopSpeech();
+    const container = document.getElementById(`steps-${caseName}`);
+    container.innerHTML = "";
+    CASES[caseName].forEach((step, index) => {
+        container.innerHTML += `<p>${index+1}. ${step}</p>`;
     });
-    casesContainer.appendChild(card);
+    speakText(CASES[caseName].join(". "));
 }
 
-// ================== الاتصال بالطوارئ ==================
-function callEmergency(caseName) {
-    if (confirm(`هل تريد الاتصال بالطوارئ لحالة ${caseName}؟`)) {
-        window.location.href = "tel:997";
-    }
-}
-
-// ================== استجابة صوتية ==================
-let speech;
-function speakSteps(steps) {
-    if ('speechSynthesis' in window) {
-        speech = new SpeechSynthesisUtterance(steps.join('، '));
-        speech.lang = 'ar-SA';
-        window.speechSynthesis.speak(speech);
-    }
+function speakText(text) {
+    stopSpeech();
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(currentUtterance);
 }
 
 function stopSpeech() {
-    if (speech) window.speechSynthesis.cancel();
+    if(currentUtterance) {
+        window.speechSynthesis.cancel();
+        currentUtterance = null;
+    }
 }
 
-// ================== زر الطوارئ في الرئيسية ==================
-document.getElementById('emergencyBtn').addEventListener('click', () => {
-    const caseName = prompt("اذكر حالة الطوارئ (الحروق، الصرع، انخفاض الضغط، الاختناق):");
-    if (CASES[caseName]) {
-        stopSpeech();
-        speakSteps(CASES[caseName]);
-        alert("عرضت خطوات الحالة: " + caseName);
-    } else {
-        alert("الحالة غير موجودة.");
-    }
+document.getElementById('emergencyBtn').addEventListener('click', function() {
+    const allSteps = Object.values(CASES).flat().join(". ");
+    speakText(allSteps);
 });
+
+function callEmergency(event, number){
+    event.stopPropagation();
+    if(confirm(`هل تريد الاتصال بالطوارئ على الرقم ${number}؟`)){
+        window.location.href = `tel:${number}`;
+    }
+}
