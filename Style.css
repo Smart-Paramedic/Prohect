@@ -1,14 +1,20 @@
 :root {
   --primary: #dc3545;
-  --warning: #ffc107;
+  --secondary: #28a745;
   --light: #f8f9fa;
   --dark: #343a40;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
   background-color: #f5f5f5;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  direction: rtl;
+  line-height: 1.6;
 }
 
 .container {
@@ -18,41 +24,37 @@ body {
 }
 
 .header {
-  background: var(--primary);
+  background-color: var(--primary);
   color: white;
-  padding: 1.5rem;
-  border-radius: 10px;
   text-align: center;
-  margin-bottom: 1rem;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
 }
 
 .nav-tabs {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
-.nav-tab {
-  padding: 1rem 2rem;
-  cursor: pointer;
+.nav-tabs button {
+  padding: 10px 20px;
   border-radius: 5px;
+  border: none;
+  cursor: pointer;
   background: white;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
-.nav-tab.active {
+.nav-tabs button.active {
   background: var(--primary);
   color: white;
 }
 
-.tab {
-  display: block;
-}
-
-.tab.hidden {
-  display: none;
-}
+.tab { display: none; }
+.tab:not(.hidden) { display: block; }
 
 .cases-container {
   display: flex;
@@ -64,27 +66,17 @@ body {
 .case-card {
   background: white;
   border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.case-card.hidden {
-  display: none;
-}
+.case-card.hidden { display: none; }
 
-.case-image {
+.image-container img {
   width: 100%;
   border-radius: 8px;
-  margin: 10px 0;
-}
-
-.case-video {
-  margin: 10px 0;
-}
-
-.case-video.hidden {
-  display: none;
+  margin-bottom: 10px;
 }
 
 .steps-list {
@@ -101,20 +93,18 @@ body {
 }
 
 .steps-list li.highlight {
-  background: var(--warning);
-  color: black;
+  background-color: var(--secondary);
+  color: white;
 }
 
 .buttons {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
 
 .buttons button {
-  flex: 1;
-  padding: 8px 15px;
+  padding: 5px 15px;
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -128,12 +118,40 @@ body {
 }
 
 .emergency-btn {
-  display: block;
-  margin: 15px auto;
-  padding: 12px 25px;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 25px;
+  padding: 15px 25px;
+  border-radius: 30px;
   cursor: pointer;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.popup-content {
+  background:white;
+  padding:20px;
+  position:relative;
+  border-radius:10px;
+}
+
+.close {
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:25px;
+  cursor:pointer;
 }
