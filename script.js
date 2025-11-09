@@ -95,7 +95,7 @@ function renderFullCase(caseName, steps) {
   `;
   card.querySelector('.play-btn').onclick = () => speakSteps([caseName, ...steps]);
   card.querySelector('.stop-btn').onclick = () => stopSpeech();
-  card.querySelector('.back-btn').onclick = () => showTab('home'); // ✅ يرجع للرئيسية
+  card.querySelector('.back-btn').onclick = () => showTab('home');
   card.querySelector('.call-btn').onclick = () => {
     stopSpeech();
     if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
@@ -135,7 +135,6 @@ if (SpeechRec) {
         return;
       }
     }
-    // لا تعرض أي تنبيه إذا لم يتم التعرف على الحالة
   };
 
   recognition.onerror = err => {
