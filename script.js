@@ -1,105 +1,90 @@
 const CASES = {
-  "الحروق": [
-    "تبريد الحرق بالماء الجاري لمدة 10 دقائق",
-    "إزالة الملابس برفق إن لم تكن ملتصقة",
-    "تغطية الحرق بقطعة قماش نظيفة",
-    "عدم وضع مراهم أو مواد دهنية",
-    "الاتصال بالطوارئ إذا كانت الحروق شديدة"
-  ],
-  "الصرع": [
-    "عدم تقييد المصاب أو محاولة إيقاف النوبة",
-    "إبعاد الأجسام الحادة من حوله",
-    "وضع المصاب على جانبه بعد انتهاء النوبة",
-    "مراقبة التنفس",
-    "الاتصال بالطوارئ إذا استمرت النوبة أكثر من 5 دقائق"
-  ],
-  "انخفاض الضغط": [
-    "مساعدة المصاب على الاستلقاء ورفع قدميه",
-    "تشجيعه على شرب الماء",
-    "تجنب الوقوف المفاجئ",
-    "الاتصال بالطوارئ إذا فقد الوعي"
-  ],
-  "الاختناق": [
-    "الوقوف خلف المصاب",
-    "الضغط على البطن بحركات سريعة للأعلى",
-    "تكرار الضغطات حتى يزول الجسم العالق",
-    "الاتصال بالطوارئ إذا فقد المصاب وعيه"
-  ]
+    "الحروق": [
+        "تبريد الحرق بوضعه تحت ماء جاري معتدل لمدة 10-15 دقيقة.",
+        "إزالة الملابس الضيقة والأكسسوارات.",
+        "تغطية الحرق بضمادة نظيفة.",
+        "اتصل بالإسعاف فوراً على 997."
+    ],
+    "الصرع": [
+        "لاحظ الوقت المستغرق في النوبة.",
+        "احمِ المصاب من الأجسام المحيطة.",
+        "ادعم رأس المصاب بقطعة قماش.",
+        "لا تضع شيء في فم المصاب.",
+        "إذا استمرت النوبة أكثر من 5 دقائق، اطلب الإسعاف فوراً."
+    ],
+    "انخفاض الضغط": [
+        "أجلس المصاب أو اجعله يستلقي.",
+        "ارفع قدميه قليلاً.",
+        "أعطه ماء أو عصير إذا كان واعياً.",
+        "اتصل بالإسعاف إذا لم يتحسن."
+    ],
+    "اختناق": [
+        "قف خلف الشخص المصاب.",
+        "اضغط بقوة وبسرعة فوق السرة لعدة مرات.",
+        "إذا فقد وعيه، ابدأ بالإنعاش القلبي الرئوي.",
+        "اتصل بالإسعاف فوراً على 997."
+    ]
 };
-
-const emergencyBtn = document.getElementById("emergencyBtn");
-const casesContainer = document.getElementById("casesContainer");
-const tabs = document.querySelectorAll(".tab");
-const navTabs = document.querySelectorAll(".nav-tab");
 
 let currentUtterance = null;
 
-function showTab(tabId, event) {
-  tabs.forEach(tab => tab.classList.add("hidden"));
-  document.getElementById(tabId).classList.remove("hidden");
+document.getElementById('emergencyBtn').addEventListener('click', () => {
+    stopSpeech();
+    const caseName = prompt("اذكر الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق");
+    if (CASES[caseName]) {
+        showCaseSteps(caseName);
+        speakSteps(caseName);
+    } else {
+        alert("الحالة غير معروفة.");
+    }
+});
 
-  navTabs.forEach(tab => tab.classList.remove("active"));
-  event.currentTarget.classList.add("active");
+function showTab(tabId, element) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
 
-  stopSpeech();
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+
+    stopSpeech();
 }
 
-function renderCases() {
-  casesContainer.innerHTML = "";
-  for (const [caseName, steps] of Object.entries(CASES)) {
-    const card = document.createElement("div");
-    card.className = "case-card";
-
-    const title = document.createElement("h3");
-    title.textContent = caseName;
-
-    const list = document.createElement("ul");
-    list.className = "steps-list";
-    steps.forEach(step => {
-      const li = document.createElement("li");
-      li.textContent = step;
-      list.appendChild(li);
+function showCaseSteps(caseName) {
+    // إخفاء جميع الخطوات أولاً
+    Object.keys(CASES).forEach(c => {
+        const container = document.getElementById(`steps-${c}`);
+        if (container) container.innerHTML = "";
     });
 
-    const callBtn = document.createElement("button");
-    callBtn.className = "call-btn";
-    callBtn.textContent = "📞 الاتصال بالطوارئ";
-    callBtn.onclick = () => {
-      if (confirm("هل تريد الاتصال بالطوارئ 997؟")) {
-        window.location.href = "tel:997";
-      }
-    };
-
-    card.appendChild(title);
-    card.appendChild(list);
-    card.appendChild(callBtn);
-    card.onclick = () => {
-      stopSpeech();
-      speakSteps(steps);
-    };
-
-    casesContainer.appendChild(card);
-  }
+    const container = document.getElementById(`steps-${caseName}`);
+    if (container) {
+        CASES[caseName].forEach((step, index) => {
+            const p = document.createElement('p');
+            p.textContent = `${index + 1}. ${step}`;
+            container.appendChild(p);
+        });
+    }
 }
 
-function speakSteps(steps) {
-  if (!("speechSynthesis" in window)) return;
-  const text = steps.join("، ثم ");
-  currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.lang = "ar-SA";
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(currentUtterance);
+function speakSteps(caseName) {
+    stopSpeech();
+    if (!('speechSynthesis' in window)) return;
+
+    const utterance = new SpeechSynthesisUtterance(CASES[caseName].join('. '));
+    utterance.lang = 'ar-SA';
+    window.speechSynthesis.speak(utterance);
+    currentUtterance = utterance;
 }
 
 function stopSpeech() {
-  window.speechSynthesis.cancel();
-  currentUtterance = null;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    currentUtterance = null;
 }
 
-emergencyBtn.onclick = () => {
-  stopSpeech();
-  const allSteps = Object.values(CASES).flat();
-  speakSteps(allSteps);
-};
-
-document.addEventListener("DOMContentLoaded", renderCases);
+function callEmergency(event) {
+    event.stopPropagation();
+    if (confirm("هل تريد الاتصال بخدمة الطوارئ؟")) {
+        alert("سيتم الاتصال بالطوارئ فوراً!");
+        // هنا يمكن وضع كود الاتصال الفعلي إذا كان موقع على الهاتف
+    }
+}
