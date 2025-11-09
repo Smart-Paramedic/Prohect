@@ -1,157 +1,130 @@
 :root {
-  --primary: #dc3545;
-  --secondary: #28a745;
-  --light: #f8f9fa;
-  --dark: #343a40;
+  --babyblue: #89CFF0;
+  --lightblue: #E8F7FF;
+  --white: #ffffff;
+  --dark: #222222;
+  --darkblue: #154d86;
+  --muted: #667085;
+  --highlight: #fff3c4;
+  --card-shadow: rgba(16, 24, 40, 0.08);
+  --card-padding: 16px;
+  --radius-lg: 12px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-  background-color: #f5f5f5;
-  line-height: 1.6;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
-
-.header {
-  background-color: var(--primary);
-  color: white;
+  margin: 0;
+  font-family: "Segoe UI", "Noto Naskh Arabic", system-ui, sans-serif;
+  background: var(--lightblue);
+  color: var(--dark);
+  direction: rtl;
   text-align: center;
-  padding: 2rem 1rem;
-  border-radius: 10px;
-  margin-bottom: 2rem;
 }
 
-.nav-tabs {
+/* الهيدر */
+header {
+  background: var(--babyblue);
+  color: var(--white);
+  padding: 18px 16px;
+  border-radius: 0 0 18px 18px;
+}
+header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+
+/* التنقل */
+nav {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  padding: 12px 10px;
+  flex-wrap: wrap;
 }
-
-.nav-tabs button {
-  padding: 10px 20px;
-  border-radius: 5px;
+nav button {
+  background: var(--babyblue);
+  color: var(--white);
   border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
-  background: white;
-  transition: 0.3s;
+  font-size: 0.95rem;
 }
+nav button:hover { filter: brightness(0.95); }
+.tab.hidden { display: none; }
 
-.nav-tabs button.active {
-  background: var(--primary);
-  color: white;
+/* زر الطوارئ */
+.main-btn {
+  background: var(--darkblue);
+  color: var(--white);
+  border: none;
+  padding: 20px 56px;
+  border-radius: 28px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  margin: 18px 0;
 }
+.note { margin-top: 10px; font-size: 0.95rem; color: var(--muted); }
 
-.tab { display: none; }
-.tab:not(.hidden) { display: block; }
-
+/* حاوية الكروت */
 .cases-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+.cases-container::before, .cases-container::after {
+  content: ""; display: inline-block; width: 12px; flex: 0 0 12px;
 }
 
+/* كارد الحالة */
 .case-card {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.case-card.hidden { display: none; }
-
-.image-container img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.steps-list {
-  list-style: decimal inside;
-  margin-top: 10px;
-}
-
-.steps-list li {
-  margin: 5px 0;
-  padding: 5px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: 0.3s;
-}
-
-.steps-list li.highlight {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.buttons {
+  min-width: 300px;
+  max-width: 340px;
+  flex: 0 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 22px var(--card-shadow);
+  padding: var(--card-padding);
+  text-align: right;
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
 }
+.case-card h3 { margin: 0; color: var(--darkblue); font-size: 1.05rem; font-weight: 700; }
+.case-card .mini-steps { list-style: none; padding: 0; margin: 0; color: var(--muted); font-size: 0.95rem; text-align: right; }
+.case-card .card-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+.case-card .card-controls button, .case-card .card-controls a {
+  background: var(--babyblue); color: var(--white); border: none; padding: 8px 10px;
+  border-radius: 8px; font-size: 0.95rem; cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.case-card .card-controls button:hover, .case-card .card-controls a:hover { filter: brightness(0.95); }
+.case-card .card-controls a.call-btn { background: #c62828; }
 
-.buttons button {
-  padding: 5px 15px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  background: var(--primary);
-  color: white;
-  transition: 0.3s;
-}
+/* كارد الخطوات */
+#caseCard { position: fixed; left: 50%; transform: translateX(-50%); bottom: 28px; width: min(820px, 96%); z-index: 1200; display: none; }
+#caseCard:not(.hidden) { display: block; }
+.case-card-inner { background: var(--white); border-radius: 12px; padding: 18px; box-shadow: 0 18px 40px rgba(8, 24, 48, 0.18); text-align: right; }
+#caseTitle { margin: 0 0 8px 0; color: var(--darkblue); font-size: 1.15rem; font-weight: 700; }
+.steps-list { display: flex; flex-direction: column; gap: 8px; max-height: 48vh; overflow: auto; padding-right: 6px; }
+.steps-list .step { padding: 10px 12px; border-radius: 8px; background: #fafafa; border-left: 4px solid var(--babyblue); cursor: pointer; text-align: right; font-size: 0.98rem; }
+.steps-list .step.done { background: var(--highlight); border-left-color: #f0c000; }
 
-.buttons button:hover {
-  transform: scale(1.05);
-}
+/* أزرار التحكم */
+.controls { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.ctrl { background: var(--babyblue); color: var(--white); border: none; padding: 10px 14px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; text-decoration: none; }
+.ctrl:hover { filter: brightness(0.95); }
+.ctrl.call { background: #b71c1c; }
 
-.emergency-btn {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 30px;
-  cursor: pointer;
-}
+/* الفيديو داخل الكارد */
+.case-media video, .case-media img { width: 100%; border-radius: 8px; margin-bottom: 10px; }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width:100%;
-  height:100%;
-  background: rgba(0,0,0,0.7);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+/* استجابة الشاشة الصغيرة */
+@media (max-width: 720px) {
+  .case-card { min-width: 260px; max-width: 280px; }
+  .main-btn { padding: 16px 36px; font-size: 1rem; }
+  #caseCard { bottom: 14px; width: calc(100% - 24px); }
 }
-
-.popup-content {
-  background:white;
-  padding:20px;
-  position:relative;
-  border-radius:10px;
-}
-
-.close {
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:25px;
-  cursor:pointer;
-}
+.hidden { display: none !important; }
