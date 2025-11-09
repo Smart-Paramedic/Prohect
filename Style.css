@@ -1,8 +1,8 @@
 :root {
-    --baby-blue: #b3d9ff;
-    --dark-blue: #0056b3;
-    --light: #f5f5f5;
-    --dark: #222;
+    --baby-blue: #a3d5ff;
+    --dark-blue: #1a3e5b;
+    --light-gray: #f8f9fa;
+    --white: #fff;
 }
 
 * {
@@ -13,7 +13,7 @@
 }
 
 body {
-    background-color: var(--light);
+    background-color: var(--light-gray);
 }
 
 .container {
@@ -25,15 +25,88 @@ body {
 /* التبويبات */
 .nav-tabs {
     display: flex;
-    justify-content: center;
-    background-color: var(--baby-blue);
-    border-radius: 8px;
+    justify-content: space-around;
+    background: var(--baby-blue);
+    padding: 10px;
+    border-radius: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
 }
 
 .nav-tab {
+    cursor: pointer;
     padding: 10px 20px;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.nav-tab.active {
+    background: var(--dark-blue);
+    color: var(--white);
+}
+
+/* تبويبات المحتوى */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* الرئيسية */
+.main-title {
+    background-color: var(--baby-blue);
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* زر الطوارئ */
+.emergency-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 25px;
+    background: var(--dark-blue);
+    color: var(--white);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.emergency-btn:hover { background: #16324a; }
+
+.hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* كروت الحالات */
+.cases-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.case-card {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    width: 280px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.case-title { font-weight: bold; margin-bottom: 10px; }
+.step { margin-bottom: 10px; }
+.emergency-call-btn {
+    background: var(--dark-blue);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
     cursor: pointer;
     margin: 5px;
     border-radius: 5px;
@@ -166,3 +239,4 @@ body {
 .submit-btn:hover {
     background-color: #003366;
 }
+
