@@ -34,26 +34,22 @@ const registerForm = document.getElementById('registerForm');
 
 // 🔊 إعدادات النطق
 const synth = window.speechSynthesis || null;
-let lastSpokenSteps = [];
 let currentUtterance = null;
 
 function speakSteps(steps) {
   stopSpeech();
-  lastSpokenSteps = steps;
-  if (!synth) return;
   const text = steps.join('، ');
   currentUtterance = new SpeechSynthesisUtterance(text);
   currentUtterance.lang = 'ar-SA';
-  synth.speak(currentUtterance);
+  synth?.speak(currentUtterance);
 }
 
 function stopSpeech() {
-  if (!synth) return;
-  if (synth.speaking || synth.pending) synth.cancel();
+  if (synth?.speaking || synth?.pending) synth.cancel();
   currentUtterance = null;
 }
 
-// 🧠 عرض الحالات داخل تبويب "الحالات"
+// 📋 عرض الحالات داخل تبويب "الحالات"
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
@@ -77,7 +73,7 @@ function renderCases(filtered = null) {
   }
 }
 
-// 🧠 عرض حالة كاملة عند التفاعل الصوتي
+// 📋 عرض حالة كاملة عند التفاعل الصوتي
 function renderFullCase(caseName, steps) {
   casesContainer.innerHTML = '';
   const card = document.createElement('article');
@@ -145,8 +141,7 @@ if (SpeechRec) {
 emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
-  if (!recognition) return;
-  try { recognition.start(); } catch (err) {}
+  try { recognition?.start(); } catch {}
 };
 
 // 📝 نموذج التسجيل
@@ -159,10 +154,8 @@ registerForm?.addEventListener('submit', e => {
 // 🚀 تهيئة الصفحة وتشغيل المايك تلقائيًا بشكل دائم
 document.addEventListener('DOMContentLoaded', () => {
   renderCases();
-  if (recognition) {
-    try { recognition.start(); } catch {}
-    setInterval(() => {
-      try { recognition.start(); } catch {}
-    }, 5000); // يعيد تشغيل المايك كل 5 ثواني إذا توقف
-  }
+  try { recognition?.start(); } catch {}
+  setInterval(() => {
+    try { recognition?.start(); } catch {}
+  }, 5000); // يعيد تشغيل المايك كل 5 ثواني إذا توقف
 });
