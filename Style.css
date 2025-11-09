@@ -1,117 +1,83 @@
-body {
-  font-family: "Tajawal", sans-serif;
-  background-color: #e9f5ff;
-  margin: 0;
-  color: #03396c;
-  text-align: center;
+:root{
+  --babyblue: #89CFF0;
+  --lightblue: #E8F7FF;
+  --darkblue: #03396c;
+  --midblue: #005b96;
+  --white: #ffffff;
+  --muted: #61748a;
+  --card-bg: #dfeffb;
 }
 
-header {
-  background-color: #005b96;
-  color: white;
-  padding: 1rem;
-  border-bottom: 4px solid #03396c;
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:"Segoe UI","Noto Naskh Arabic",Tajawal, sans-serif;direction:rtl}
+body{background:var(--lightblue);color:var(--darkblue);text-align:center;}
+
+/* header */
+header{background:linear-gradient(90deg,var(--midblue),var(--darkblue));color:var(--white);padding:14px 12px}
+header h1{margin:0;font-size:1.5rem}
+
+/* main sections */
+main{padding:18px 14px 90px}
+
+/* tabs */
+.tab{display:none}
+.tab.active{display:block}
+
+/* emergency button */
+.main-btn{
+  background:var(--midblue);color:var(--white);border:none;padding:14px 26px;border-radius:12px;font-size:1.05rem;cursor:pointer;
+  box-shadow:0 6px 16px rgba(3,57,108,0.12);
+}
+.main-btn:hover{background:var(--darkblue)}
+
+/* hint */
+#hint{margin:12px 0;color:var(--darkblue);font-size:0.98rem}
+
+/* cards container (grid responsive) */
+.card-container{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  margin-top:18px;
+  align-items:start;
+  justify-items:center;
 }
 
-h1 {
-  font-size: 1.8rem;
-  margin: 0;
+/* single card */
+.card{
+  background:var(--card-bg);
+  width:100%;
+  max-width:520px;
+  border-radius:14px;
+  padding:14px;
+  text-align:right;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
+.card h3{margin:0 0 8px;color:var(--darkblue)}
+.card ul{margin:0 0 10px;padding-inline-start:18px;text-align:right}
+.card li{margin:6px 0;color:#153e5b}
 
-main {
-  padding: 20px;
+/* card controls */
+.card .card-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.card .card-actions button{
+  background:var(--midblue);color:var(--white);border:none;padding:10px 12px;border-radius:10px;cursor:pointer;
 }
+.card .card-actions button.call{background:#b71c1c}
 
-.tab {
-  display: none;
+/* footer tabs */
+footer{
+  position:fixed;left:0;right:0;bottom:0;padding:10px 6px;background:var(--midblue);display:flex;justify-content:space-around;gap:8px;
 }
+.tab-btn{background:none;border:none;color:var(--white);font-weight:600;cursor:pointer;padding:8px 10px}
+.tab-btn:active,.tab-btn:hover{text-decoration:underline}
 
-.tab.active {
-  display: block;
-}
+/* form */
+form{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+input,select,textarea{padding:10px;border-radius:8px;border:1px solid #cfdfea;font-size:0.95rem}
+.submit-btn{background:var(--midblue);color:white;border:none;padding:12px;border-radius:10px;cursor:pointer}
 
-.main-btn {
-  background-color: #005b96;
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.main-btn:hover {
-  background-color: #03396c;
-}
-
-#hint {
-  margin-top: 15px;
-  font-size: 1rem;
-  color: #005b96;
-}
-
-.card-container {
-  display: grid;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.card {
-  background-color: #b3cde0;
-  padding: 15px;
-  border-radius: 15px;
-  text-align: right;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.card h3 {
-  color: #03396c;
-}
-
-.card button {
-  margin-top: 10px;
-  background-color: #005b96;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.card button:hover {
-  background-color: #03396c;
-}
-
-footer {
-  background-color: #005b96;
-  color: white;
-  padding: 10px;
-  display: flex;
-  justify-content: space-around;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-.tab-btn {
-  background: none;
-  color: white;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.tab-btn:hover {
-  text-decoration: underline;
-}
-
-.submit-btn {
-  background-color: #005b96;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  cursor: pointer;
+/* responsive tweaks */
+@media (max-width:520px){
+  header h1{font-size:1.2rem}
+  .card{padding:12px}
 }
