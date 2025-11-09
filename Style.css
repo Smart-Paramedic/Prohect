@@ -6,7 +6,6 @@
     --dark: #333;
 }
 
-/* عام */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,7 +18,7 @@ body {
     padding: 20px;
 }
 
-/* تبويب الرئيسية */
+/* الرئيسية */
 .header {
     text-align: center;
     margin-bottom: 1rem;
@@ -29,8 +28,25 @@ body {
     font-size: 0.9rem;
     color: var(--darkblue);
 }
+.control-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.control-buttons button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    background: var(--btnblue);
+    color: white;
+    cursor: pointer;
+}
+.control-buttons button:hover {
+    background: var(--darkblue);
+}
 
-/* تبويبات */
+/* التبويبات */
 .nav-tabs {
     display: flex;
     justify-content: center;
@@ -60,7 +76,7 @@ body {
     background: white;
     border-radius: 10px;
     padding: 15px;
-    width: 250px;
+    width: 280px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .case-card h3 {
