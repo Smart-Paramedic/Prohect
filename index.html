@@ -2,53 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أسعفني</title>
+  <title>أسعفني - المساعد الطبي الذكي</title>
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
   <header>
-    <h1>أسعفني</h1>
+    <h1> أسعفني</h1>
   </header>
 
   <nav>
-    <button data-tab="home">الرئيسية</button>
-    <button data-tab="firstaid">الإسعافات الأولية</button>
-    <button data-tab="licensed">المسعفون المرخصون</button>
+    <button class="tab-btn active" data-tab="home">الرئيسية</button>
+    <button class="tab-btn" data-tab="cases">الإسعافات الأولية</button>
+    <button class="tab-btn" data-tab="register">التسجيل</button>
+    <button class="tab-btn" data-tab="about">حول</button>
   </nav>
 
-  <!-- الرئيسية -->
-  <section id="home" class="tab">
-    <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
-    <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض الضغط، الحروق</p>
-  </section>
+  <main>
+    <!-- الصفحة الرئيسية -->
+    <section id="home" class="tab-content active">
+      <h2>ابدأ المساعدة الآن</h2>
+      <button id="emergencyBtn">🚨 زر الطوارئ</button>
+      <p id="hint">🩺 الحالات الممكنة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
+    </section>
 
-  <!-- الإسعافات الأولية -->
-  <section id="firstaid" class="tab hidden">
-    <h2>الإسعافات الأولية</h2>
-    <div id="casesContainer" class="cases-container"></div>
-  </section>
+    <!-- الإسعافات الأولية -->
+    <section id="cases" class="tab-content">
+      <h2>🩺 خطوات الإسعافات الأولية</h2>
+      <div id="casesList"></div>
+    </section>
 
-  <!-- المسعفون المرخصون -->
-  <section id="licensed" class="tab hidden">
-    <h2>المسعفون المرخصون</h2>
-    <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
-  </section>
+    <!-- تبويب التسجيل -->
+    <section id="register" class="tab-content">
+      <h2>نموذج التسجيل</h2>
+      <form id="registerForm">
+        <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+        <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+        <select name="blood_type" required>
+          <option value="">فصيلة الدم</option>
+          <option value="A+">A+</option><option value="A-">A-</option>
+          <option value="B+">B+</option><option value="B-">B-</option>
+          <option value="AB+">AB+</option><option value="AB-">AB-</option>
+          <option value="O+">O+</option><option value="O-">O-</option>
+        </select>
+        <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
+        <button type="submit" class="submit-btn">تسجيل</button>
+      </form>
+    </section>
 
-  <!-- كارد عرض الخطوات -->
-  <div id="caseCard" class="hidden">
-    <div class="case-card-inner">
+    <!-- تبويب حول -->
+    <section id="about" class="tab-content">
+      <h2>عن النظام</h2>
+      <p>نظام ذكي لتقديم خطوات الإسعافات الأولية صوتيًا وبشكل تفاعلي للمستخدم.</p>
+    </section>
+  </main>
+
+  <div id="stepsCard" class="hidden">
+    <div class="card-content">
       <h3 id="caseTitle"></h3>
-      <ul id="stepsList" class="steps-list"></ul>
+      <div id="stepsText"></div>
       <div class="controls">
-        <button id="playBtn" class="ctrl">إعادة الاستماع</button>
-        <button id="stopBtn" class="ctrl">إيقاف</button>
-        <button id="backBtn" class="ctrl">رجوع</button>
-        <button id="callBtn" class="ctrl call">اتصل بالإسعاف 997</button>
+        <button id="backBtn">رجوع</button>
+        <button id="stopBtn">إيقاف</button>
+        <button id="replayBtn">إعادة</button>
       </div>
     </div>
   </div>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
