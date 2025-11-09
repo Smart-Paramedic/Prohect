@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام الإسعافات الأولية</title>
-<link rel="stylesheet" href="Style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أسعفني</title>
+  <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>أسعفني</h1>
-        <p>دليلك للإسعافات الأولية في حالات الطوارئ</p>
+  <header>
+    <h1>أسعفني</h1>
+  </header>
+
+  <nav>
+    <button data-tab="home">الرئيسية</button>
+    <button data-tab="firstaid">الإسعافات الأولية</button>
+    <button data-tab="licensed">المسعفون المرخصون</button>
+  </nav>
+
+  <!-- الرئيسية -->
+  <section id="home" class="tab">
+    <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
+    <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض السكر، الحروق</p>
+  </section>
+
+  <!-- الإسعافات الأولية -->
+  <section id="firstaid" class="tab hidden">
+    <h2>الإسعافات الأولية</h2>
+    <div id="casesContainer" class="cases-container"></div>
+  </section>
+
+  <!-- المسعفون المرخصون -->
+  <section id="licensed" class="tab hidden">
+    <h2>المسعفون المرخصون</h2>
+    <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
+  </section>
+
+  <!-- كارد عرض الخطوات -->
+  <div id="caseCard" class="hidden">
+    <div class="case-card-inner">
+      <h3 id="caseTitle"></h3>
+      <ul id="stepsList" class="steps-list"></ul>
+      <div class="controls">
+        <button id="playBtn" class="ctrl">إعادة الاستماع</button>
+        <button id="stopBtn" class="ctrl">إيقاف</button>
+        <button id="backBtn" class="ctrl">رجوع</button>
+        <a href="tel:997" class="ctrl call">اتصل بالطوارئ</a>
+      </div>
     </div>
+  </div>
 
-    <div class="nav-tabs">
-        <div class="nav-tab active" onclick="showTab('firstaid', event)">الإسعافات الأولية</div>
-        <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المعتمدون</div>
-        <div class="nav-tab" onclick="showTab('profile', event)">ملفي الشخصي</div>
-    </div>
-
-    <!-- تبويب الإسعافات الأولية -->
-    <div id="firstaid" class="tab">
-        <div id="casesContainer" class="cases-container"></div>
-        <div id="caseCard" class="case-card hidden">
-            <h3 id="caseTitle"></h3>
-            <img id="caseImage" src="" alt="صورة توضيحية" class="case-image">
-            <ul id="stepsList" class="steps-list"></ul>
-            <div class="buttons">
-                <button id="playBtn">إعادة التشغيل</button>
-                <button id="stopBtn">إيقاف</button>
-                <button id="backBtn">رجوع</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- تبويب المسعفون المعتمدون -->
-    <div id="paramedics" class="tab hidden">
-        <h2>المسعفون المعتمدون</h2>
-        <div id="paramedicsList"></div>
-    </div>
-
-    <!-- تبويب الملف الشخصي -->
-    <div id="profile" class="tab hidden">
-        <h2>ملفي الشخصي</h2>
-        <div id="profileInfo"></div>
-        <div id="emergencyContacts"></div>
-    </div>
-
-    <button id="emergencyBtn" class="emergency-btn">بدء الاستماع</button>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
