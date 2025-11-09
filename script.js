@@ -1,4 +1,4 @@
-// 🩺 الحالات الطبية
+
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
@@ -53,7 +53,6 @@ function stopSpeech() {
   currentUtterance = null;
 }
 
-// 🧠 عرض الحالات
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
@@ -65,52 +64,57 @@ function renderCases(filtered = null) {
       <h3>${caseName}</h3>
       <div class="subtitle">خطوات الإسعافات الأولية</div>
       <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
-      <div class="card-controls" role="group">
-        <button class="play-btn">إعادة التشغيل</button>
-        <button class="stop-btn">إيقاف الصوت</button>
-        <button class="back-btn">رجوع</button>
-        <button class="call-btn">اتصال 997</button>
-      </div>
+      <button class="call-btn">اتصال 997</button>
     `;
-
-    card.querySelector('.play-btn').onclick = e => {
-      e.stopPropagation();
-      speakSteps([caseName, ...steps]);
-    };
-
-    card.querySelector('.stop-btn').onclick = e => {
-      e.stopPropagation();
-      stopSpeech();
-    };
-
-    card.querySelector('.back-btn').onclick = e => {
-      e.stopPropagation();
-      renderCases();
-    };
-
-    card.querySelector('.call-btn').onclick = e => {
-      e.stopPropagation();
+    card.querySelector('.call-btn').onclick = () => {
       stopSpeech();
       if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
         window.location.href = 'tel:997';
       }
     };
-
     casesContainer.appendChild(card);
   }
 }
 
-// 🧭 التبويبات
+
+function renderFullCase(caseName, steps) {
+  casesContainer.innerHTML = '';
+  const card = document.createElement('article');
+  card.className = 'case-card';
+  card.innerHTML = `
+    <h3>${caseName}</h3>
+    <div class="subtitle">خطوات الإسعافات الأولية</div>
+    <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
+    <div class="card-controls">
+      <button class="play-btn">إعادة التشغيل</button>
+      <button class="stop-btn">إيقاف الصوت</button>
+      <button class="back-btn">رجوع</button>
+      <button class="call-btn">اتصال 997</button>
+    </div>
+  `;
+  card.querySelector('.play-btn').onclick = () => speakSteps([caseName, ...steps]);
+  card.querySelector('.stop-btn').onclick = () => stopSpeech();
+  card.querySelector('.back-btn').onclick = () => renderCases();
+  card.querySelector('.call-btn').onclick = () => {
+    stopSpeech();
+    if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
+      window.location.href = 'tel:997';
+    }
+  };
+  casesContainer.appendChild(card);
+}
+
+
 function showTab(tabId, event) {
   stopSpeech();
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   event?.currentTarget?.classList.add('active');
-  if (tabId === 'home' && recognition) recognition.start(); // 🎙 تفعيل المايك عند الدخول للرئيسية
+  if (tabId === 'home' && recognition) recognition.start();
 }
 
-// 🎙 التعرف الصوتي
+
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 let recognition = null;
 
@@ -125,21 +129,20 @@ if (SpeechRec) {
     for (const caseName of Object.keys(CASES)) {
       if (spoken.includes(caseName.toLowerCase())) {
         showTab('cases');
-        renderCases(caseName);
+        renderFullCase(caseName, CASES[caseName]);
         speakSteps([caseName, ...CASES[caseName]]);
         return;
       }
     }
-    alert('لم أتعرف على اسم حالة مناسب. كرر اسم الحالة مثل: الحروق أو الصرع.');
+   
   };
 
   recognition.onerror = err => {
     console.warn('Recognition error:', err);
-    alert('حدث خطأ في التعرف الصوتي.');
   };
 }
 
-// 🎙 زر الطوارئ
+
 emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
@@ -154,15 +157,15 @@ emergencyBtn.onclick = e => {
   }
 };
 
-// 📝 نموذج التسجيل
+
 registerForm?.addEventListener('submit', e => {
   e.preventDefault();
   alert('تم استلام بيانات التسجيل (تجريبياً).');
   e.target.reset();
 });
 
-// 🚀 تهيئة الصفحة
+
 document.addEventListener('DOMContentLoaded', () => {
   renderCases();
-  if (recognition) recognition.start(); // 🎙 يبدأ المايك تلقائيًا عند تحميل الصفحة
+  if (recognition) recognition.start();
 });
