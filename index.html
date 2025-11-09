@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أسعفني </title>
-<link rel="stylesheet" href="Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسعفني</title>
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-<section class="container">
-    <!-- التبويبات -->
-    <div class="nav-tabs">
-        <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-        <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
-        <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
-        <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
+    <div class="container">
+
+        <!-- تبويب الرئيسية -->
+        <section id="home" class="tab-content active">
+            <div class="header">
+                <h1>نظام الإسعافات الأولية</h1>
+                <p>دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
+                <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
+                <p class="hint">انقر على الزر أو تحدث باسم الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
+            </div>
+        </section>
+
+        <!-- التبويبات -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
+            <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
+            <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
+            <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
+        </div>
+
+        <!-- تبويب الحالات الطبية -->
+        <section id="cases" class="tab-content">
+            <h2>الحالات الطبية</h2>
+            <div id="cases-container" class="cases-container"></div>
+        </section>
+
+        <!-- تبويب التسجيل -->
+        <section id="register" class="tab-content">
+            <h2>نموذج التسجيل</h2>
+            <form id="registerForm">
+                <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+                <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+                <select name="blood_type" required>
+                    <option value="">فصيلة الدم</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
+                <button type="submit" class="submit-btn">تسجيل</button>
+            </form>
+        </section>
+
+        <!-- تبويب المسعفون -->
+        <section id="paramedics" class="tab-content center-content">
+            <h2>المسعفون المرخصون</h2>
+            <p>يتم عرض بيانات المسعفين المرخصين بعد موافقة وزارة الصحة.</p>
+            <a href="https://www.moh.gov.sa/" target="_blank">رابط وزارة الصحة للمسعفين</a>
+        </section>
+
     </div>
 
-    <!-- تبويب الرئيسية -->
-    <div id="home" class="tab-content active">
-        <h1 class="main-title">دليلك الشامل للإسعافات الأولية</h1>
-        <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
-        <p class="hint">انقر على الزر أو تحدث لذكر الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
-    </div>
-
-    <!-- تبويب الحالات الطبية -->
-    <div id="cases" class="tab-content">
-        <div id="cases-container" class="cases-container"></div>
-    </div>
-
-    <!-- تبويب التسجيل -->
-    <div id="register" class="tab-content">
-        <h2>نموذج التسجيل</h2>
-        <form id="registerForm">
-            <input type="text" name="full_name" placeholder="الاسم الكامل" required>
-            <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-            <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
-            <select name="blood_type" required>
-                <option value="">فصيلة الدم</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-            </select>
-            <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
-            <button type="submit" class="submit-btn">تسجيل</button>
-        </form>
-    </div>
-
-    <!-- تبويب المسعفون -->
-    <div id="paramedics" class="tab-content">
-        <h2>المسعفون المرخصون</h2>
-        <p>يتم عرض بيانات المسعفين المرخصين بعد موافقة وزارة الصحة.</p>
-        <a href="https://www.moh.gov.sa/" target="_blank">رابط وزارة الصحة للمسعفين</a>
-    </div>
-</section>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
