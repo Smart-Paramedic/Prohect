@@ -1,61 +1,56 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام الإسعافات الأولية</title>
-<link rel="stylesheet" href="Style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام الإسعافات الأولية</title>
+  <link rel="stylesheet" href="Style.css">
 </head>
 <body>
+  <div class="container">
+    <div class="header">
+      <h1>نظام الإسعافات الأولية</h1>
+      <p>دليلك للإسعافات الأولية في حالات الطوارئ</p>
+    </div>
 
-<div class="container">
-    <header class="header">
-        <h1>نظام الإسعافات الأولية</h1>
-        <p>دليلك للإسعافات الأولية في حالات الطوارئ</p>
-    </header>
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="showTab('firstaid', event)">الإسعافات الأولية</div>
+      <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المعتمدون</div>
+      <div class="nav-tab" onclick="showTab('profile', event)">ملفي الشخصي</div>
+    </div>
 
-    <nav class="nav-tabs">
-        <button class="tab-btn active" data-tab="firstaid">الحالات الطبية</button>
-        <button class="tab-btn" data-tab="paramedics">المسعفون المعتمدون</button>
-        <button class="tab-btn" data-tab="profile">ملفي الشخصي</button>
-    </nav>
-
-    <!-- تبويب الحالات الطبية -->
-    <section id="firstaid" class="tab">
-        <div id="casesContainer"></div>
-        <div id="caseCard" class="case-card hidden">
-            <div id="imageContainer" class="image-container"></div>
-            <h3 id="caseTitle"></h3>
-            <ul id="stepsList"></ul>
-            <div class="buttons">
-                <button id="playBtn">إعادة التشغيل</button>
-                <button id="stopBtn">إيقاف</button>
-                <button id="backBtn">رجوع</button>
-            </div>
+    <!-- تبويب الإسعافات الأولية -->
+    <div id="firstaid" class="tab">
+      <div id="casesContainer" class="cases-container"></div>
+      <div id="caseCard" class="case-card hidden">
+        <h3 id="caseTitle"></h3>
+        <img id="caseImage" src="" alt="صورة توضيحية" class="case-image">
+        <iframe id="caseVideo" style="display:none;" width="100%" height="200" allowfullscreen></iframe>
+        <ul id="stepsList" class="steps-list"></ul>
+        <div class="buttons">
+          <button id="playBtn">إعادة التشغيل</button>
+          <button id="stopBtn">إيقاف</button>
+          <button id="backBtn">رجوع</button>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- تبويب المسعفون -->
-    <section id="paramedics" class="tab hidden">
-        <div id="paramedicsContainer"></div>
-    </section>
+    <!-- تبويب المسعفون المعتمدون -->
+    <div id="paramedics" class="tab hidden">
+      <h2>المسعفون المعتمدون</h2>
+      <div id="paramedicsList"></div>
+    </div>
 
     <!-- تبويب الملف الشخصي -->
-    <section id="profile" class="tab hidden">
-        <div id="profileContainer"></div>
-    </section>
-
-    <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
-</div>
-
-<!-- Popup الفيديو -->
-<div id="videoPopup" class="popup hidden">
-    <div class="popup-content">
-        <span id="closePopup" class="close">&times;</span>
-        <iframe id="videoFrame" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+    <div id="profile" class="tab hidden">
+      <h2>ملفي الشخصي</h2>
+      <div id="profileInfo"></div>
+      <div id="emergencyContacts"></div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <button id="emergencyBtn" class="emergency-btn">بدء الاستماع</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
