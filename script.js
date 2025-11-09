@@ -38,7 +38,7 @@ function showTab(tabId, event) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    if(event) event.currentTarget.classList.add('active');
 }
 
 // ================= توليد كروت الحالات =================
@@ -51,13 +51,17 @@ function renderCases(filteredCase = null) {
         const card = document.createElement('div');
         card.classList.add('case-card');
 
-        let html = `<h3>${caseName}</h3><ul>`;
+        let html = `<h3>${caseName}</h3><p class="step-title">خطوات الإسعافات الأولية:</p><ul>`;
         casesToShow[caseName].forEach(step => html += `<li>${step}</li>`);
-        html += `</ul><button onclick="callEmergency('${caseName}')">الاتصال بالإسعاف 997</button>`;
-        card.innerHTML = html;
+        html += `</ul>
+        <div>
+            <button onclick="speakSteps([caseName].concat(CASES['${caseName}']))">▶ إعادة التشغيل</button>
+            <button onclick="stopSpeech()">⏹ إيقاف</button>
+            <button onclick="renderCases()">⏪ الرجوع</button>
+            <button onclick="callEmergency('${caseName}')">📞 الاتصال بالإسعاف 997</button>
+        </div>`;
 
-        // عند النقر على الكارد، تشغيل القراءة الصوتية
-        card.onclick = () => speakSteps([caseName].concat(casesToShow[caseName]));
+        card.innerHTML = html;
         container.appendChild(card);
     }
 }
@@ -103,12 +107,8 @@ recognition.onresult = function(event) {
     const spoken = event.results[0][0].transcript.trim();
     for (let caseName in CASES) {
         if (spoken.includes(caseName)) {
-            // فتح تبويب الحالات
-            const casesTab = document.querySelector('.nav-tab:nth-child(2)');
-            showTab('cases', {currentTarget: casesTab});
-            // عرض الكارد الخاص بالحالة فقط
+            showTab('cases', {currentTarget: document.querySelector('.nav-tab:nth-child(2)')});
             renderCases(caseName);
-            // تشغيل الصوت مباشرة
             speakSteps([caseName].concat(CASES[caseName]));
             break;
         }
@@ -119,11 +119,8 @@ function startListening() {
     recognition.start();
 }
 
-// ================= أزرار التحكم =================
+// ================= زر الطوارئ =================
 document.getElementById('emergencyBtn').onclick = startListening;
-document.getElementById('stopBtn').onclick = stopSpeech;
-document.getElementById('repeatBtn').onclick = repeatSpeech;
-document.getElementById('backBtn').onclick = () => renderCases();
 
 // ================= بدء تحميل الكروت =================
 renderCases();
