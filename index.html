@@ -17,19 +17,18 @@
     <button data-tab="licensed">المسعفون المرخصون</button>
   </nav>
 
-  <!-- الرئيسية -->
+
   <section id="home" class="tab">
     <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
-    <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض الضغط، الحروق</p>
+    <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض السكر، الحروق</p>
   </section>
 
-  <!-- الإسعافات الأولية -->
+ 
   <section id="firstaid" class="tab hidden">
     <h2>الإسعافات الأولية</h2>
     <div id="casesContainer" class="cases-container"></div>
   </section>
 
-  <!-- المسعفون المرخصون -->
   <section id="licensed" class="tab hidden">
     <h2>المسعفون المرخصون</h2>
     <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
@@ -38,14 +37,13 @@
   <!-- كارد عرض الخطوات -->
   <div id="caseCard" class="hidden">
     <div class="case-card-inner">
-      <div id="caseMedia" class="case-media"></div>
       <h3 id="caseTitle"></h3>
-      <div id="stepsList" class="steps-list"></div>
+      <ul id="stepsList" class="steps-list"></ul>
       <div class="controls">
         <button id="playBtn" class="ctrl">إعادة الاستماع</button>
         <button id="stopBtn" class="ctrl">إيقاف</button>
         <button id="backBtn" class="ctrl">رجوع</button>
-        <a href="tel:997" class="ctrl call">اتصل بالإسعاف</a>
+        <button id="callBtn" class="ctrl call">اتصل بالإسعاف 997</button>
       </div>
     </div>
   </div>
@@ -53,4 +51,3 @@
   <script src="script.js" defer></script>
 </body>
 </html>
-
