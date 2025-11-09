@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أسعفني</title>
+    <title>أسعفني - نظام الإسعافات الأولية</title>
     <link rel="stylesheet" href="Style.css">
 </head>
 <body>
     <div class="container">
 
+        <!-- التبويبات -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
+            <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
+            <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
+            <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
+        </div>
+
         <!-- الرئيسية -->
         <section id="home" class="tab-content active">
             <div class="header">
-            
+                <h1>أسعفني</h1>
                 <p>دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
                 <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
                 <p class="hint">انقر على الزر أو تحدث باسم الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
@@ -24,17 +32,33 @@
             </div>
         </section>
 
-        <!-- التبويبات -->
-        <div class="nav-tabs">
-            <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-            <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
-            <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
-        </div>
-
         <!-- تبويب الحالات الطبية -->
         <section id="cases" class="tab-content">
             <h2>الحالات الطبية</h2>
             <div id="cases-container" class="cases-container"></div>
+        </section>
+
+        <!-- تبويب التسجيل -->
+        <section id="register" class="tab-content">
+            <h2>نموذج التسجيل</h2>
+            <form id="registerForm">
+                <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+                <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+                <select name="blood_type" required>
+                    <option value="">فصيلة الدم</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
+                <button type="submit" class="submit-btn">تسجيل</button>
+            </form>
         </section>
 
         <!-- تبويب المسعفون -->
