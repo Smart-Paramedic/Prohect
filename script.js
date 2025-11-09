@@ -56,6 +56,7 @@ function renderCases(filteredCase = null) {
         html += `</ul><button onclick="callEmergency('${caseName}')">الاتصال بالإسعاف 997</button>`;
         card.innerHTML = html;
 
+        // عند النقر على الكارد، تشغيل القراءة الصوتية
         card.onclick = () => speakSteps([caseName].concat(casesToShow[caseName]));
         container.appendChild(card);
     }
@@ -102,8 +103,12 @@ recognition.onresult = function(event) {
     const spoken = event.results[0][0].transcript.trim();
     for (let caseName in CASES) {
         if (spoken.includes(caseName)) {
-            showTab('cases', {currentTarget: document.querySelector('.nav-tab:nth-child(2)')});
+            // فتح تبويب الحالات
+            const casesTab = document.querySelector('.nav-tab:nth-child(2)');
+            showTab('cases', {currentTarget: casesTab});
+            // عرض الكارد الخاص بالحالة فقط
             renderCases(caseName);
+            // تشغيل الصوت مباشرة
             speakSteps([caseName].concat(CASES[caseName]));
             break;
         }
