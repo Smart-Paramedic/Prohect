@@ -3,41 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أسعفني - نظام الإسعافات الأولية</title>
+<title>أسعفني</title>
 <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 <div class="container">
-    <header class="header">
-        <h1>أسعفني </h1>
-    </header>
 
-    <div class="nav-tabs">
-        <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-        <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
-        <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
-        <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
-    </div>
-
-    <!-- تبويب الرئيسية -->
+    <!-- واجهة رئيسية -->
     <div id="home" class="tab-content active">
-        <button id="emergencyBtn">زر الطوارئ</button>
-        <p class="hint">انقر على الزر أو تحدث باسم الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
+        <h1>أسعفني</h1>
+        <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
+        <p class="hint">انقر على الزر أو تحدث لذكر الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
     </div>
 
-    <!-- تبويب الحالات الطبية -->
+    <!-- تبويب الحالات -->
     <div id="cases" class="tab-content">
         <h2>الحالات الطبية</h2>
-        <div id="cases-container">
-            <!-- الكروت ستُملأ بواسطة script.js -->
+        <div class="case-card" onclick="showCaseSteps('حروق')">
+            <h3>الحروق</h3>
+            <button class="call-btn" onclick="callEmergency(event, '997')">الاتصال بالطوارئ</button>
+            <div class="steps-container" id="steps-حروق"></div>
+        </div>
+        <div class="case-card" onclick="showCaseSteps('صرع')">
+            <h3>الصرع</h3>
+            <button class="call-btn" onclick="callEmergency(event, '997')">الاتصال بالطوارئ</button>
+            <div class="steps-container" id="steps-صرع"></div>
+        </div>
+        <div class="case-card" onclick="showCaseSteps('انخفاض الضغط')">
+            <h3>انخفاض الضغط</h3>
+            <button class="call-btn" onclick="callEmergency(event, '997')">الاتصال بالطوارئ</button>
+            <div class="steps-container" id="steps-انخفاض الضغط"></div>
+        </div>
+        <div class="case-card" onclick="showCaseSteps('اختناق')">
+            <h3>الاختناق</h3>
+            <button class="call-btn" onclick="callEmergency(event, '997')">الاتصال بالطوارئ</button>
+            <div class="steps-container" id="steps-اختناق"></div>
         </div>
     </div>
 
     <!-- تبويب المسعفون -->
     <div id="paramedics" class="tab-content">
-        <h2>المسعفون المرخصون</h2>
-        <p>بيانات المسعفين ورخصهم تُعرض بعد موافقة وزارة الصحة.</p>
-        <a href="https://www.moh.gov.sa" target="_blank">زيارة وزارة الصحة للمسعفين</a>
+        <h2>المسعفون المعتمدون</h2>
+        <p>جميع بيانات المسعفين ورخصهم ستكون متاحة بعد الموافقة من وزارة الصحة.</p>
+        <p>رابط وزارة الصحة للمسعفين: <a href="https://www.moh.gov.sa/" target="_blank">وزارة الصحة</a></p>
     </div>
 
     <!-- تبويب التسجيل -->
@@ -61,6 +69,14 @@
             <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
             <button type="submit" class="submit-btn">تسجيل</button>
         </form>
+    </div>
+
+    <!-- تبويبات أسفل الصفحة -->
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="showTab('home', this)">الرئيسية</div>
+        <div class="nav-tab" onclick="showTab('cases', this)">الحالات</div>
+        <div class="nav-tab" onclick="showTab('paramedics', this)">المسعفون</div>
+        <div class="nav-tab" onclick="showTab('register', this)">التسجيل</div>
     </div>
 </div>
 
