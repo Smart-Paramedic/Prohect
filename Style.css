@@ -1,142 +1,184 @@
 :root {
-    --primary: #89CFF0; /* بيبي بلو */
-    --darkblue: #0D3B66;
-    --card-bg: #E0F7FA;
-    --btnblue: #1E88E5;
+  --babyblue: #cfeffd;
+  --darkblue: #0b4f8a;
+  --btnblue: #0e66c2;
+  --cardbg: #eef9ff;
+  --text: #21303b;
+  --muted: #5b6b73;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f5f5f5;
-    color: #333;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background-color: #f6f8fa;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  color: var(--text);
 }
 
-header h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin: 20px 0;
+/* عنوان الموقع */
+header {
+  background-color: var(--babyblue);
+  text-align: center;
+  padding: 10px;
+}
+.site-title {
+  font-size: 2.2rem;
+  margin: 0;
+  color: var(--darkblue);
+  font-weight: 700;
 }
 
+/* التبويبات */
 .nav-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    background: var(--primary);
-    padding: 10px;
+  display: flex;
+  justify-content: center;
+  background: var(--babyblue);
+  gap: 10px;
+  padding: 10px;
 }
-
 .nav-tab {
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    background: #cce7ff;
-    transition: 0.3s;
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
-
 .nav-tab.active {
-    background: var(--darkblue);
-    color: white;
+  background: var(--darkblue);
+  color: white;
 }
 
+/* المحتوى */
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 .tab-content {
-    display: none;
-    padding: 20px;
+  display: none;
 }
-
 .tab-content.active {
-    display: block;
+  display: block;
 }
 
 /* الرئيسية */
-#home {
-    text-align: center;
+.home-center {
+  text-align: center;
+  margin-top: 60px;
 }
-
 .emergency-btn {
-    background: var(--darkblue);
-    color: white;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 18px;
+  background: var(--btnblue);
+  color: white;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
 }
-
 .hint {
-    margin-top: 10px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+.listening {
+  color: var(--darkblue);
+  font-weight: 600;
+  margin-top: 10px;
+}
+.hidden {
+  display: none;
 }
 
-/* الحالات */
+/* كروت الحالات */
 .cases-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
 }
-
 .case-card {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 10px;
-    width: 250px;
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  background: var(--cardbg);
+  width: 300px;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
-
 .case-card h3 {
-    margin: 0;
+  color: var(--darkblue);
+  margin-top: 0;
+}
+.subtitle {
+  font-weight: 600;
+  color: var(--text);
+  margin: 8px 0;
+}
+.case-card ul {
+  list-style: disc;
+  margin: 0;
+  padding-right: 18px;
+  color: var(--muted);
+}
+.card-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.card-controls button {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+.play-btn {
+  background: var(--btnblue);
+}
+.stop-btn {
+  background: #b71c1c;
+}
+.back-btn {
+  background: var(--darkblue);
+}
+.call-btn {
+  background: #d84315;
 }
 
-.case-card .subtitle {
-    font-weight: bold;
-    text-decoration: underline;
+/* التسجيل */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.register-form input,
+.register-form select,
+.register-form textarea {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.submit-btn {
+  background: var(--btnblue);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.case-card button {
-    background: var(--btnblue);
-    color: white;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 5px;
-}
-
-/* تبويب التسجيل */
-#register form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-#register input, #register select, #register textarea, #register button {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-#register button.submit-btn {
-    background: var(--btnblue);
-    color: white;
-    cursor: pointer;
-}
-
-#register button.submit-btn:hover {
-    background: var(--darkblue);
-}
-
-/* تبويب المسعفون */
+/* المسعفون */
 .center-content {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  text-align: center;
+}
+.moh-link {
+  color: var(--darkblue);
+  font-weight: bold;
+  text-decoration: none;
+}
+.moh-link:hover {
+  text-decoration: underline;
 }
