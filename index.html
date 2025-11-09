@@ -9,31 +9,28 @@
 <body>
 
 <header>
-    <h1 class="site-title">أسعفني</h1>
+    <h1>أسعفني</h1>
 </header>
 
 <!-- التبويبات -->
 <nav class="nav-tabs">
     <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-    <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
+    <div class="nav-tab" onclick="showTab('cases', event)">الحالات</div>
     <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
     <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
 </nav>
 
-<!-- تبويب الرئيسية -->
+<!-- تبويبات المحتوى -->
 <section id="home" class="tab-content active">
     <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
-    <p class="hint">انقر على الزر أو تحدث باسم الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
+    <p class="hint">انقر على الزر أو تحدث باسم الحالة</p>
 </section>
 
-<!-- تبويب الحالات الطبية -->
 <section id="cases" class="tab-content">
     <div id="cases-container" class="cases-container"></div>
 </section>
 
-<!-- تبويب التسجيل -->
 <section id="register" class="tab-content">
-    <h2>نموذج التسجيل</h2>
     <form id="registerForm">
         <input type="text" name="full_name" placeholder="الاسم الكامل" required>
         <input type="email" name="email" placeholder="البريد الإلكتروني" required>
@@ -54,14 +51,12 @@
     </form>
 </section>
 
-<!-- تبويب المسعفون -->
 <section id="paramedics" class="tab-content center-content">
     <h2>المسعفون المرخصون</h2>
-    <p>يتم عرض بيانات المسعفين المرخصين بعد موافقة وزارة الصحة.</p>
+    <p>يتم عرض بيانات المسعفين بعد موافقة وزارة الصحة.</p>
     <a href="https://www.moh.gov.sa/" target="_blank">رابط وزارة الصحة للمسعفين</a>
 </section>
 
 <script src="script.js"></script>
 </body>
 </html>
-
