@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>أسعفني</title>
   <link rel="stylesheet" href="Style.css">
 </head>
 <body>
   <header>
-    <h1> أسعفني</h1>
+    <h1>أسعفني</h1>
   </header>
 
   <main>
+    <!-- الصفحة الرئيسية -->
     <section id="home" class="tab active">
-      <h2>مرحباً بك</h2>
-      <p>تحدث أو انقر على الزر لذكر الحالة</p>
+      <h2>ابدأ المساعدة الآن</h2>
+      <p id="hint">تحدث أو انقر على الزر لذكر الحالة</p>
       <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
-      <div id="hint">تحدث أو انقر على الزر لذكر الحالة مثل: "حروق" أو "صرع"</div>
     </section>
 
+    <!-- تبويب الحالات -->
     <section id="cases" class="tab">
       <h2>الحالات الإسعافية</h2>
       <div id="casesList" class="card-container"></div>
     </section>
 
+    <!-- تبويب المسعفون -->
     <section id="licensed" class="tab">
       <h2>المسعفون المرخصون</h2>
-      <p>تُعرض بيانات المسعفين ورخصهم هنا بعد الموافقة من وزارة الصحة.</p>
+      <p>يتم عرض بيانات المسعفين ورخصهم هنا بعد الحصول على الموافقة الرسمية من وزارة الصحة.</p>
     </section>
 
+    <!-- تبويب التسجيل -->
     <section id="register" class="tab">
       <h2>نموذج التسجيل</h2>
       <form id="registerForm">
@@ -49,7 +52,7 @@
   </main>
 
   <footer>
-    <button class="tab-btn" data-target="home">الصفحة الرئيسية</button>
+    <button class="tab-btn" data-target="home">الرئيسية</button>
     <button class="tab-btn" data-target="cases">الإسعافات الأولية</button>
     <button class="tab-btn" data-target="licensed">المسعفون</button>
     <button class="tab-btn" data-target="register">التسجيل</button>
