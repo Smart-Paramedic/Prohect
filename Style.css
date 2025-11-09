@@ -1,85 +1,117 @@
 body {
   font-family: "Tajawal", sans-serif;
-  background-color: #f8f7ff;
+  background-color: #e9f5ff;
   margin: 0;
-  padding: 0;
-  color: #333;
+  color: #03396c;
   text-align: center;
 }
 
 header {
-  background: linear-gradient(to right, #c3a3f0, #9c8be0);
+  background-color: #005b96;
   color: white;
-  padding: 15px;
-  font-size: 1.8em;
+  padding: 1rem;
+  border-bottom: 4px solid #03396c;
 }
 
-nav {
-  display: flex;
-  justify-content: center;
-  background-color: #ebe7fb;
+h1 {
+  font-size: 1.8rem;
+  margin: 0;
 }
 
-.tab-btn {
-  padding: 12px 20px;
+main {
+  padding: 20px;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.main-btn {
+  background-color: #005b96;
+  color: white;
   border: none;
-  background: none;
-  color: #4b3fa5;
-  font-weight: bold;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.tab-btn.active, .tab-btn:hover {
-  background-color: #cdbffa;
-  border-radius: 5px;
+.main-btn:hover {
+  background-color: #03396c;
 }
 
-.tab-content { display: none; padding: 20px; }
-.tab-content.active { display: block; }
+#hint {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #005b96;
+}
 
-#stepsCard {
-  background: white;
-  margin: 20px auto;
-  padding: 20px;
-  width: 85%;
-  max-width: 600px;
+.card-container {
+  display: grid;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background-color: #b3cde0;
+  padding: 15px;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: right;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.controls { display: flex; justify-content: space-around; margin-top: 15px; }
-.controls button {
-  background-color: #9c8be0;
+.card h3 {
+  color: #03396c;
+}
+
+.card button {
+  margin-top: 10px;
+  background-color: #005b96;
   color: white;
   border: none;
-  border-radius: 25px;
-  padding: 8px 20px;
-  cursor: pointer;
-}
-.controls button:hover { background-color: #8364c7; }
-
-.hidden { display: none; }
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 85%;
-  max-width: 400px;
-  margin: auto;
-}
-input, select, textarea {
-  padding: 10px;
-  border: 1px solid #d4c8f1;
+  padding: 10px 15px;
   border-radius: 8px;
-}
-.submit-btn {
-  background: #9c8be0;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 10px;
   cursor: pointer;
 }
-.submit-btn:hover { background: #8364c7; }
+
+.card button:hover {
+  background-color: #03396c;
+}
+
+footer {
+  background-color: #005b96;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.tab-btn {
+  background: none;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.tab-btn:hover {
+  text-decoration: underline;
+}
+
+.submit-btn {
+  background-color: #005b96;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+}
