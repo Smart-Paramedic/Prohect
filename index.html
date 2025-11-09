@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام الإسعافات الأولية</title>
-  <link rel="stylesheet" href="Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسعفني</title>
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1> أسعفني</h1>
-      <p class="hint">انقر على الزر أو تحدث لذكر الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
+    <div class="container">
+        <header>
+            <h1>أسعفني</h1>
+
+            <!-- التبويبات -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showTab('cases', this)">الحالات الطبية</div>
+                <div class="nav-tab" onclick="showTab('paramedics', this)">المسعفون المرخصون</div>
+            </div>
+
+            <!-- زر الطوارئ -->
+            <button id="emergencyBtn">زر الطوارئ</button>
+            <p class="hint">انقر على الزر أو تحدث: "الحروق"، "الصرع"، "انخفاض الضغط"، "الاختناق" لعرض خطوات الإسعاف.</p>
+        </header>
+
+        <!-- تبويب الحالات -->
+        <div id="cases" class="tab-content active">
+            <div class="case-card" onclick="showCaseSteps('حروق')">
+                <h3>الحروق</h3>
+                <div class="steps-container" id="steps-حروق"></div>
+                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
+            </div>
+
+            <div class="case-card" onclick="showCaseSteps('صرع')">
+                <h3>الصرع</h3>
+                <div class="steps-container" id="steps-صرع"></div>
+                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
+            </div>
+
+            <div class="case-card" onclick="showCaseSteps('انخفاض الضغط')">
+                <h3>انخفاض الضغط</h3>
+                <div class="steps-container" id="steps-انخفاض الضغط"></div>
+                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
+            </div>
+
+            <div class="case-card" onclick="showCaseSteps('اختناق')">
+                <h3>الاختناق</h3>
+                <div class="steps-container" id="steps-اختناق"></div>
+                <button class="emergency-btn" onclick="callEmergency(event)">الاتصال بالطوارئ</button>
+            </div>
+        </div>
+
+        <!-- تبويب المسعفين -->
+        <div id="paramedics" class="tab-content">
+            <h2>المسعفون المرخصون</h2>
+            <p>بيانات المسعفين ورخصهم ستوضع بعد الموافقة من وزارة الصحة. لمزيد من التفاصيل: 
+            <a href="https://www.moh.gov.sa" target="_blank">وزارة الصحة</a></p>
+        </div>
     </div>
 
-    <div class="nav-tabs">
-      <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
-      <div class="nav-tab" onclick="showTab('cases', event)">الحالات</div>
-      <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون</div>
-      <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
-    </div>
-
-    <div id="home" class="tab">
-      <button id="emergencyBtn" class="emergency-btn">🎙 زر الطوارئ</button>
-    </div>
-
-    <div id="cases" class="tab hidden">
-      <div id="casesContainer" class="cases-container"></div>
-    </div>
-
-    <div id="paramedics" class="tab hidden">
-      <h2>المسعفون المعتمدون</h2>
-      <p>بانتظار موافقة وزارة الصحة على عرض قائمة المسعفين.</p>
-      <a href="https://www.moh.gov.sa" target="_blank">🔗 وزارة الصحة السعودية</a>
-    </div>
-
-    <div id="register" class="tab hidden">
-      <h2>نموذج التسجيل</h2>
-      <p>سيتم تفعيل نموذج التسجيل قريبًا.</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
