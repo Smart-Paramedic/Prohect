@@ -1,64 +1,54 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>المسعف الذكي</title>
-<link rel="stylesheet" href="Style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة الإسعافات الأولية</title>
+  <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-<header>
-  <h1>المسعف الذكي</h1>
-  <p class="subtitle">دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
-</header>
+  <header>
+    <h1>منصة الإسعافات الأولية</h1>
+  </header>
 
-<nav>
-  <button data-tab="home">🏠 الرئيسية</button>
-  <button data-tab="register">📝 التسجيل</button>
-  <button data-tab="firstaid">🚑 الإسعافات الأولية</button>
-  <button data-tab="licensed">👨‍⚕️ المسعفون المرخصون</button>
-</nav>
+  <nav>
+    <button data-tab="home">الرئيسية</button>
+    <button data-tab="firstaid">الإسعافات الأولية</button>
+    <button data-tab="licensed">المسعفون المرخصون</button>
+  </nav>
 
-<!-- HOME: زر الطوارئ (بدون نص "الواجهة الرئيسية") -->
-<section id="home" class="tab">
-  <button id="emergencyBtn" class="main-btn">🎙 زر الطوارئ</button>
-  <p class="note">تحدث باسم الحالة: كسر، نزيف، انخفاض السكر</p>
-</section>
+  <!-- الرئيسية -->
+  <section id="home" class="tab">
+    <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
+    <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض الضغط، الحروق</p>
+  </section>
 
-<!-- التسجيل -->
-<section id="register" class="tab hidden">
-  <h2>نموذج التسجيل</h2>
-  <form id="registerForm"> ... أحقِم الحقول كما لديك ... </form>
-</section>
+  <!-- الإسعافات الأولية -->
+  <section id="firstaid" class="tab hidden">
+    <h2>الإسعافات الأولية</h2>
+    <div id="casesContainer" class="cases-container"></div>
+  </section>
 
-<!-- تبويب الاسعافات (كروت أفقية) -->
-<section id="firstaid" class="tab hidden">
-  <div id="casesContainer" class="cases-container"></div>
-</section>
+  <!-- المسعفون المرخصون -->
+  <section id="licensed" class="tab hidden">
+    <h2>المسعفون المرخصون</h2>
+    <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
+  </section>
 
-<!-- المسعفون -->
-<section id="licensed" class="tab hidden">
-  <h2>المسعفون المرخصون</h2>
-  <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
-  <div id="paramedicsContainer"></div>
-</section>
-
-<!-- Card عرض خطوات الحالة (يظهر فقط عند الاستجابة الصوتية أو عند فتح حالة) -->
-<section id="caseCard" class="tab hidden">
-  <div class="case-card-inner">
-    <h3 id="caseTitle"></h3>
-    <div id="stepsList" class="steps-list"></div>
-
-    <div class="controls">
-      <button id="playBtn" class="ctrl">🔄 إعادة</button>
-      <button id="stopBtn" class="ctrl">⏹ إيقاف</button>
-      <button id="backBtn" class="ctrl">⬅ رجوع</button>
-      <a id="callBtn" class="ctrl call" href="#" role="button">📞 اتصال الطوارئ</a>
+  <!-- كارد عرض الخطوات -->
+  <div id="caseCard" class="hidden">
+    <div class="case-card-inner">
+      <h3 id="caseTitle"></h3>
+      <div id="stepsList" class="steps-list"></div>
+      <div class="controls">
+        <button id="playBtn" class="ctrl">إعادة الاستماع</button>
+        <button id="stopBtn" class="ctrl">إيقاف</button>
+        <button id="backBtn" class="ctrl">رجوع</button>
+        <a href="tel:997" class="ctrl call">اتصل بالطوارئ</a>
+      </div>
     </div>
   </div>
-</section>
 
-<script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
-
