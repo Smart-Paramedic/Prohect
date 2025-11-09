@@ -112,7 +112,6 @@ function showTab(tabId, event) {
   document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   event?.currentTarget?.classList.add('active');
-  if (tabId === 'home' && recognition) recognition.start();
 }
 
 // 🎙 التعرف الصوتي
@@ -123,10 +122,10 @@ if (SpeechRec) {
   recognition = new SpeechRec();
   recognition.lang = 'ar-SA';
   recognition.interimResults = false;
-  recognition.continuous = false;
+  recognition.continuous = true;
 
   recognition.onresult = e => {
-    const spoken = e.results[0][0].transcript.trim().toLowerCase();
+    const spoken = e.results[e.results.length - 1][0].transcript.trim().toLowerCase();
     for (const caseName of Object.keys(CASES)) {
       if (spoken.includes(caseName.toLowerCase())) {
         showTab('cases');
@@ -138,7 +137,7 @@ if (SpeechRec) {
   };
 
   recognition.onerror = err => {
-    console.warn('Recognition error:', err);
+    console.warn('Recognition error:', err); // بدون تنبيه
   };
 }
 
@@ -146,15 +145,8 @@ if (SpeechRec) {
 emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
-  if (!recognition) {
-    alert('متصفحك لا يدعم التعرف على الصوت. استخدم Chrome أو Edge.');
-    return;
-  }
-  try {
-    recognition.start();
-  } catch (err) {
-    console.warn('recognition.start() error:', err);
-  }
+  if (!recognition) return;
+  try { recognition.start(); } catch (err) {}
 };
 
 // 📝 نموذج التسجيل
@@ -164,8 +156,13 @@ registerForm?.addEventListener('submit', e => {
   e.target.reset();
 });
 
-// 🚀 تهيئة الصفحة
+// 🚀 تهيئة الصفحة وتشغيل المايك تلقائيًا بشكل دائم
 document.addEventListener('DOMContentLoaded', () => {
   renderCases();
-  if (recognition) recognition.start();
+  if (recognition) {
+    try { recognition.start(); } catch {}
+    setInterval(() => {
+      try { recognition.start(); } catch {}
+    }, 5000); // يعيد تشغيل المايك كل 5 ثواني إذا توقف
+  }
 });
