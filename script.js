@@ -1,75 +1,116 @@
-const tabs = document.querySelectorAll(".tab-btn");
-const contents = document.querySelectorAll(".tab-content");
-const emergencyBtn = document.getElementById("emergencyBtn");
-const hint = document.getElementById("hint");
-const stepsCard = document.getElementById("stepsCard");
-const caseTitle = document.getElementById("caseTitle");
-const stepsText = document.getElementById("stepsText");
+// ================== الحالات الإسعافية ==================
+const CASES = {
+  "الحروق": [
+    "حروق الدرجة الأولى (الخفيفة):",
+    "تبريد الحرق بماء جاري معتدل لمدة 10-15 دقيقة.",
+    "إزالة الإكسسوارات والملابس الضيقة قبل الانتفاخ.",
+    "تغطية منطقة الحرق بضمادة رطبة أو قطعة قماش نظيفة.",
+    "لا تلمس الفقاعات أو تضع مراهم أو ثلج مباشرة.",
+    "اتصل بالإسعاف فوراً على 997."
+  ],
+  "الصرع": [
+    "لاحظ وقت النوبة واحمِ المصاب من الأجسام المحيطة.",
+    "ادعم رأس المصاب بقطعة قماش أو جاكيت.",
+    "لا تضع شيئًا في فمه.",
+    "بعد انتهاء النوبة ضع المصاب على جانبه.",
+    "اتصل بالإسعاف فوراً على 997."
+  ],
+  "انخفاض الضغط": [
+    "مدد المصاب على ظهره وارفع قدميه قليلاً.",
+    "افتح ملابسه الضيقة.",
+    "قدم له سوائل إذا كان واعيًا.",
+    "اتصل بالإسعاف فوراً على 997."
+  ],
+  "الاختناق": [
+    "قف خلف الشخص المصاب وضع إحدى قدميك أمام الأخرى.",
+    "لف ذراعيك حول خصره.",
+    "اصنع قبضة وضعها فوق السرة.",
+    "اضغط بقوة للأعلى من 6 إلى 10 مرات.",
+    "إذا فقد وعيه ابدأ بالإنعاش القلبي الرئوي.",
+    "اتصل بالإسعاف فوراً على 997."
+  ]
+};
 
-const synth = window.speechSynthesis;
-let recognition;
+// ================== التبويبات ==================
+const tabs = document.querySelectorAll(".tab");
+const tabButtons = document.querySelectorAll(".tab-btn");
+const casesList = document.getElementById("casesList");
 
-// 🎯 تفعيل التبويبات
-tabs.forEach(btn => {
+tabButtons.forEach(btn => {
   btn.addEventListener("click", () => {
-    tabs.forEach(b => b.classList.remove("active"));
-    contents.forEach(c => c.classList.remove("active"));
-    stepsCard.classList.add("hidden");
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
+    tabs.forEach(tab => tab.classList.remove("active"));
+    document.getElementById(btn.dataset.target).classList.add("active");
+    document.getElementById("hint").textContent = "تحدث أو انقر على الزر لذكر الحالة";
+    stopSpeech();
   });
 });
 
-// 🔊 تعريف الحالات الصوتية
-const casesMap = {
-  "الحروق": 1,
-  "الصرع": 2,
-  "انخفاض الضغط": 3,
-  "الاختناق": 4
-};
+// ================== عرض الحالات ==================
+function showCases() {
+  casesList.innerHTML = "";
+  Object.keys(CASES).forEach(caseName => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.innerHTML = `
+      <h3>${caseName}</h3>
+      <ul>${CASES[caseName].map(s => `<li>${s}</li>`).join("")}</ul>
+      <button onclick="confirmCall()">📞 اتصال بالإسعاف</button>
+    `;
+    casesList.appendChild(card);
+  });
+}
+showCases();
 
-// 🚨 زر الطوارئ
-emergencyBtn.addEventListener("click", () => {
-  if (!("webkitSpeechRecognition" in window)) {
-    alert("المتصفح لا يدعم الأوامر الصوتية.");
-    return;
+// ================== خاصية الاتصال ==================
+function confirmCall() {
+  if (confirm("هل ترغب في الاتصال بالإسعاف الآن؟")) {
+    window.location.href = "tel:997";
   }
-  recognition = new webkitSpeechRecognition();
-  recognition.lang = "ar-SA";
-  recognition.start();
-
-  hint.textContent = "🎙 تحدث الآن...";
-  
-  recognition.onresult = async (event) => {
-    const result = event.results[0][0].transcript.trim();
-    hint.textContent = `🔍 تم التعرف على: ${result}`;
-    
-    for (const [key, id] of Object.entries(casesMap)) {
-      if (result.includes(key)) {
-        await loadCaseFromDB(id);
-        break;
-      }
-    }
-  };
-});
-
-// 🩺 جلب الحالة من قاعدة البيانات
-async function loadCaseFromDB(caseId) {
-  const res = await fetch(`api/get_case_details.php?case_id=${caseId}`);
-  const data = await res.json();
-
-  caseTitle.textContent = `🩺 ${data.caseName}`;
-  stepsText.innerHTML = data.steps.map(s => `<p>${s}</p>`).join("");
-  stepsCard.classList.remove("hidden");
-
-  const textToSpeak = data.steps.join("، ");
-  speak(textToSpeak);
 }
 
-// 🔈 النطق
-function speak(text) {
+// ================== التعرف الصوتي ==================
+const emergencyBtn = document.getElementById("emergencyBtn");
+let recognition;
+if ("webkitSpeechRecognition" in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "ar-SA";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onresult = (event) => {
+    const result = event.results[0][0].transcript.trim();
+    handleVoice(result);
+  };
+}
+
+function handleVoice(command) {
+  for (let caseName in CASES) {
+    if (command.includes(caseName)) {
+      speakSteps(CASES[caseName], caseName);
+      return;
+    }
+  }
+  alert("لم يتم التعرف على الحالة، حاول مرة أخرى.");
+}
+
+emergencyBtn.addEventListener("click", () => recognition.start());
+
+// ================== نطق الخطوات ==================
+let synth = window.speechSynthesis;
+let lastSteps = [];
+
+function speakSteps(steps, title) {
+  stopSpeech();
+  lastSteps = steps;
+  let message = new SpeechSynthesisUtterance("خطوات الإسعاف في حالة " + title + ": " + steps.join(". "));
+  message.lang = "ar-SA";
+  synth.speak(message);
+}
+
+function stopSpeech() {
   synth.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "ar-SA";
-  synth.speak(utter);
+}
+
+function playLast() {
+  if (lastSteps.length > 0) speakSteps(lastSteps);
 }
