@@ -1,3 +1,4 @@
+// 🩺 الحالات الطبية
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
@@ -26,12 +27,12 @@ const CASES = {
   ]
 };
 
-// ========== عناصر DOM ==========
+// 🔗 عناصر DOM
 const emergencyBtn = document.getElementById('emergencyBtn');
 const casesContainer = document.getElementById('cases-container');
 const registerForm = document.getElementById('registerForm');
 
-// ========== تكوين النطق ==========
+// 🔊 إعدادات النطق
 const synth = window.speechSynthesis || null;
 let lastSpokenSteps = [];
 let currentUtterance = null;
@@ -52,73 +53,64 @@ function stopSpeech() {
   currentUtterance = null;
 }
 
-function repeatSpeech() {
-  if (lastSpokenSteps && lastSpokenSteps.length) speakSteps(lastSpokenSteps);
-}
-
-// ========== عرض الكروت ==========
+// 🧠 عرض الحالات
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
-  for (const caseName of Object.keys(toShow)) {
-    const steps = toShow[caseName];
+
+  for (const [caseName, steps] of Object.entries(toShow)) {
     const card = document.createElement('article');
     card.className = 'case-card';
     card.innerHTML = `
       <h3>${caseName}</h3>
       <div class="subtitle">خطوات الإسعافات الأولية</div>
       <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
-      <div class="card-controls" role="group" aria-label="أزرار التحكم">
-        <button class="play-btn" type="button">إعادة التشغيل</button>
-        <button class="stop-btn" type="button">إيقاف الصوت</button>
-        <button class="back-btn" type="button">رجوع</button>
-        <button class="call-btn" type="button">اتصال 997</button>
+      <div class="card-controls" role="group">
+        <button class="play-btn">إعادة التشغيل</button>
+        <button class="stop-btn">إيقاف الصوت</button>
+        <button class="back-btn">رجوع</button>
+        <button class="call-btn">اتصال 997</button>
       </div>
     `;
-    const playBtn = card.querySelector('.play-btn');
-    const stopBtn = card.querySelector('.stop-btn');
-    const backBtn = card.querySelector('.back-btn');
-    const callBtn = card.querySelector('.call-btn');
 
-    playBtn.addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      speakSteps([caseName].concat(steps));
-    });
+    card.querySelector('.play-btn').onclick = e => {
+      e.stopPropagation();
+      speakSteps([caseName, ...steps]);
+    };
 
-    stopBtn.addEventListener('click', (ev) => {
-      ev.stopPropagation();
+    card.querySelector('.stop-btn').onclick = e => {
+      e.stopPropagation();
       stopSpeech();
-    });
+    };
 
-    backBtn.addEventListener('click', (ev) => {
-      ev.stopPropagation();
+    card.querySelector('.back-btn').onclick = e => {
+      e.stopPropagation();
       renderCases();
-    });
+    };
 
-    callBtn.addEventListener('click', (ev) => {
-      ev.stopPropagation();
+    card.querySelector('.call-btn').onclick = e => {
+      e.stopPropagation();
       stopSpeech();
       if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
         window.location.href = 'tel:997';
       }
-    });
+    };
 
     casesContainer.appendChild(card);
   }
 }
 
-// ========== التبويبات ==========
+// 🧭 التبويبات
 function showTab(tabId, event) {
   stopSpeech();
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  const el = document.getElementById(tabId);
-  if (el) el.classList.add('active');
+  document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  if (event && event.currentTarget) event.currentTarget.classList.add('active');
-  if (tabId === 'home' && recognition) recognition.start(); // ✅ تفعيل المايك عند الدخول للرئيسية
+  event?.currentTarget?.classList.add('active');
+  if (tabId === 'home' && recognition) recognition.start(); // 🎙 تفعيل المايك عند الدخول للرئيسية
 }
 
-// ========== التعرف الصوتي ==========
+// 🎙 التعرف الصوتي
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 let recognition = null;
 
@@ -128,52 +120,49 @@ if (SpeechRec) {
   recognition.interimResults = false;
   recognition.continuous = false;
 
-  recognition.onresult = (e) => {
-    const spoken = e.results[0][0].transcript.trim();
-    const low = spoken.toLowerCase();
+  recognition.onresult = e => {
+    const spoken = e.results[0][0].transcript.trim().toLowerCase();
     for (const caseName of Object.keys(CASES)) {
-      if (low.includes(caseName.toLowerCase())) {
+      if (spoken.includes(caseName.toLowerCase())) {
         showTab('cases');
         renderCases(caseName);
-        speakSteps([caseName].concat(CASES[caseName]));
+        speakSteps([caseName, ...CASES[caseName]]);
         return;
       }
     }
     alert('لم أتعرف على اسم حالة مناسب. كرر اسم الحالة مثل: الحروق أو الصرع.');
   };
 
-  recognition.onerror = (err) => {
-    console.warn('Recognition error', err);
+  recognition.onerror = err => {
+    console.warn('Recognition error:', err);
     alert('حدث خطأ في التعرف الصوتي.');
   };
 }
 
-// زر الطوارئ يبدأ الاستماع
-emergencyBtn.addEventListener('click', (e) => {
+// 🎙 زر الطوارئ
+emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
   if (!recognition) {
-    alert('متصفحك لا يدعم التعرف على الصوت (Web Speech API). استخدم Chrome أو Edge.');
+    alert('متصفحك لا يدعم التعرف على الصوت. استخدم Chrome أو Edge.');
     return;
   }
   try {
     recognition.start();
   } catch (err) {
-    console.warn('recognition.start() error', err);
+    console.warn('recognition.start() error:', err);
   }
+};
+
+// 📝 نموذج التسجيل
+registerForm?.addEventListener('submit', e => {
+  e.preventDefault();
+  alert('تم استلام بيانات التسجيل (تجريبياً).');
+  e.target.reset();
 });
 
-// ========== نموذج التسجيل ==========
-if (registerForm) {
-  registerForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('تم استلام بيانات التسجيل (تجريبياً).');
-    e.target.reset();
-  });
-}
-
-// ========== تهيئة أولية ==========
-document.addEventListener("DOMContentLoaded", () => {
+// 🚀 تهيئة الصفحة
+document.addEventListener('DOMContentLoaded', () => {
   renderCases();
-  if (recognition) recognition.start(); // ✅ يبدأ المايك تلقائيًا عند تحميل الصفحة
+  if (recognition) recognition.start(); // 🎙 يبدأ المايك تلقائيًا عند تحميل الصفحة
 });
