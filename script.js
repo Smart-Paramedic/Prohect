@@ -1,4 +1,4 @@
-
+// 🩺 الحالات الطبية
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
@@ -53,6 +53,7 @@ function stopSpeech() {
   currentUtterance = null;
 }
 
+// 🧠 عرض الحالات داخل تبويب "الحالات"
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
@@ -76,7 +77,7 @@ function renderCases(filtered = null) {
   }
 }
 
-
+// 🧠 عرض حالة كاملة عند التفاعل الصوتي
 function renderFullCase(caseName, steps) {
   casesContainer.innerHTML = '';
   const card = document.createElement('article');
@@ -94,7 +95,7 @@ function renderFullCase(caseName, steps) {
   `;
   card.querySelector('.play-btn').onclick = () => speakSteps([caseName, ...steps]);
   card.querySelector('.stop-btn').onclick = () => stopSpeech();
-  card.querySelector('.back-btn').onclick = () => renderCases();
+  card.querySelector('.back-btn').onclick = () => showTab('home'); // ✅ يرجع للرئيسية
   card.querySelector('.call-btn').onclick = () => {
     stopSpeech();
     if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
@@ -104,7 +105,7 @@ function renderFullCase(caseName, steps) {
   casesContainer.appendChild(card);
 }
 
-
+// 🧭 التبويبات
 function showTab(tabId, event) {
   stopSpeech();
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -114,7 +115,7 @@ function showTab(tabId, event) {
   if (tabId === 'home' && recognition) recognition.start();
 }
 
-
+// 🎙 التعرف الصوتي
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 let recognition = null;
 
@@ -134,7 +135,7 @@ if (SpeechRec) {
         return;
       }
     }
-   
+    // لا تعرض أي تنبيه إذا لم يتم التعرف على الحالة
   };
 
   recognition.onerror = err => {
@@ -142,7 +143,7 @@ if (SpeechRec) {
   };
 }
 
-
+// 🎙 زر الطوارئ
 emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
@@ -157,14 +158,14 @@ emergencyBtn.onclick = e => {
   }
 };
 
-
+// 📝 نموذج التسجيل
 registerForm?.addEventListener('submit', e => {
   e.preventDefault();
   alert('تم استلام بيانات التسجيل (تجريبياً).');
   e.target.reset();
 });
 
-
+// 🚀 تهيئة الصفحة
 document.addEventListener('DOMContentLoaded', () => {
   renderCases();
   if (recognition) recognition.start();
