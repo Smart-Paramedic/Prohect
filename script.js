@@ -1,103 +1,112 @@
-// ================= بيانات الحالات =================
+// ================== البيانات الأساسية للحالات ==================
 const CASES = {
     "الحروق": [
-        "تبريد الحرق تحت ماء جاري 10-15 دقيقة",
-        "إزالة الإكسسوارات والملابس الضيقة",
-        "تغطية الحرق بضمادة نظيفة",
-        "لا تضع معجون أسنان أو ثلج مباشرة",
-        "اتصل بالإسعاف فوراً على 997"
+        "تبريد الحرق بوضع المنطقة المصابة تحت ماء جاري لمدة 10-15 دقيقة.",
+        "إزالة الإكسسوارات والملابس الضيقة قبل انتفاخ المنطقة.",
+        "تغطية منطقة الحرق بضمادة نظيفة.",
+        "اتصل بالإسعاف فوراً على 997."
     ],
     "الصرع": [
-        "حماية المصاب من الاصطدام",
-        "دعم الرأس بقطعة قماش",
-        "لا تقيد حركاته أو تضع شيء في فمه",
-        "بعد انتهاء النوبة ضع المصاب على جانبه",
-        "اتصل بالإسعاف فوراً إذا استمرت النوبة أكثر من 5 دقائق"
+        "لاحظ الوقت المستغرق في النوبة.",
+        "احمِ المصاب من الأجسام المحيطة.",
+        "ادعم رأس المصاب بقطعة قماش أو جاكيت.",
+        "بعد انتهاء النوبة، ضع المصاب على جانبه.",
+        "اتصل بالإسعاف فوراً على 997 إذا لم يستعد وعيه."
     ],
     "انخفاض الضغط": [
-        "إراحة المصاب واستلقائه",
-        "رفع القدمين قليلاً",
-        "تقديم ماء أو عصير إذا كان واعياً",
-        "مراقبة التنفس والنبض",
-        "اتصل بالإسعاف فوراً إذا فقد وعيه"
+        "اطلب من المصاب الاستلقاء ورفع الأرجل قليلاً.",
+        "راقب التنفس والنبض.",
+        "اتصل بالإسعاف فوراً على 997."
     ],
     "الاختناق": [
-        "الوقوف خلف الشخص",
-        "لف الذراعين حول الخصر",
-        "الضغط بالقبضة فوق السرة نحو الأعلى 6-10 مرات",
-        "إذا فقد الوعي ابدأ بالإنعاش القلبي الرئوي",
-        "اتصل بالإسعاف فوراً على 997"
+        "قف خلف الشخص المصاب وضع إحدى قدميك أمام الأخرى.",
+        "لف ذراعيك حول خصر الشخص المصاب واضغط بقوة على البطن.",
+        "كرر حتى يزول الجسم العالق.",
+        "إذا فقد وعيه، ابدأ بالإنعاش القلبي الرئوي فوراً.",
+        "اتصل بالإسعاف فوراً على 997."
     ]
 };
 
-let synth = window.speechSynthesis;
-let currentUtterance = null;
-
-// ================= عرض التبويبات =================
-function showTab(tabName) {
+// ================== التفاعل بين التبويبات ==================
+function showTab(tabId, tabElement) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
 
     document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    tabElement.classList.add('active');
 
-    stopSpeech(); // إيقاف الصوت عند التبديل
+    // إيقاف أي صوت عند التنقل
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+    }
 }
 
-// ================= إنشاء كروت الحالات =================
+// ================== إنشاء كروت الحالات ==================
 function loadCases() {
     const container = document.getElementById('casesContainer');
     container.innerHTML = '';
-    for (const [caseName, steps] of Object.entries(CASES)) {
-        const card = document.createElement('div');
+
+    Object.keys(CASES).forEach(caseName => {
+        let card = document.createElement('div');
         card.classList.add('case-card');
 
-        let html = `<h3>${caseName}</h3>`;
-        html += '<div class="steps-list">';
-        steps.forEach((s, idx) => html += `<div class="step"><span class="step-type">خطوة ${idx+1}</span> ${s}</div>`);
-        html += '</div>';
-        html += `<button class="contact-btn" onclick="callEmergency('${caseName}')">اتصل بالإسعاف 997</button>`;
+        let title = document.createElement('div');
+        title.classList.add('case-title');
+        title.textContent = caseName;
+        card.appendChild(title);
 
-        card.innerHTML = html;
-        card.addEventListener('click', () => speakCase(caseName));
+        let stepsDiv = document.createElement('div');
+        stepsDiv.classList.add('case-steps');
+        CASES[caseName].forEach((step, idx) => {
+            let p = document.createElement('div');
+            p.classList.add('step');
+            p.textContent = `${idx + 1}. ${step}`;
+            stepsDiv.appendChild(p);
+        });
+        card.appendChild(stepsDiv);
+
+        // زر الاتصال بالإسعاف
+        let callBtn = document.createElement('button');
+        callBtn.classList.add('call-btn');
+        callBtn.textContent = 'الاتصال بالإسعاف 997';
+        callBtn.onclick = () => {
+            if (confirm('هل تريد الاتصال بالإسعاف على 997؟')) {
+                window.location.href = 'tel:997';
+            }
+        };
+        card.appendChild(callBtn);
+
+        // النطق الصوتي عند النقر على الكارد
+        card.onclick = () => {
+            speakSteps(caseName);
+        };
+
         container.appendChild(card);
-    }
+    });
 }
 
-// ================= الاستجابة الصوتية =================
-function speakCase(caseName) {
-    stopSpeech();
-    const steps = CASES[caseName];
-    const text = `إجراءات الإسعافات الأولية لحالة ${caseName}: ${steps.join('، ')}`;
-    currentUtterance = new SpeechSynthesisUtterance(text);
-    currentUtterance.lang = 'ar-SA';
-    synth.speak(currentUtterance);
+// ================== الاستجابة الصوتية ==================
+function speakSteps(caseName) {
+    if (!('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel(); // إيقاف أي كلام سابق
+
+    let utterance = new SpeechSynthesisUtterance();
+    utterance.lang = 'ar-SA';
+    utterance.text = `${caseName}. ${CASES[caseName].join('. ')}`;
+    utterance.rate = 0.9; // ضبط سرعة الصوت
+    window.speechSynthesis.speak(utterance);
 }
 
-function stopSpeech() {
-    if (synth.speaking) synth.cancel();
-}
-
-// ================= زر الاتصال بالإسعاف =================
-function callEmergency(caseName) {
-    stopSpeech();
-    if (confirm(`هل تريد الاتصال بالإسعاف 997 لحالة ${caseName}؟`)) {
-        window.location.href = 'tel:997';
-    }
-}
-
-// ================= زر الطوارئ =================
+// ================== زر الطوارئ ==================
 document.getElementById('emergencyBtn').addEventListener('click', () => {
-    speakAllCases();
+    let selectedCase = prompt("اذكر الحالة: الحروق، الصرع، انخفاض الضغط، الاختناق");
+    if (selectedCase && CASES[selectedCase]) {
+        speakSteps(selectedCase);
+    } else {
+        alert('الحالة غير موجودة!');
+    }
 });
 
-function speakAllCases() {
-    stopSpeech();
-    const text = Object.entries(CASES).map(([name, steps]) => `حالة ${name}: ${steps.join('، ')}`).join('، ');
-    currentUtterance = new SpeechSynthesisUtterance(text);
-    currentUtterance.lang = 'ar-SA';
-    synth.speak(currentUtterance);
-}
-
-// ================= تحميل الكروت عند فتح الصفحة =================
-window.onload = loadCases;
+// تحميل الحالات عند بدء الصفحة
+loadCases();
