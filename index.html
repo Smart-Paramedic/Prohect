@@ -7,78 +7,63 @@
 <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>أسعفني </h1>
-            <p>دليلك الشامل للإسعافات الأولية في حالات الطوارئ</p>
-        </header>
+<div class="container">
+    <header class="header">
+        <h1>أسعفني </h1>
+    </header>
 
-        <!-- التبويبات أسفل الشاشة -->
-        <nav class="nav-tabs">
-            <div class="nav-tab active" onclick="showTab('cases', this)">الحالات الطبية</div>
-            <div class="nav-tab" onclick="showTab('paramedics', this)">المسعفون المرخصون</div>
-            <div class="nav-tab" onclick="showTab('profile', this)">ملفي الشخصي</div>
-            <div class="nav-tab" onclick="showTab('register', this)">التسجيل</div>
-        </nav>
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="showTab('home', event)">الرئيسية</div>
+        <div class="nav-tab" onclick="showTab('cases', event)">الحالات الطبية</div>
+        <div class="nav-tab" onclick="showTab('paramedics', event)">المسعفون المرخصون</div>
+        <div class="nav-tab" onclick="showTab('register', event)">التسجيل</div>
+    </div>
 
-        <!-- محتوى الحالات الطبية -->
-        <div id="cases" class="tab-content active">
-            <h2>الحالات الطبية</h2>
-            <div id="cases-container">
-                <!-- كروت الحالات ستضاف بواسطة JS -->
-            </div>
-            <div id="case-steps" class="steps-container" style="display:none;">
-                <h3 id="case-title"></h3>
-                <div id="steps-list"></div>
-            </div>
-        </div>
+    <!-- تبويب الرئيسية -->
+    <div id="home" class="tab-content active">
+        <button id="emergencyBtn">زر الطوارئ</button>
+        <p class="hint">انقر على الزر أو تحدث باسم الحالة (الحروق، الصرع، انخفاض الضغط، الاختناق)</p>
+    </div>
 
-        <!-- محتوى المسعفون المرخصون -->
-        <div id="paramedics" class="tab-content">
-            <h2>المسعفون المرخصون</h2>
-            <p>سيتم عرض بيانات المسعفين ورخصهم بعد الحصول على موافقة وزارة الصحة.</p>
-            <p>رابط وزارة الصحة: <a href="https://www.moh.gov.sa" target="_blank">زيارة وزارة الصحة</a></p>
-        </div>
-
-        <!-- محتوى الملف الشخصي -->
-        <div id="profile" class="tab-content">
-            <h2>ملفي الشخصي</h2>
-            <div class="case-card">
-                <h3>معلوماتي الأساسية</h3>
-                <p>يتم تحميل البيانات من قاعدة المستخدمين.</p>
-            </div>
-            <div class="case-card">
-                <h3>جهات اتصال الطوارئ</h3>
-                <div id="emergency-contacts">
-                    <p>يتم تحميل بيانات جهات الاتصال من قاعدة البيانات.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- تبويب التسجيل -->
-        <div id="register" class="tab-content">
-            <h2>نموذج التسجيل</h2>
-            <form id="registerForm">
-                <input type="text" name="full_name" placeholder="الاسم الكامل" required>
-                <input type="email" name="email" placeholder="البريد الإلكتروني" required>
-                <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
-                <select name="blood_type" required>
-                    <option value="">فصيلة الدم</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                </select>
-                <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
-                <button type="submit" class="submit-btn">تسجيل</button>
-            </form>
+    <!-- تبويب الحالات الطبية -->
+    <div id="cases" class="tab-content">
+        <h2>الحالات الطبية</h2>
+        <div id="cases-container">
+            <!-- الكروت ستُملأ بواسطة script.js -->
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- تبويب المسعفون -->
+    <div id="paramedics" class="tab-content">
+        <h2>المسعفون المرخصون</h2>
+        <p>بيانات المسعفين ورخصهم تُعرض بعد موافقة وزارة الصحة.</p>
+        <a href="https://www.moh.gov.sa" target="_blank">زيارة وزارة الصحة للمسعفين</a>
+    </div>
+
+    <!-- تبويب التسجيل -->
+    <div id="register" class="tab-content">
+        <h2>نموذج التسجيل</h2>
+        <form id="registerForm">
+            <input type="text" name="full_name" placeholder="الاسم الكامل" required>
+            <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+            <input type="tel" name="phone_number" placeholder="رقم الهاتف" required>
+            <select name="blood_type" required>
+                <option value="">فصيلة الدم</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+            <textarea name="medical_history" placeholder="التاريخ الطبي"></textarea>
+            <button type="submit" class="submit-btn">تسجيل</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
