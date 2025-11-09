@@ -14,19 +14,28 @@
 <nav>
   <button data-tab="home">الرئيسية</button>
   <button data-tab="firstaid">الإسعافات الأولية</button>
+  <button data-tab="licensed">المسعفون المرخصون</button>
 </nav>
 
+<!-- الرئيسية -->
 <section id="home" class="tab">
   <button id="emergencyBtn" class="main-btn">زر الطوارئ</button>
   <p class="note">تحدث باسم الحالة: الصرع، الاختناق، انخفاض الضغط، الحروق</p>
 </section>
 
+<!-- الإسعافات الأولية -->
 <section id="firstaid" class="tab hidden">
   <h2>الإسعافات الأولية</h2>
   <div id="casesContainer" class="cases-container"></div>
 </section>
 
-<!-- كارد الخطوات المفصل -->
+<!-- المسعفون المرخصون -->
+<section id="licensed" class="tab hidden">
+  <h2>المسعفون المرخصون</h2>
+  <p>يتم عرض بيانات المسعفين المرخصين من وزارة الصحة لتوفير المساعدة الطبية عند الحاجة.</p>
+</section>
+
+<!-- كارد عرض الخطوات -->
 <div id="caseCard" class="hidden">
   <div class="case-card-inner">
     <h3 id="caseTitle"></h3>
