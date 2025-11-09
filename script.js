@@ -1,27 +1,39 @@
-// ================== البيانات (مؤقت محلياً) ==================
+// ================== بيانات الحالات ==================
 const CASES = {
-  "نزيف": [
-    "اضغط على مكان النزيف مباشرة بقطعة قماش نظيفة.",
-    "ارفع الجزء المصاب فوق مستوى القلب.",
-    "لا تزل الأجسام العالقة في الجرح.",
-    "اتصل بالإسعاف فوراً على 997"
+  "الصرع": [
+    "لاحظ الوقت المستنفذ في النوبة.",
+    "أزل الأجسام القريبة من المصاب لتفادي الأذى.",
+    "ادعم رأس المصاب بقطعة قماش أو جاكيت.",
+    "ضع المصاب في وضع الإفاقة بعد انتهاء النوبة.",
+    "طمئن المصاب وانتظر حتى يستعيد وعيه.",
+    "إذا استمرت النوبة أكثر من خمس دقائق اطلب الإسعاف فوراً على 997."
   ],
-  "كسر": [
-    "لا تحرك الجزء المصاب.",
-    "ثبت المنطقة باستخدام جبيرة مؤقتة.",
-    "ضع ثلجاً ملفوفاً لتقليل التورم.",
-    "اتصل بالإسعاف فوراً على 997"
+  "الاختناق": [
+    "إذا كان المصاب قادراً على التنفس فعليه الاستمرار في السعال.",
+    "إذا كان غير قادر على الكلام أو البكاء قم بالخطوات التالية:",
+    "قف خلف المصاب وضع إحدى قدميك أمام الأخرى لتحقيق التوازن.",
+    "لف ذراعيك حول خصره وأمل رأسه قليلاً للأمام.",
+    "اجعل قبضة يدك فوق السرة واضغط بقوة إلى الأعلى.",
+    "كرر من 6 إلى 10 ضغطات حتى يزول الجسم العالق.",
+    "إذا فقد وعيه قم بالإنعاش القلبي الرئوي واتصل فوراً على 997."
   ],
-  "انخفاض السكر": [
-    "أعط المصاب شيئاً يحتوي على سكر سريع مثل العصير.",
-    "إذا فقد وعيه لا تعطه شيئاً عن طريق الفم.",
-    "راقب تنفسه حتى تصل المساعدة.",
-    "اتصل بالإسعاف فوراً على 997"
+  "انخفاض الضغط": [
+    "أجعل المصاب يستلقي وارفع ساقيه قليلاً.",
+    "فك الملابس الضيقة لتسهيل التنفس.",
+    "أعطه ماءً إذا كان واعياً.",
+    "راقب تنفسه ونبضه.",
+    "إذا لم يتحسن خلال دقائق اتصل بالإسعاف 997."
+  ],
+  "الحروق": [
+    "برّد منطقة الحرق بماء معتدل الحرارة لمدة 10 إلى 15 دقيقة.",
+    "أزل الإكسسوارات أو الملابس برفق قبل تورم المنطقة.",
+    "غطِ الحرق بقطعة قماش نظيفة ورطبة.",
+    "لا تلمس الفقاعات الناتجة ولا تضع أي مرهم أو معجون.",
+    "إذا كانت الحروق شديدة أو ممتدة اتصل بالطوارئ 997."
   ]
 };
 
 // ================== عناصر DOM ==================
-const emergencyBtn = document.getElementById("emergencyBtn");
 const casesContainer = document.getElementById("casesContainer");
 const caseCard = document.getElementById("caseCard");
 const caseTitle = document.getElementById("caseTitle");
@@ -29,176 +41,122 @@ const stepsList = document.getElementById("stepsList");
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const backBtn = document.getElementById("backBtn");
-const callBtn = document.getElementById("callBtn");
+const emergencyBtn = document.getElementById("emergencyBtn");
 
-let currentSteps = [];
-let currentCaseName = "";
-let synth = window.speechSynthesis;
-let recognition = null;
+// ================== عرض التبويبات ==================
+function showTab(tabId) {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.add("hidden"));
+  document.getElementById(tabId).classList.remove("hidden");
+}
 
-// ================== توليد الكروت الأفقية (مركزه) ==================
-function renderCases(){
+// ================== إنشاء كروت الحالات ==================
+function renderCases() {
   casesContainer.innerHTML = "";
-  for(const [caseName, steps] of Object.entries(CASES)){
+  for (const [name, steps] of Object.entries(CASES)) {
     const card = document.createElement("div");
     card.className = "case-card";
+    const title = document.createElement("h3");
+    title.textContent = name;
 
-    const h = document.createElement("h3");
-    h.textContent = caseName;
-
-    const ul = document.createElement("ul");
-    ul.className = "mini-steps";
-    steps.slice(0,3).forEach((s, i) => { // عرض ثلاثة أسطر مختصر
+    const list = document.createElement("ul");
+    list.className = "mini-steps";
+    steps.slice(0, 2).forEach(step => {
       const li = document.createElement("li");
-      li.textContent = `${i+1}. ${s}`;
-      ul.appendChild(li);
+      li.textContent = step;
+      list.appendChild(li);
     });
 
-    // أزرار داخل كل كارد: فتح (عرض كامل)، إعادة، إيقاف، اتصال
     const controls = document.createElement("div");
     controls.className = "card-controls";
+    const btnPlay = document.createElement("button");
+    btnPlay.textContent = "إعادة الاستماع";
+    btnPlay.onclick = () => speakSteps(name);
 
-    const openBtn = document.createElement("button");
-    openBtn.textContent = "📋 عرض";
-    openBtn.onclick = () => showSteps(caseName, steps);
+    const btnStop = document.createElement("button");
+    btnStop.textContent = "إيقاف";
+    btnStop.onclick = stopSpeech;
 
-    const replayBtn = document.createElement("button");
-    replayBtn.textContent = "🔄";
-    replayBtn.title = "إعادة استماع";
-    replayBtn.onclick = () => speakSteps(steps);
-
-    const stopLocal = document.createElement("button");
-    stopLocal.textContent = "⏹";
-    stopLocal.title = "إيقاف";
-    stopLocal.onclick = stopSpeech;
-
-    const callLocal = document.createElement("a");
-    callLocal.textContent = "📞";
-    callLocal.className = "call-btn";
-    callLocal.href = "tel:997";
-    callLocal.onclick = (e) => {
-      // تأكيد قبل الاتصال — على سطح المكتب قد لا يعمل tel:
-      if(!confirm("هل تريد الاتصال بالطوارئ 997؟")) e.preventDefault();
+    const btnBack = document.createElement("button");
+    btnBack.textContent = "رجوع";
+    btnBack.onclick = () => {
+      caseCard.classList.add("hidden");
+      showTab("firstaid");
+      stopSpeech();
     };
 
-    controls.append(openBtn, replayBtn, stopLocal, callLocal);
-    card.appendChild(h);
-    card.appendChild(ul);
-    card.appendChild(controls);
+    const callBtn = document.createElement("a");
+    callBtn.href = "tel:997";
+    callBtn.className = "call-btn";
+    callBtn.textContent = "اتصل بالطوارئ";
+
+    controls.append(btnPlay, btnStop, btnBack, callBtn);
+    card.append(title, list, controls);
+    card.onclick = () => showSteps(name, steps);
     casesContainer.appendChild(card);
   }
 }
 
-// ================== عرض كارد الخطوات المفصل ==================
-function showSteps(caseName, steps){
-  currentCaseName = caseName;
-  currentSteps = steps.slice(); // انسخ
-  caseTitle.textContent = caseName;
+// ================== عرض خطوات الحالة ==================
+function showSteps(name, steps) {
+  caseTitle.textContent = name;
   stepsList.innerHTML = "";
-
-  steps.forEach((step, idx) => {
+  steps.forEach((step, i) => {
     const div = document.createElement("div");
     div.className = "step";
-    div.dataset.index = idx;
-    div.innerHTML = `<strong>${idx+1}.</strong> ${step}`;
-    // عند النقر على الخطوة -> تبديل اللون (تم) أو الاتصال عند النقر على رقم
-    div.addEventListener("click", (ev) => {
-      // إذا النقر كان على الرقم (نعتبر النقر العام يؤدي لتأكيد اتصال)
-      if(confirm("هل تريد الاتصال بالإسعاف 997 الآن؟")) {
-        window.location.href = "tel:997";
-        return;
-      }
-      div.classList.toggle("done");
-    });
+    div.innerHTML = `<strong>${i + 1}.</strong> ${step}`;
+    div.onclick = () => div.classList.toggle("done");
     stepsList.appendChild(div);
   });
-
-  // ضبط رابط زر الاتصال في الكارد ليحمل رقم الطوارئ من آخر خطوة أو ثابت
-  callBtn.href = "tel:997";
   caseCard.classList.remove("hidden");
-  // تشغيل القراءة فوراً
-  speakSteps(steps);
+  speakSteps(name);
 }
 
-// ================== القراءة الصوتية ==================
-function speakSteps(steps = currentSteps){
-  if(!("speechSynthesis" in window)) return;
-  stopSpeech();
+// ================== الصوت ==================
+function speakSteps(name) {
+  const steps = CASES[name];
+  if (!("speechSynthesis" in window)) return;
   const utter = new SpeechSynthesisUtterance(steps.join("، ثم "));
   utter.lang = "ar-SA";
-  synth.speak(utter);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
 }
 
-// ================== إيقاف الصوت ==================
-function stopSpeech(){
-  if(synth && synth.speaking) synth.cancel();
+function stopSpeech() {
+  window.speechSynthesis.cancel();
 }
 
-// ================== أزرار كارد التحكم */}
-playBtn.addEventListener("click", () => speakSteps());
-stopBtn.addEventListener("click", stopSpeech);
-backBtn.addEventListener("click", () => {
-  stopSpeech();
-  caseCard.classList.add("hidden");
-  currentSteps = [];
-  currentCaseName = "";
-});
-
-// ================== التبويبات (nav) ==================
+// ================== التبويبات ==================
 document.querySelectorAll("nav button").forEach(btn => {
   btn.addEventListener("click", () => {
-    const tab = btn.getAttribute("data-tab");
-    document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
-    document.getElementById(tab).classList.remove("hidden");
-    if(tab === "firstaid") renderCases();
+    const tabId = btn.getAttribute("data-tab");
+    showTab(tabId);
+    if (tabId === "firstaid") renderCases();
   });
 });
 
-// ================== تشغيل التعرّف الصوتي (Recognition) تلقائياً في الخلفية ==================
-function initRecognition(){
-  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    console.warn("المتصفح لا يدعم التعرف على الصوت");
-    return;
-  }
+// ================== زر العودة ==================
+backBtn.onclick = () => {
+  caseCard.classList.add("hidden");
+  stopSpeech();
+  showTab("firstaid");
+};
+
+// ================== التعرف الصوتي ==================
+if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SR();
+  const recognition = new SR();
   recognition.lang = "ar-SA";
   recognition.continuous = true;
-  recognition.interimResults = false;
 
-  recognition.onresult = function(e){
+  recognition.onresult = (e) => {
     const text = e.results[e.results.length - 1][0].transcript.trim();
-    // لا تستخدم تنبيهات مزعجة — فقط استجب مباشرة
-    for(const [caseName, steps] of Object.entries(CASES)){
-      if(text.includes(caseName)){
-        // عرض الكارد وتشغيل الكلام
-        showSteps(caseName, steps);
+    for (const [key, steps] of Object.entries(CASES)) {
+      if (text.includes(key)) {
+        showSteps(key, steps);
         return;
       }
     }
   };
 
-  recognition.onerror = function(err){
-    console.warn("recognition error:", err);
-    // في بعض المتصفحات يمكن إعادة التشغيل تلقائياً
-    // لا نعرض تنبيه للمستخدم هنا
-  };
-
-  // ابدء التعرف تلقائياً
-  try { recognition.start(); } catch(e){ /* بعض المتصفحات ترمي خطأ لو بدأ مسبقاً */ }
+  emergencyBtn.onclick = () => recognition.start();
 }
-
-// عند تحميل الصفحة
-window.addEventListener("load", () => {
-  renderCases();
-  initRecognition();
-});
-
-// زر الطوارئ يفعّل التعرف أو يطلب إذن الميكروفون (يعمل أيضاً كـ start)
-emergencyBtn.addEventListener("click", () => {
-  if(recognition) {
-    try { recognition.start(); } catch(e){}
-  } else {
-    initRecognition();
-  }
-});
