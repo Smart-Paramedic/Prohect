@@ -51,17 +51,17 @@ function renderCases(filteredCase = null) {
         const card = document.createElement('div');
         card.classList.add('case-card');
 
-        let html = `<h3>${caseName}</h3><p class="step-title">خطوات الإسعافات الأولية:</p><ul>`;
+        let html = `<h3>${caseName}</h3>`;
+        html += `<div class="subtitle">خطوات الإسعافات الأولية</div><ul>`;
         casesToShow[caseName].forEach(step => html += `<li>${step}</li>`);
         html += `</ul>
-        <div>
-            <button onclick="speakSteps([caseName].concat(CASES['${caseName}']))">▶ إعادة التشغيل</button>
-            <button onclick="stopSpeech()">⏹ إيقاف</button>
-            <button onclick="renderCases()">⏪ الرجوع</button>
-            <button onclick="callEmergency('${caseName}')">📞 الاتصال بالإسعاف 997</button>
-        </div>`;
-
+            <button onclick="callEmergency('${caseName}')">الاتصال بالإسعاف 997</button>
+            <button onclick="repeatSpeech()">إعادة التشغيل</button>
+            <button onclick="stopSpeech()">إيقاف الصوت</button>
+            <button onclick="renderCases()">رجوع</button>`;
         card.innerHTML = html;
+
+        card.onclick = () => speakSteps([caseName].concat(casesToShow[caseName]));
         container.appendChild(card);
     }
 }
@@ -107,7 +107,7 @@ recognition.onresult = function(event) {
     const spoken = event.results[0][0].transcript.trim();
     for (let caseName in CASES) {
         if (spoken.includes(caseName)) {
-            showTab('cases', {currentTarget: document.querySelector('.nav-tab:nth-child(2)')});
+            showTab('cases');
             renderCases(caseName);
             speakSteps([caseName].concat(CASES[caseName]));
             break;
@@ -119,7 +119,7 @@ function startListening() {
     recognition.start();
 }
 
-// ================= زر الطوارئ =================
+// ================= أزرار التحكم =================
 document.getElementById('emergencyBtn').onclick = startListening;
 
 // ================= بدء تحميل الكروت =================
