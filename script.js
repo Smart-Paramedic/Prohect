@@ -1,4 +1,4 @@
-// ================== البيانات الأساسية للحالات ==================
+// ================== البيانات (مؤقت محلياً) ==================
 const CASES = {
   "نزيف": [
     "اضغط على مكان النزيف مباشرة بقطعة قماش نظيفة.",
@@ -29,129 +29,176 @@ const stepsList = document.getElementById("stepsList");
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const backBtn = document.getElementById("backBtn");
+const callBtn = document.getElementById("callBtn");
 
 let currentSteps = [];
+let currentCaseName = "";
+let synth = window.speechSynthesis;
+let recognition = null;
 
-// ================== التبويبات ==================
-function showTab(tabId) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
-  document.getElementById(tabId).classList.remove("hidden");
-  if(tabId === "firstaid") renderCases();
-}
-
-// ================== توليد كروت الحالات ==================
-function renderCases() {
+// ================== توليد الكروت الأفقية (مركزه) ==================
+function renderCases(){
   casesContainer.innerHTML = "";
-  for (const [caseName, steps] of Object.entries(CASES)) {
+  for(const [caseName, steps] of Object.entries(CASES)){
     const card = document.createElement("div");
     card.className = "case-card";
 
-    const title = document.createElement("h3");
-    title.textContent = caseName;
+    const h = document.createElement("h3");
+    h.textContent = caseName;
 
-    const list = document.createElement("ul");
-    steps.forEach((step, index) => {
+    const ul = document.createElement("ul");
+    ul.className = "mini-steps";
+    steps.slice(0,3).forEach((s, i) => { // عرض ثلاثة أسطر مختصر
       const li = document.createElement("li");
-      li.textContent = `${index + 1}. ${step}`;
-      li.onclick = () => {
-        if(confirm("هل تريد الاتصال بالإسعاف 997؟")) {
-          window.location.href = "tel:997";
-        }
-      };
-      li.onmousedown = () => li.classList.toggle("highlight");
-      list.appendChild(li);
+      li.textContent = `${i+1}. ${s}`;
+      ul.appendChild(li);
     });
 
-    const playBtn = document.createElement("button");
-    playBtn.textContent = "🔄 إعادة";
-    playBtn.onclick = () => speakSteps(steps);
+    // أزرار داخل كل كارد: فتح (عرض كامل)، إعادة، إيقاف، اتصال
+    const controls = document.createElement("div");
+    controls.className = "card-controls";
 
-    const stopBtn = document.createElement("button");
-    stopBtn.textContent = "⏹ إيقاف";
-    stopBtn.onclick = stopSpeech;
+    const openBtn = document.createElement("button");
+    openBtn.textContent = "📋 عرض";
+    openBtn.onclick = () => showSteps(caseName, steps);
 
-    const backBtn = document.createElement("button");
-    backBtn.textContent = "⬅ رجوع";
-    backBtn.onclick = () => card.remove();
+    const replayBtn = document.createElement("button");
+    replayBtn.textContent = "🔄";
+    replayBtn.title = "إعادة استماع";
+    replayBtn.onclick = () => speakSteps(steps);
 
-    card.append(title, list, playBtn, stopBtn, backBtn);
+    const stopLocal = document.createElement("button");
+    stopLocal.textContent = "⏹";
+    stopLocal.title = "إيقاف";
+    stopLocal.onclick = stopSpeech;
+
+    const callLocal = document.createElement("a");
+    callLocal.textContent = "📞";
+    callLocal.className = "call-btn";
+    callLocal.href = "tel:997";
+    callLocal.onclick = (e) => {
+      // تأكيد قبل الاتصال — على سطح المكتب قد لا يعمل tel:
+      if(!confirm("هل تريد الاتصال بالطوارئ 997؟")) e.preventDefault();
+    };
+
+    controls.append(openBtn, replayBtn, stopLocal, callLocal);
+    card.appendChild(h);
+    card.appendChild(ul);
+    card.appendChild(controls);
     casesContainer.appendChild(card);
   }
 }
 
-// ================== عرض خطوات الحالة ==================
-function showSteps(caseName, steps) {
+// ================== عرض كارد الخطوات المفصل ==================
+function showSteps(caseName, steps){
+  currentCaseName = caseName;
+  currentSteps = steps.slice(); // انسخ
   caseTitle.textContent = caseName;
   stepsList.innerHTML = "";
-  currentSteps = steps;
-  steps.forEach((step, index) => {
-    const li = document.createElement("li");
-    li.textContent = `${index + 1}. ${step}`;
-    li.onclick = () => {
-      if(confirm("هل تريد الاتصال بالإسعاف 997؟")) {
+
+  steps.forEach((step, idx) => {
+    const div = document.createElement("div");
+    div.className = "step";
+    div.dataset.index = idx;
+    div.innerHTML = `<strong>${idx+1}.</strong> ${step}`;
+    // عند النقر على الخطوة -> تبديل اللون (تم) أو الاتصال عند النقر على رقم
+    div.addEventListener("click", (ev) => {
+      // إذا النقر كان على الرقم (نعتبر النقر العام يؤدي لتأكيد اتصال)
+      if(confirm("هل تريد الاتصال بالإسعاف 997 الآن؟")) {
         window.location.href = "tel:997";
+        return;
       }
-    };
-    li.onmousedown = () => li.classList.toggle("highlight");
-    stepsList.appendChild(li);
+      div.classList.toggle("done");
+    });
+    stepsList.appendChild(div);
   });
+
+  // ضبط رابط زر الاتصال في الكارد ليحمل رقم الطوارئ من آخر خطوة أو ثابت
+  callBtn.href = "tel:997";
   caseCard.classList.remove("hidden");
+  // تشغيل القراءة فوراً
   speakSteps(steps);
 }
 
 // ================== القراءة الصوتية ==================
-function speakSteps(steps = currentSteps) {
-  if (!("speechSynthesis" in window)) return;
+function speakSteps(steps = currentSteps){
+  if(!("speechSynthesis" in window)) return;
+  stopSpeech();
   const utter = new SpeechSynthesisUtterance(steps.join("، ثم "));
   utter.lang = "ar-SA";
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utter);
+  synth.speak(utter);
 }
 
 // ================== إيقاف الصوت ==================
-function stopSpeech() {
-  window.speechSynthesis.cancel();
+function stopSpeech(){
+  if(synth && synth.speaking) synth.cancel();
 }
 
-// ================== التبويبات تعمل على النقر واللمس ==================
+// ================== أزرار كارد التحكم */}
+playBtn.addEventListener("click", () => speakSteps());
+stopBtn.addEventListener("click", stopSpeech);
+backBtn.addEventListener("click", () => {
+  stopSpeech();
+  caseCard.classList.add("hidden");
+  currentSteps = [];
+  currentCaseName = "";
+});
+
+// ================== التبويبات (nav) ==================
 document.querySelectorAll("nav button").forEach(btn => {
   btn.addEventListener("click", () => {
-    const tabId = btn.getAttribute("data-tab");
-    showTab(tabId);
+    const tab = btn.getAttribute("data-tab");
+    document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+    document.getElementById(tab).classList.remove("hidden");
+    if(tab === "firstaid") renderCases();
   });
 });
 
-// ================== زر الطوارئ والتعرف الصوتي ==================
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+// ================== تشغيل التعرّف الصوتي (Recognition) تلقائياً في الخلفية ==================
+function initRecognition(){
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    console.warn("المتصفح لا يدعم التعرف على الصوت");
+    return;
+  }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SR();
+  recognition = new SR();
   recognition.lang = "ar-SA";
   recognition.continuous = true;
+  recognition.interimResults = false;
 
-  recognition.onresult = function(e) {
+  recognition.onresult = function(e){
     const text = e.results[e.results.length - 1][0].transcript.trim();
-    for (const [caseName, steps] of Object.entries(CASES)) {
-      if (text.includes(caseName)) {
+    // لا تستخدم تنبيهات مزعجة — فقط استجب مباشرة
+    for(const [caseName, steps] of Object.entries(CASES)){
+      if(text.includes(caseName)){
+        // عرض الكارد وتشغيل الكلام
         showSteps(caseName, steps);
         return;
       }
     }
   };
 
-  recognition.start(); // يبدأ تلقائيًا عند فتح الموقع
-  emergencyBtn.onclick = () => recognition.start();
-} 
+  recognition.onerror = function(err){
+    console.warn("recognition error:", err);
+    // في بعض المتصفحات يمكن إعادة التشغيل تلقائياً
+    // لا نعرض تنبيه للمستخدم هنا
+  };
 
-// ================== نموذج التسجيل ==================
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target).entries());
-  const API_URL = "https://sheetdb.io/api/v1/pp3tkazlfqhvu";
-  await fetch(API_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({data: formData})
-  });
-  alert("تم إرسال البيانات بنجاح!");
-  e.target.reset();
+  // ابدء التعرف تلقائياً
+  try { recognition.start(); } catch(e){ /* بعض المتصفحات ترمي خطأ لو بدأ مسبقاً */ }
+}
+
+// عند تحميل الصفحة
+window.addEventListener("load", () => {
+  renderCases();
+  initRecognition();
+});
+
+// زر الطوارئ يفعّل التعرف أو يطلب إذن الميكروفون (يعمل أيضاً كـ start)
+emergencyBtn.addEventListener("click", () => {
+  if(recognition) {
+    try { recognition.start(); } catch(e){}
+  } else {
+    initRecognition();
+  }
 });
