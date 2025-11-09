@@ -1,44 +1,38 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أسعفني </title>
-<link rel="stylesheet" href="Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسعفني</title>
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 <div class="container">
-    <header class="header">
-        <h1>أسعفني</h1>
-        <p>دليلك السريع للإسعافات الأولية</p>
-    </header>
 
-    <!-- التبويبات -->
+    <!-- التبويبات الثابتة -->
     <div class="nav-tabs">
-        <div class="nav-tab active" onclick="showTab('cases')">الحالات الطبية</div>
-        <div class="nav-tab" onclick="showTab('paramedics')">المسعفون المرخصون</div>
-        <div class="nav-tab" onclick="showTab('register')">التسجيل</div>
+        <div class="nav-tab active" onclick="showTab('home', this)">الرئيسية</div>
+        <div class="nav-tab" onclick="showTab('cases', this)">الحالات الطبية</div>
+        <div class="nav-tab" onclick="showTab('register', this)">التسجيل</div>
+        <div class="nav-tab" onclick="showTab('paramedics', this)">المسعفون المرخصون</div>
     </div>
 
-    <!-- زر الطوارئ -->
-    <div class="emergency-container">
-        <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
-        <p class="hint">انقر أو تحدث: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
-    </div>
+    <!-- تبويب الرئيسية -->
+    <section id="home" class="tab-content active">
+        <header class="header">
+            <h1>أسعفني</h1>
+            <p class="subtitle">دليلك الشامل للإسعافات الأولية</p>
+        </header>
 
-    <!-- تبويب الحالات الطبية -->
-    <section id="cases" class="tab-content active">
-        <div class="cards-container" id="casesContainer">
-            <!-- سيتم ملؤها بواسطة JS -->
+        <div class="emergency-container">
+            <button id="emergencyBtn" class="emergency-btn">زر الطوارئ</button>
+            <p class="hint">انقر أو تحدث: الحروق، الصرع، انخفاض الضغط، الاختناق</p>
         </div>
     </section>
 
-    <!-- تبويب المسعفين المرخصين -->
-    <section id="paramedics" class="tab-content">
-        <h2>المسعفون المرخصون</h2>
-        <p>بيانات المسعفين ورخصهم ستظهر بعد موافقة وزارة الصحة.</p>
-        <a href="https://www.moh.gov.sa" target="_blank">رابط وزارة الصحة للمسعفين</a>
-        <div id="paramedicsContainer"></div>
+    <!-- تبويب الحالات الطبية -->
+    <section id="cases" class="tab-content">
+        <div class="cards-container" id="casesContainer"></div>
     </section>
 
     <!-- تبويب التسجيل -->
@@ -63,8 +57,16 @@
             <button type="submit" class="submit-btn">تسجيل</button>
         </form>
     </section>
-</div>
 
+    <!-- تبويب المسعفون المرخصون -->
+    <section id="paramedics" class="tab-content">
+        <h2>المسعفون المرخصون</h2>
+        <p>سيتم وضع بيانات المسعفين ورخصهم بعد الموافقة من وزارة الصحة.</p>
+        <a href="https://www.moh.gov.sa" target="_blank">رابط وزارة الصحة للمسعفين</a>
+        <div id="paramedicsContainer"></div>
+    </section>
+
+</div>
 <script src="script.js"></script>
 </body>
 </html>
