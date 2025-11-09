@@ -8,56 +8,179 @@
 }
 
 * { box-sizing: border-box; }
-html,body { height:100%; margin:0; padding:0; font-family:"Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif; direction:rtl; color:var(--text); background:#f6f8fa; }
-
-/* العنوان */
-header { background:var(--babyblue); padding:12px 8px; text-align:center; }
-.site-title { margin:0; font-size:2.1rem; color:var(--darkblue); font-weight:700; }
-
-/* التبويبات */
-.nav-tabs { display:flex; justify-content:center; gap:10px; background:var(--babyblue); padding:10px; }
-.nav-tab { border:0; background:transparent; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:600; }
-.nav-tab.active { background:var(--darkblue); color:#fff; }
-
-/* المحتوى */
-.main { max-width:1100px; margin:18px auto; padding:0 16px; }
-.tab-content { display:none; padding:12px 4px; }
-.tab-content.active { display:block; }
-
-/* الرئيسية */
-.home-center { text-align:center; margin-top:40px; }
-.emergency-btn { background:var(--btnblue); color:#fff; border:none; padding:14px 28px; border-radius:28px; font-size:16px; cursor:pointer; }
-.hint { margin-top:10px; color:var(--muted); }
-
-/* كروت الحالات */
-.section-title { text-align:center; margin-bottom:12px; }
-.cases-container { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
-.case-card { background:var(--cardbg); width:300px; border-radius:10px; padding:14px; box-shadow:0 5px 12px rgba(0,0,0,0.06); text-align:right; display:flex; flex-direction:column; gap:8px; }
-.case-card h3 { margin:0; color:var(--darkblue); font-size:1.05rem; }
-.subtitle { font-weight:700; color:var(--text); margin-top:6px; margin-bottom:6px; }
-.case-card ul { margin:0; padding-right:18px; color:var(--muted); line-height:1.4; }
-
-/* أزرار داخل الكارد */
-.card-controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
-.card-controls button, .card-controls a { border:0; padding:8px 10px; border-radius:8px; cursor:pointer; color:#fff; font-weight:600; text-decoration:none; }
-.play-btn { background:var(--btnblue); }
-.stop-btn { background:#b71c1c; }
-.back-btn { background:var(--darkblue); }
-.call-btn { background:#d84315; }
-
-/* التسجيل */
-.register-form { max-width:420px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
-.register-form input, .register-form select, .register-form textarea { padding:10px; border-radius:6px; border:1px solid #d5dce6; }
-.submit-btn { background:var(--btnblue); color:#fff; padding:10px; border-radius:6px; border:0; cursor:pointer; }
-
-/* المسعفون */
-.center-content { display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
-.moh-link { color:var(--darkblue); font-weight:700; text-decoration:none; }
-.moh-link:hover { text-decoration:underline; }
-
-/* استجابة شاشة صغيرة */
-@media (max-width:640px) {
-  .case-card { width:92%; }
-  .site-title { font-size:1.6rem; }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif;
+  direction: rtl;
+  color: var(--text);
+  background: #f6f8fa;
 }
 
+/* العنوان */
+header {
+  background: var(--babyblue);
+  padding: 12px 8px;
+  text-align: center;
+}
+.site-title {
+  margin: 0;
+  font-size: 2.1rem;
+  color: var(--darkblue);
+  font-weight: 700;
+}
+
+/* التبويبات */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background: var(--babyblue);
+  padding: 10px;
+}
+.nav-tab {
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.nav-tab.active {
+  background: var(--darkblue);
+  color: #fff;
+}
+
+/* المحتوى */
+.main {
+  max-width: 1100px;
+  margin: 18px auto;
+  padding: 0 16px;
+}
+.tab-content {
+  display: none;
+  padding: 12px 4px;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* الرئيسية */
+.home-center {
+  text-align: center;
+  margin-top: 40px;
+}
+.emergency-btn {
+  background: var(--btnblue);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.hint {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+/* الحالات */
+.section-title {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.cases-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.case-card {
+  background: var(--cardbg);
+  width: 300px;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.case-card h3 {
+  margin: 0;
+  color: var(--darkblue);
+  font-size: 1.05rem;
+}
+.subtitle {
+  font-weight: 700;
+  color: var(--text);
+  margin: 6px 0;
+}
+.case-card ul {
+  margin: 0;
+  padding-right: 18px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* أزرار داخل الكارد */
+.card-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.card-controls button {
+  border: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+.play-btn { background: var(--btnblue); }
+.stop-btn { background: #b71c1c; }
+.back-btn { background: var(--darkblue); }
+.call-btn { background: #d84315; }
+
+/* التسجيل */
+.register-form {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.register-form input,
+.register-form select,
+.register-form textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #d5dce6;
+}
+.submit-btn {
+  background: var(--btnblue);
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  border: 0;
+  cursor: pointer;
+}
+
+/* المسعفون */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.moh-link {
+  color: var(--darkblue);
+  font-weight: 700;
+  text-decoration: none;
+}
+.moh-link:hover {
+  text-decoration: underline;
+}
