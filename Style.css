@@ -1,4 +1,3 @@
-/* ========== متغيرات الألوان والحجم ========== */
 :root {
   --babyblue: #89CFF0;
   --lightblue: #E8F7FF;
@@ -6,207 +5,54 @@
   --dark: #222222;
   --darkblue: #154d86;
   --muted: #667085;
-  --highlight: #fff3c4; /* لون عند تمييز خطوة */
+  --highlight: #fff3c4;
   --card-shadow: rgba(16, 24, 40, 0.08);
   --card-padding: 16px;
   --radius-lg: 12px;
 }
 
-/* ========== إعدادات أساسية ========== */
 * { box-sizing: border-box; }
-html, body { height: 100%; }
-body {
-  margin: 0;
-  font-family: "Segoe UI", "Noto Naskh Arabic", system-ui, sans-serif;
-  background: var(--lightblue);
-  color: var(--dark);
-  direction: rtl;
-  text-align: center;
-}
+html, body { height: 100%; margin: 0; font-family: "Segoe UI", "Noto Naskh Arabic", system-ui, sans-serif; background: var(--lightblue); color: var(--dark); text-align: center; }
 
-/* ========== الهيدر ========== */
-header {
-  background: var(--babyblue);
-  color: var(--white);
-  padding: 18px 16px;
-  border-radius: 0 0 18px 18px;
-}
+header { background: var(--babyblue); color: var(--white); padding: 18px 16px; border-radius: 0 0 18px 18px; }
 header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
 
-/* ========== شريط التنقل ========== */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 10px;
-  flex-wrap: wrap;
-}
-nav button {
-  background: var(--babyblue);
-  color: var(--white);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-nav button:focus { outline: 2px solid rgba(21,77,134,0.18); outline-offset: 2px; }
+nav { display: flex; justify-content: center; gap: 8px; padding: 12px 10px; flex-wrap: wrap; }
+nav button { background: var(--babyblue); color: var(--white); border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; }
 nav button:hover { filter: brightness(0.95); }
 
-/* ========== تبويبات مخفية ========== */
 .tab.hidden { display: none; }
 
-/* ========== زر الطوارئ في الصفحة الرئيسية ========== */
-.main-btn {
-  background: var(--darkblue);
-  color: var(--white);
-  border: none;
-  padding: 20px 56px;
-  border-radius: 28px;
-  font-size: 1.05rem;
-  cursor: pointer;
-  margin: 18px 0;
-}
+.main-btn { background: var(--darkblue); color: var(--white); border: none; padding: 20px 56px; border-radius: 28px; font-size: 1.05rem; cursor: pointer; margin: 18px 0; }
 .note { margin-top: 10px; font-size: 0.95rem; color: var(--muted); }
 
-/* ========== حاوية الكروت ========== */
-.cases-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 18px;
-  padding: 18px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-}
-.cases-container::before,
-.cases-container::after {
-  content: "";
-  display: inline-block;
-  width: 12px;
-  flex: 0 0 12px;
-}
+.cases-container { display: flex; justify-content: center; align-items: flex-start; gap: 18px; padding: 18px; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.cases-container::before, .cases-container::after { content: ""; display: inline-block; width: 12px; flex: 0 0 12px; }
 
-/* ========== كل كارد حالة ========== */
-.case-card {
-  min-width: 300px;
-  max-width: 340px;
-  flex: 0 0 auto;
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 22px var(--card-shadow);
-  padding: var(--card-padding);
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.case-card h3 {
-  margin: 0;
-  color: var(--darkblue);
-  font-size: 1.05rem;
-  font-weight: 700;
-}
+.case-card { min-width: 300px; max-width: 340px; flex: 0 0 auto; background: var(--white); border-radius: var(--radius-lg); box-shadow: 0 8px 22px var(--card-shadow); padding: var(--card-padding); text-align: right; display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+.case-card h3 { margin: 0; color: var(--darkblue); font-size: 1.05rem; font-weight: 700; }
 
-/* ========== تحكمات الكارد ========== */
-.card-controls {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.card-controls button {
-  background: var(--babyblue);
-  color: var(--white);
-  border: none;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-.card-controls button:hover { filter: brightness(0.95); }
+.case-card .card-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+.case-card .card-controls button, .case-card .card-controls a { background: var(--babyblue); color: var(--white); border: none; padding: 8px 10px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.case-card .card-controls button:hover, .case-card .card-controls a:hover { filter: brightness(0.95); }
+.case-card .card-controls a.call-btn { background: #c62828; }
 
-/* ========== كارد الخطوات المفصل ========== */
-#caseCard {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 28px;
-  width: min(820px, 96%);
-  z-index: 1200;
-  display: none;
-}
+#caseCard { position: fixed; left: 50%; transform: translateX(-50%); bottom: 28px; width: min(820px, 96%); z-index: 1200; display: none; }
 #caseCard:not(.hidden) { display: block; }
+.case-card-inner { background: var(--white); border-radius: 12px; padding: 18px; box-shadow: 0 18px 40px rgba(8, 24, 48, 0.18); text-align: right; }
+#caseTitle { margin: 0 0 8px 0; color: var(--darkblue); font-size: 1.15rem; font-weight: 700; }
+.steps-list { display: flex; flex-direction: column; gap: 8px; max-height: 48vh; overflow: auto; padding-right: 6px; }
+.steps-list .step { padding: 10px 12px; border-radius: 8px; background: #fafafa; border-left: 4px solid var(--babyblue); cursor: pointer; text-align: right; line-height: 1.45; font-size: 0.98rem; }
+.steps-list .step.done { background: var(--highlight); border-left-color: #f0c000; }
 
-.case-card-inner {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 18px 40px rgba(8, 24, 48, 0.18);
-  text-align: right;
-}
-
-#caseTitle {
-  margin: 0 0 8px 0;
-  color: var(--darkblue);
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
-.steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 48vh;
-  overflow: auto;
-  padding-right: 6px;
-}
-.steps-list .step {
-  padding: 10px 12px;
-  border-radius: 8px;
-  background: #fafafa;
-  border-left: 4px solid var(--babyblue);
-  cursor: pointer;
-  text-align: right;
-  line-height: 1.45;
-  font-size: 0.98rem;
-}
-.steps-list .step.done {
-  background: var(--highlight);
-  border-left-color: #f0c000;
-}
-
-/* ========== أزرار التحكم داخل كارد الخطوات ========== */
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-.ctrl {
-  background: var(--babyblue);
-  color: var(--white);
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-}
+.controls { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.ctrl { background: var(--babyblue); color: var(--white); border: none; padding: 10px 14px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; text-decoration: none; }
 .ctrl:hover { filter: brightness(0.95); }
 .ctrl.call { background: #b71c1c; }
 
-/* ========== استجابة شاشة صغيرة ========== */
 @media (max-width: 720px) {
   .case-card { min-width: 260px; max-width: 280px; }
   .main-btn { padding: 16px 36px; font-size: 1rem; }
   #caseCard { bottom: 14px; width: calc(100% - 24px); }
 }
-
-/* ========== تحسين الوصول ========== */
-a, button { -webkit-tap-highlight-color: rgba(0,0,0,0.06); }
-button:focus, a:focus { outline: 3px solid rgba(21,77,134,0.12); outline-offset: 2px; }
-
-/* ========== مخفي بسيط لمزامنة مع الكود السابق ========== */
 .hidden { display: none !important; }
