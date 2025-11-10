@@ -34,22 +34,26 @@ const registerForm = document.getElementById('registerForm');
 
 // 🔊 إعدادات النطق
 const synth = window.speechSynthesis || null;
+let lastSpokenSteps = [];
 let currentUtterance = null;
 
 function speakSteps(steps) {
   stopSpeech();
+  lastSpokenSteps = steps;
+  if (!synth) return;
   const text = steps.join('، ');
   currentUtterance = new SpeechSynthesisUtterance(text);
   currentUtterance.lang = 'ar-SA';
-  synth?.speak(currentUtterance);
+  synth.speak(currentUtterance);
 }
 
 function stopSpeech() {
-  if (synth?.speaking || synth?.pending) synth.cancel();
+  if (!synth) return;
+  if (synth.speaking || synth.pending) synth.cancel();
   currentUtterance = null;
 }
 
-// 📋 عرض الحالات داخل تبويب "الحالات"
+// 🧠 عرض الحالات داخل تبويب "الحالات"
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
   const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
@@ -73,7 +77,7 @@ function renderCases(filtered = null) {
   }
 }
 
-// 📋 عرض حالة كاملة عند التفاعل الصوتي
+// 🧠 عرض حالة كاملة عند التفاعل الصوتي
 function renderFullCase(caseName, steps) {
   casesContainer.innerHTML = '';
   const card = document.createElement('article');
@@ -108,8 +112,6 @@ function showTab(tabId, event) {
   document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   event?.currentTarget?.classList.add('active');
-
-  if (tabId === 'cases') renderCases();
 }
 
 // 🎙 التعرف الصوتي
@@ -135,7 +137,7 @@ if (SpeechRec) {
   };
 
   recognition.onerror = err => {
-    console.warn('Recognition error:', err);
+    console.warn('Recognition error:', err); // بدون تنبيه
   };
 }
 
@@ -143,7 +145,8 @@ if (SpeechRec) {
 emergencyBtn.onclick = e => {
   e.preventDefault();
   stopSpeech();
-  try { recognition?.start(); } catch {}
+  if (!recognition) return;
+  try { recognition.start(); } catch (err) {}
 };
 
 // 📝 نموذج التسجيل
@@ -153,13 +156,13 @@ registerForm?.addEventListener('submit', e => {
   e.target.reset();
 });
 
-// 🚀 تهيئة الصفحة وتشغيل المايك تلقائي دائمًا
+// 🚀 تهيئة الصفحة وتشغيل المايك تلقائيًا بشكل دائم
 document.addEventListener('DOMContentLoaded', () => {
   renderCases();
-  try { recognition?.start(); } catch {}
-  setInterval(() => {
-    if (recognition && recognition.continuous && !synth?.speaking) {
+  if (recognition) {
+    try { recognition.start(); } catch {}
+    setInterval(() => {
       try { recognition.start(); } catch {}
-    }
-  }, 5000);
+    }, 5000); // يعيد تشغيل المايك كل 5 ثواني إذا توقف
+  }
 });
