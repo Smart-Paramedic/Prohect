@@ -1,24 +1,21 @@
 function showTab(tabId, event) {
-  // إيقاف الصوت عند التنقل
   stopSpeech();
 
-  // تبديل التبويبات
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   event?.currentTarget?.classList.add('active');
 
-  // إذا المستخدم فتح تبويب "الحالات" يدويًا، امسح الكارد
   if (tabId === 'cases') {
-    const container = document.getElementById('cases-container');
-    container.innerHTML = '';
+    document.getElementById('cases-container').innerHTML = '';
   }
 }
 
-// التعرف الصوتي
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
+
 if (SpeechRec) {
-  const recognition = new SpeechRec();
+  recognition = new SpeechRec();
   recognition.lang = 'ar-SA';
   recognition.continuous = true;
   recognition.interimResults = false;
@@ -31,7 +28,6 @@ if (SpeechRec) {
       showTab('cases');
       renderBurnsCard();
     }
-    // أضف حالات أخرى هنا مثل "الصرع"، "الضغط"، إلخ
   };
 
   recognition.onerror = err => {
@@ -43,7 +39,6 @@ if (SpeechRec) {
   };
 }
 
-// عرض كارد الحروق
 function renderBurnsCard() {
   const container = document.getElementById('cases-container');
   container.innerHTML = `
@@ -65,9 +60,8 @@ function renderBurnsCard() {
   `;
 }
 
-// إيقاف الصوت (احتياطي)
 function stopSpeech() {
-  if (typeof recognition !== 'undefined') {
+  if (recognition) {
     try { recognition.stop(); } catch {}
   }
 }
