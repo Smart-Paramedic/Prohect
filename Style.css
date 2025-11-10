@@ -6,6 +6,56 @@
   --text: #21303b;
   --muted: #5b6b73;
 }
+body {
+  font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", sans-serif;
+  direction: rtl;
+  background: #f6f8fa;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  background: #cfeffd;
+  padding: 10px;
+}
+.nav-tab {
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.nav-tab.active {
+  background: #0b4f8a;
+  color: white;
+  border-radius: 8px;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+}
+.tab-content.active {
+  display: block;
+}
+
+.case-card {
+  background: #eef9ff;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.card-controls button,
+.call-btn {
+  margin: 6px;
+  padding: 8px 12px;
+  background: #0e66c2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 * { box-sizing: border-box; }
 html, body {
@@ -114,3 +164,4 @@ header {
   border: 0;
   cursor: pointer;
 }
+
