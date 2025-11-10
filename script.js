@@ -104,6 +104,7 @@ function renderFullCase(caseName, steps) {
 // 🧭 التبويبات
 function showTab(tabId, event = null) {
   stopSpeech();
+
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId)?.classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
@@ -114,6 +115,7 @@ function showTab(tabId, event = null) {
     renderCases();
   }
 }
+
 
 // 🎙 التعرف الصوتي
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
@@ -164,3 +166,4 @@ document.addEventListener('DOMContentLoaded', () => {
     try { recognition?.start(); } catch {}
   }, 5000);
 });
+
