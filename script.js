@@ -1,3 +1,4 @@
+// 🩺 الحالات الطبية
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
@@ -26,10 +27,12 @@ const CASES = {
   ]
 };
 
+// 🔗 عناصر DOM
 const emergencyBtn = document.getElementById('emergencyBtn');
 const casesContainer = document.getElementById('cases-container');
 const registerForm = document.getElementById('registerForm');
 
+// 🔊 إعدادات النطق
 const synth = window.speechSynthesis || null;
 let currentUtterance = null;
 
@@ -46,6 +49,118 @@ function stopSpeech() {
   currentUtterance = null;
 }
 
+// 📋 عرض كل الحالات داخل تبويب "الحالات"
 function renderCases(filtered = null) {
   casesContainer.innerHTML = '';
-  const toShow = filtered ? { [
+  const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
+
+  for (const [caseName, steps] of Object.entries(toShow)) {
+    const card = document.createElement('article');
+    card.className = 'case-card';
+    card.innerHTML = `
+      <h3>${caseName}</h3>
+      <div class="subtitle">خطوات الإسعافات الأولية</div>
+      <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
+      <button class="call-btn">اتصال 997</button>
+    `;
+    card.querySelector('.call-btn').onclick = () => {
+      stopSpeech();
+      if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
+        window.location.href = 'tel:997';
+      }
+    };
+    casesContainer.appendChild(card);
+  }
+}
+
+// 📋 عرض حالة واحدة عند التفاعل الصوتي
+function renderFullCase(caseName, steps) {
+  casesContainer.innerHTML = '';
+  const card = document.createElement('article');
+  card.className = 'case-card';
+  card.innerHTML = `
+    <h3>${caseName}</h3>
+    <div class="subtitle">خطوات الإسعافات الأولية</div>
+    <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
+    <div class="card-controls">
+      <button class="play-btn">إعادة التشغيل</button>
+      <button class="stop-btn">إيقاف الصوت</button>
+      <button class="back-btn">رجوع</button>
+      <button class="call-btn">اتصال 997</button>
+    </div>
+  `;
+  card.querySelector('.play-btn').onclick = () => speakSteps([caseName, ...steps]);
+  card.querySelector('.stop-btn').onclick = () => stopSpeech();
+  card.querySelector('.back-btn').onclick = () => showTab('home');
+  card.querySelector('.call-btn').onclick = () => {
+    stopSpeech();
+    if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
+      window.location.href = 'tel:997';
+    }
+  };
+  casesContainer.appendChild(card);
+}
+
+// 🧭 التبويبات
+function showTab(tabId, event = null) {
+  stopSpeech();
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId)?.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  if (event?.currentTarget) event.currentTarget.classList.add('active');
+
+  // عند فتح تبويب "الحالات" يدويًا، أعرض كل الحالات
+  if (tabId === 'cases') {
+    renderCases();
+  }
+}
+
+// 🎙 التعرف الصوتي
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+let recognition = null;
+
+if (SpeechRec) {
+  recognition = new SpeechRec();
+  recognition.lang = 'ar-SA';
+  recognition.interimResults = false;
+  recognition.continuous = true;
+
+  recognition.onresult = e => {
+    const spoken = e.results[e.results.length - 1][0].transcript.trim().toLowerCase();
+    for (const caseName of Object.keys(CASES)) {
+      if (spoken.includes(caseName.toLowerCase())) {
+        showTab('cases');
+        renderFullCase(caseName, CASES[caseName]);
+        speakSteps([caseName, ...CASES[caseName]]);
+        return;
+      }
+    }
+  };
+
+  recognition.onerror = err => {
+    console.warn('Recognition error:', err);
+  };
+}
+
+// 🎙 زر الطوارئ
+emergencyBtn.onclick = e => {
+  e.preventDefault();
+  stopSpeech();
+  try { recognition?.start(); } catch {}
+};
+
+// 📝 نموذج التسجيل
+registerForm?.addEventListener('submit', e => {
+  e.preventDefault();
+  alert('تم استلام بيانات التسجيل (تجريبياً).');
+  e.target.reset();
+});
+
+// 🚀 تهيئة الصفحة وتشغيل المايك تلقائيًا
+document.addEventListener('DOMContentLoaded', () => {
+  renderCases();
+  try { recognition?.start(); } catch {}
+  setInterval(() => {
+    try { recognition?.start(); } catch {}
+  }, 5000);
+});
