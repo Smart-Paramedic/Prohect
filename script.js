@@ -1,11 +1,11 @@
-// 🩺 الحالات الطبية
+// 🩺 الحالات
 const CASES = {
   "الحروق": [
     "تبريد الحرق تحت ماء جاري لمدة 10 إلى 15 دقيقة.",
     "إزالة الملابس الضيقة أو الإكسسوارات حول المنطقة.",
-    "تغطية منطقة الحرق بضمادة نظيفة وطرية.",
-    "عدم وضع مراهم أو الثلج مباشرة.",
-    "اطلب المساعدة فورًا إذا كانت الحروق شديدة وتمتد لمساحات واسعة."
+    "تغطية الحرق بضمادة نظيفة وطرية.",
+    "عدم وضع مراهم أو زبدة أو الثلج مباشرة.",
+    "الاتصال بالإسعاف فوراً على 997 إذا كانت المساحة واسعة."
   ],
   "الصرع": [
     "لاحظ وقت النوبة واحمِ المصاب من الأجسام الحادة.",
@@ -22,150 +22,98 @@ const CASES = {
   "الاختناق": [
     "قف خلف المصاب ووضع إحدى قدميك أمام الأخرى للتوازن.",
     "لف ذراعيك حول خصر المصاب واصنع قبضة فوق السرة.",
-    "اضغط بقوة وسرعة نحو الأعلى 6-10 مرات حتى يزول الجسم العالق.",
+    "اضغط بقوة وسرعة نحو الأعلى حتى يزول الجسم العالق.",
     "إذا فقد الوعي، ابدأ بالإنعاش القلبي الرئوي فوراً."
   ]
 };
 
-// 🔗 عناصر DOM
-const emergencyBtn = document.getElementById('emergencyBtn');
-const casesContainer = document.getElementById('cases-container');
-const registerForm = document.getElementById('registerForm');
+// 🎙 تعريف الصوت
+const synth = window.speechSynthesis;
+let recognition = null;
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = 'ar-SA';
+  recognition.continuous = false;
+}
 
-// 🔊 إعدادات النطق
-const synth = window.speechSynthesis || null;
-let currentUtterance = null;
+// 🎧 البدء بالاستماع
+function startListening() {
+  recognition?.start();
+}
 
+// 🗣 النطق
 function speakSteps(steps) {
-  stopSpeech();
-  const text = steps.join('، ');
-  currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.lang = 'ar-SA';
-  synth?.speak(currentUtterance);
-}
-
-function stopSpeech() {
-  if (synth?.speaking || synth?.pending) synth.cancel();
-  currentUtterance = null;
-}
-
-// 📋 عرض كل الحالات داخل تبويب "الحالات"
-function renderCases(filtered = null) {
-  casesContainer.innerHTML = '';
-  const toShow = filtered ? { [filtered]: CASES[filtered] } : CASES;
-
-  for (const [caseName, steps] of Object.entries(toShow)) {
-    const card = document.createElement('article');
-    card.className = 'case-card';
-    card.innerHTML = `
-      <h3>${caseName}</h3>
-      <div class="subtitle">خطوات الإسعافات الأولية</div>
-      <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
-      <button class="call-btn">اتصال 997</button>
-    `;
-    card.querySelector('.call-btn').onclick = () => {
-      stopSpeech();
-      if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
-        window.location.href = 'tel:997';
-      }
-    };
-    casesContainer.appendChild(card);
-  }
-}
-
-// 📋 عرض حالة واحدة عند التفاعل الصوتي
-function renderFullCase(caseName, steps) {
-  casesContainer.innerHTML = '';
-  const card = document.createElement('article');
-  card.className = 'case-card';
-  card.innerHTML = `
-    <h3>${caseName}</h3>
-    <div class="subtitle">خطوات الإسعافات الأولية</div>
-    <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
-    <div class="card-controls">
-      <button class="play-btn">إعادة التشغيل</button>
-      <button class="stop-btn">إيقاف الصوت</button>
-      <button class="back-btn">رجوع</button>
-      <button class="call-btn">اتصال 997</button>
-    </div>
-  `;
-  card.querySelector('.play-btn').onclick = () => speakSteps([caseName, ...steps]);
-  card.querySelector('.stop-btn').onclick = () => stopSpeech();
-  card.querySelector('.back-btn').onclick = () => showTab('home');
-  card.querySelector('.call-btn').onclick = () => {
-    stopSpeech();
-    if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${caseName}؟`)) {
-      window.location.href = 'tel:997';
-    }
-  };
-  casesContainer.appendChild(card);
+  const utterance = new SpeechSynthesisUtterance(steps.join('، '));
+  utterance.lang = 'ar-SA';
+  synth.speak(utterance);
 }
 
 // 🧭 التبويبات
-function showTab(tabId, event = null) {
-  stopSpeech();
-
+function showTab(id, e) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabId)?.classList.add('active');
+  document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  if (event?.currentTarget) event.currentTarget.classList.add('active');
+  if (e) e.currentTarget.classList.add('active');
+  if (id === 'cases') renderCases();
+}
 
-  // عند فتح تبويب "الحالات" يدويًا، أعرض كل الحالات
-  if (tabId === 'cases') {
-    renderCases();
+// 📋 عرض الحالات
+function renderCases(filter = null) {
+  const container = document.getElementById('cases-container');
+  container.innerHTML = '';
+  const shown = filter ? { [filter]: CASES[filter] } : CASES;
+  for (const [name, steps] of Object.entries(shown)) {
+    const card = document.createElement('div');
+    card.className = 'case-card';
+    card.innerHTML = `
+      <h3>${name}</h3>
+      <div class="subtitle">خطوات الإسعافات الأولية</div>
+      <ul>${steps.map(s => `<li>${s}</li>`).join('')}</ul>
+      <div class="card-controls">
+        <button onclick="speakSteps(['${name}', ...CASES['${name}']])">إعادة</button>
+        <button onclick="synth.cancel()">إيقاف</button>
+        <button onclick="renderCases()">رجوع</button>
+        <button onclick="callEmergency('${name}')">اتصال 997</button>
+      </div>`;
+    container.appendChild(card);
   }
 }
 
+// ☎️ الاتصال بالإسعاف
+function callEmergency(name) {
+  if (confirm(`هل تريد الاتصال بالإسعاف 997 للحالة: ${name}؟`)) {
+    window.location.href = 'tel:997';
+  }
+}
 
-// 🎙 التعرف الصوتي
-const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-let recognition = null;
+// ✅ التسجيل (يحفظ محليًا)
+document.getElementById('registerForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  localStorage.setItem('registration', JSON.stringify(data));
+  document.getElementById('successMessage').hidden = false;
+  e.target.reset();
+});
 
-if (SpeechRec) {
-  recognition = new SpeechRec();
-  recognition.lang = 'ar-SA';
-  recognition.interimResults = false;
-  recognition.continuous = true;
-
-  recognition.onresult = e => {
-    const spoken = e.results[e.results.length - 1][0].transcript.trim().toLowerCase();
+// 🎙 التعرف الصوتي عند النطق بالحالة
+if (recognition) {
+  recognition.onresult = event => {
+    const spoken = event.results[0][0].transcript.trim();
     for (const caseName of Object.keys(CASES)) {
-      if (spoken.includes(caseName.toLowerCase())) {
+      if (spoken.includes(caseName)) {
         showTab('cases');
-        renderFullCase(caseName, CASES[caseName]);
+        renderCases(caseName);
         speakSteps([caseName, ...CASES[caseName]]);
         return;
       }
     }
   };
-
-  recognition.onerror = err => {
-    console.warn('Recognition error:', err);
-  };
 }
 
-// 🎙 زر الطوارئ
-emergencyBtn.onclick = e => {
-  e.preventDefault();
-  stopSpeech();
-  try { recognition?.start(); } catch {}
+// 🚀 تشغيل تلقائي عند الدخول
+window.onload = () => {
+  renderCases();
+  startListening();
 };
 
-// 📝 نموذج التسجيل
-registerForm?.addEventListener('submit', e => {
-  e.preventDefault();
-  alert('تم استلام بيانات التسجيل (تجريبياً).');
-  e.target.reset();
-});
-
-// 🚀 تهيئة الصفحة وتشغيل المايك تلقائيًا
-document.addEventListener('DOMContentLoaded', () => {
-  renderCases();
-  try { recognition?.start(); } catch {}
-  setInterval(() => {
-    try { recognition?.start(); } catch {}
-  }, 5000);
-});
-
-
-
+document.getElementById('emergencyBtn').onclick = startListening;
