@@ -4,9 +4,10 @@ $user = "root";
 $password = "";
 $dbname = "first_aid_system";
 
-$conn = mysqli_connect($host, $user, $password, $dbname);
+$conn = new mysqli($host, $user, $password, $dbname);
+$conn->set_charset("utf8mb4");
 
-if (!$conn) {
-    die("فشل الاتصال بقاعدة البيانات: " . mysqli_connect_error());
+if ($conn->connect_error) {
+    die("فشل الاتصال: " . $conn->connect_error);
 }
 ?>
